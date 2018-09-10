@@ -1,10 +1,10 @@
 # Super-Canvasser
-##1. OVERVIEW
+##OVERVIEW
 
 Super Canvasser helps organizations run door-to-door canvassing campaigns (sales campaign, fund-raising campaign, election campaign, opinion poll, etc.).  The system supports three roles: campaign managers, who manage the information associated with campaigns; canvassers, who visit the locations in campaigns on assigned dates; and system administrators, who manage user accounts.
 
 ======================================================================
-##2. FUNCTIONALITY FOR CAMPAIGN MANAGERS
+##FUNCTIONALITY FOR CAMPAIGN MANAGERS
 
 ###2.1 CREATE, VIEW, AND EDIT CAMPAIGNS.  create campaigns and view and edit data associated with them.  this data includes:
 
