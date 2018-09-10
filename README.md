@@ -1,12 +1,12 @@
 # Super-Canvasser
-1. OVERVIEW
+##1. OVERVIEW
 
 Super Canvasser helps organizations run door-to-door canvassing campaigns (sales campaign, fund-raising campaign, election campaign, opinion poll, etc.).  The system supports three roles: campaign managers, who manage the information associated with campaigns; canvassers, who visit the locations in campaigns on assigned dates; and system administrators, who manage user accounts.
 
 ======================================================================
-2. FUNCTIONALITY FOR CAMPAIGN MANAGERS
+##2. FUNCTIONALITY FOR CAMPAIGN MANAGERS
 
-2.1 CREATE, VIEW, AND EDIT CAMPAIGNS.  create campaigns and view and edit data associated with them.  this data includes:
+###2.1 CREATE, VIEW, AND EDIT CAMPAIGNS.  create campaigns and view and edit data associated with them.  this data includes:
 
 managers: set of users who can edit data for this campaign.  these users must have the campaign manager role.  initially, this set contains the campaign's creator.
 
@@ -26,24 +26,29 @@ locations are added to a campaign by entering text in a textbox.  the text conta
 
 all above information about a campaign can be edited before, but not after, the campaign starts.  other information associated with a campaign (namely, canvassing assignment and results) is discussed below.
 
-2.2 CREATE CANVASSING ASSIGNMENT.  a "task" is a set of locations to be visited by one canvasser on one day, with a recommended order for the visits.   for a selected campaign, the system partitions the locations into tasks and assigns one task to each canvasser on each day that the canvasser will work on the campaign.  the number of created tasks should be the minimum (or close to it) such that the duration of the longest task is less than or equal to the work-day duration (a global parameter).  the system then assigns the tasks to days and canvassers, packing the tasks towards the beginning of the campaign.  for example, if two canvassers are selected to work on a 2-day campaign with 3 tasks, and both canvassers are available on both days, then both canvassers will be assigned tasks on the first day, and only one of them will be assigned a task on the second day.  if some tasks remain unassigned (because there are not enough canvassers or days), the system displays a detailed warning message, but keeps the canvassing assignment anyway.  the campaign manager can later edit the campaign to address this issue, if desired.
+###2.2 CREATE CANVASSING ASSIGNMENT.  a "task" is a set of locations to be visited by one canvasser on one day, with a recommended order for the visits.   for a selected campaign, the system partitions the locations into tasks and assigns one task to each canvasser on each day that the canvasser will work on the campaign.  the number of created tasks should be the minimum (or close to it) such that the duration of the longest task is less than or equal to the work-day duration (a global parameter).  the system then assigns the tasks to days and canvassers, packing the tasks towards the beginning of the campaign.  for example, if two canvassers are selected to work on a 2-day campaign with 3 tasks, and both canvassers are available on both days, then both canvassers will be assigned tasks on the first day, and only one of them will be assigned a task on the second day.  if some tasks remain unassigned (because there are not enough canvassers or days), the system displays a detailed warning message, but keeps the canvassing assignment anyway.  the campaign manager can later edit the campaign to address this issue, if desired.
 
 a canvasser can be assigned a task on a given day only if he/she is available (i.e., planning to work) on that day and unassigned (i.e., not already assigned a task in any campaign) on that day.  for simplicity, the system does not support assigning multiple tasks per day to a canvasser.
 
 if the dates, canvassers, or locations for a campaign are modified, the system updates or discards any previously computed canvassing assignment for it.
 
-2.3 VIEW CANVASSING ASSIGNMENT.  the canvassing assignment for a selected campaign is displayed in a table showing the date, canvasser, number of locations, and duration of each task.  the user can select a task to see additional details, including the set of locations in that task.  the user can choose whether to see the locations as a list of addresses in the recommended order or as markers on a map.
+###2.3 VIEW CANVASSING ASSIGNMENT
+The canvassing assignment for a selected campaign is displayed in a table showing the date, canvasser, number of locations, and duration of each task.  the user can select a task to see additional details, including the set of locations in that task.  the user can choose whether to see the locations as a list of addresses in the recommended order or as markers on a map.
 
-2.4 VIEW CAMPAIGN RESULTS.  the system supports the following three views.  (1) Table of detailed results, showing all information from all locations.  (2) Statistical summary of results, including average and standard deviation of the ratings, and percentages of "yes" and "no" answers for each question in the questionnaire.  (3) Visual summary of results in the form of a map with a marker for each location in the campaign, such that the color and/or shape of the markers indicate the rating of each location or that the location lacks a rating.
+###2.4 VIEW CAMPAIGN RESULTS
+The system supports the following three views.  (1) Table of detailed results, showing all information from all locations.  (2) Statistical summary of results, including average and standard deviation of the ratings, and percentages of "yes" and "no" answers for each question in the questionnaire.  (3) Visual summary of results in the form of a map with a marker for each location in the campaign, such that the color and/or shape of the markers indicate the rating of each location or that the location lacks a rating.
 
 ======================================================================
-3. FUNCTIONALITY FOR CANVASSERS
+##3. FUNCTIONALITY FOR CANVASSERS
 
-3.1 EDIT AVAILABILITY, i.e., dates on which the canvasser is available for work.  This can be done conveniently, e.g., by clicking on dates on a calendar.
+###3.1 EDIT AVAILABILITY
+i.e., dates on which the canvasser is available for work.  This can be done conveniently, e.g., by clicking on dates on a calendar.
 
-3.2 VIEW UPCOMING CANVASSING ASSIGNMENTS.  select a canvassing assignment from the list to see details, including a map with markers at the locations assigned to this user, and a list of the addresses of those locations.
+###3.2 VIEW UPCOMING CANVASSING ASSIGNMENTS
+select a canvassing assignment from the list to see details, including a map with markers at the locations assigned to this user, and a list of the addresses of those locations.
 
-3.3 CANVASS.  the system loads the current day's canvassing assignment and displays the address of the next location to visit and a map with a marker at that location.  the system initially displays the next location to visit in the recommended order.  the canvasser is not required to follow the recommended order and can manually change the next location by selecting it from a list of unvisited locations.  the system displays detailed travel directions from the most recently visited location to the next location.
+###3.3 CANVASS
+the system loads the current day's canvassing assignment and displays the address of the next location to visit and a map with a marker at that location.  the system initially displays the next location to visit in the recommended order.  the canvasser is not required to follow the recommended order and can manually change the next location by selecting it from a list of unvisited locations.  the system displays detailed travel directions from the most recently visited location to the next location.
 
 after visiting a location, the canvasser enters the results.  the results include: (1) whether the canvasser spoke to anyone, (2) a rating of how successful the visit was (e.g., how likely the person at that location is to vote for the candidate, buy the product, or contribute to the organization) on a scale of 0 to 5 stars, (3) answers to the questionnaire (some questions might be unanswered), and (4) brief notes.  if that location was visited out-of-order, the system computes a new recommended order in which to visit the remaining (unvisited) locations.
 
