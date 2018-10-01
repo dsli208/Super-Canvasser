@@ -7,6 +7,10 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import {AccountCircle, VpnKey, Email} from '@material-ui/icons';
+import AppBar from '@material-ui/core/AppBar';
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
+
 
 class App extends Component {
    render() {
@@ -18,6 +22,14 @@ class App extends Component {
             <Grid item xs={12} className="header" container justify='center'>
                <h1 className='title'>Super Canvasser</h1>
             </Grid>
+
+            <AppBar position="static" color="default">
+               <Tabs indicatorColor="primary" textColor="primary" fullWidth>
+                  <Tab label="Register" />
+                  <Tab label="Sign In" />
+               </Tabs>
+            </AppBar>
+
 
             <Grid item xs={12} container justify='center'>
                <form className="form">
