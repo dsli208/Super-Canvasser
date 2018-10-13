@@ -9,7 +9,7 @@ Git collaboration
 - In your local directory, create a new branch for your new features you want to add. 
   For example, if I want to add Calendar page, I'll do:
 
-	$ git branch -b calendar
+	$ git checkout -b calendar
 
   This creates a new branch named "calendar" and moves to it.
 - Once you added new features in this current newly created branch, commit it in this branch.
@@ -31,6 +31,6 @@ Git collaboration
 	This repeats all steps above.
 - You can delete "Calendar" branch now, and create new branch:
 
-	$ git branch -b <New Page>
+	$ git checkout -b <New Page>
 
 - Keep working again like above from here...
