@@ -18,18 +18,31 @@ class Register extends Component {
    state = {
       selectedValue: '1',
    };
-   handleChange = event => {
+   handleChange = (event) => {
       this.setState({
          selectedValue: event.target.value
+      }, () => {
+         if (this.state.selectedValue == 1) {
+         } else if (this.state.selectedValue == 2) {
+         } else {
+
+         }
       })
+   };
+   handleLogin = () => {
+      if (this.state.selectedValue == 1) {
+      } else if (this.state.selectedValue == 2) {
+      } else {
+         window.location.href = "http://localhost:3000/manager";
+      }
    };
    render() {
    	const { classes } = this.props;
       return (
          <Grid item xs={12} container justify='center'>
-            <form className="form">
+            <form className="form" justify='center'>
                {/* user name text field */}
-               <Grid container spacing={8} alignItems="flex-end">
+               <Grid container spacing={8} alignItems="flex-end" justify='center'>
                   <Grid item><AccountCircle/></Grid>
                   <Grid item>
                      <TextField
@@ -40,7 +53,7 @@ class Register extends Component {
                </Grid>
 
                {/* user email text field */}
-               <Grid container spacing={8} alignItems="flex-end">
+               <Grid container spacing={8} alignItems="flex-end" justify='center'>
                   <Grid item><Email/></Grid>
                   <Grid item>
                      <TextField
@@ -51,7 +64,7 @@ class Register extends Component {
                </Grid>
 
                {/* password text field */}
-               <Grid container spacing={8} alignItems="flex-end">
+               <Grid container spacing={8} alignItems="flex-end" justify='center'>
                   <Grid item><VpnKey/></Grid>
                   <Grid item>
                      <TextField
@@ -62,12 +75,12 @@ class Register extends Component {
                   </Grid>
                </Grid>
                <br/>
-
-	            <Radio checked={this.state.selectedValue === '1'} value='1' onChange={this.handleChange} />Admin
-               <Radio checked={this.state.selectedValue === '2'} value='2' onChange={this.handleChange} />Canvasser
-               <Radio checked={this.state.selectedValue === '3'} value='3' onChange={this.handleChange} />Manager
-
-               <Button variant="contained" color="primary" fullWidth={true} style={btn_style}> Register </Button>
+               <div justify='center'>
+   	            <Radio checked={this.state.selectedValue === '1'} value='1' onChange={this.handleChange} />Admin
+                  <Radio checked={this.state.selectedValue === '2'} value='2' onChange={this.handleChange} />Canvasser
+                  <Radio checked={this.state.selectedValue === '3'} value='3' onChange={this.handleChange} />Manager
+               </div>
+               <Button onClick={this.handleLogin} variant="contained" color="primary" fullWidth={true} style={btn_style}> Register </Button>
             </form>
          </Grid>
       );
