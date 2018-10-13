@@ -10,11 +10,12 @@ import {AccountCircle, VpnKey, Email} from '@material-ui/icons';
 import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
-
+import Confirm from './Confirm';
+import {BrowserRouter, Route, Link} from "react-router-dom";
 
 class App extends Component {
-   render() {
-      return (
+    render() {
+            return (
          <Grid className="container" container spacing={0} direction='column' justify='center'>
             <Grid item xs={12} className="appLogo" container justify='center'>
                <Image src={appLogo} height={150} width={150}/>
@@ -68,8 +69,9 @@ class App extends Component {
                   </Grid>
 
                   <br/><br/>
-
-                  <Button variant="contained" color="primary" fullWidth={true} style={btn_style}> Register </Button>
+                  
+                  <a href={Confirm}><button>Go To Login</button></a>
+                 
                </form>
             </Grid>
          </Grid>
@@ -86,3 +88,14 @@ const btn_style = {
 };
 
 export default App;
+
+
+
+//<input class="RegitserButton" color="primary" fullWidth={true} onlick="window.location.href='http://www.google.com/'" type="button" value="Register"/>
+
+//<Button variant="contained" color="primary" fullWidth={true} style={btn_style}> Register </Button>
+//<Confirm/>
+
+
+
+//					<Button onClick={() => {console.log("clicked")}} variant="contained" color="primary" fullWidth={true} style={btn_style}> Register </Button>
