@@ -3,9 +3,19 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import {AccountCircle, VpnKey, Email} from '@material-ui/icons';
+import Radio from '@material-ui/core/Radio';
+import RadioGroup from '@material-ui/core/RadioGroup';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
 
 class Login extends Component {
-   
+   state = {
+      selectedValue: '1',
+   };
+   handleChange = event => {
+      this.setState({
+         selectedValue: event.target.value
+      })
+   };
    render() {
       return (
          <Grid item xs={12} container justify='center'>
@@ -32,9 +42,12 @@ class Login extends Component {
                         onChange = {(event,newValue) => this.setState({password:newValue})} />
                   </Grid>
                </Grid>
+               <br/>
 
-               <br/><br/>
-
+               <Radio checked={this.state.selectedValue === '1'} value='1' onChange={this.handleChange} />Admin
+               <Radio checked={this.state.selectedValue === '2'} value='2' onChange={this.handleChange} />Canvasser
+               <Radio checked={this.state.selectedValue === '3'} value='3' onChange={this.handleChange} />Manager
+               
                <Button variant="contained" color="primary" fullWidth={true} style={btn_style}> Log In </Button>
             </form>
          </Grid>

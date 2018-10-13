@@ -10,6 +10,7 @@ import {AccountCircle, VpnKey, Email} from '@material-ui/icons';
 import LoginAndRegister from './LoginAndRegister';
 import {BrowserRouter, Route } from 'react-router-dom';
 
+
 class App extends Component {
    
    render() {
