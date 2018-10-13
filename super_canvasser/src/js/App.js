@@ -2,17 +2,16 @@ import React, { Component } from 'react';
 import Image from 'react-image-resizer';
 import '../css/App.css';
 import appLogo from '../img/app_logo.png';
-import { createMuiTheme, MuiThemeProvider, withStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import {AccountCircle, VpnKey, Email} from '@material-ui/icons';
-import AppBar from '@material-ui/core/AppBar';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
-
+//import {Tabs, Tab} from 'react-bootstrap';
+import LoginAndRegister from './LoginAndRegister';
+import {BrowserRouter, Route } from 'react-router-dom';
 
 class App extends Component {
+   
    render() {
       return (
          <Grid className="container" container spacing={0} direction='column' justify='center'>
@@ -23,66 +22,13 @@ class App extends Component {
                <h1 className='title'>Super Canvasser</h1>
             </Grid>
 
-            <AppBar position="static" color="default">
-               <Tabs indicatorColor="primary" textColor="primary" fullWidth>
-                  <Tab label="Register" />
-                  <Tab label="Sign In" />
-               </Tabs>
-            </AppBar>
+            <BrowserRouter>
+               <Route path='/' component={LoginAndRegister}/>
+            </BrowserRouter>
 
-
-            <Grid item xs={12} container justify='center'>
-               <form className="form">
-                  {/* user name text field */}
-                  <Grid container spacing={8} alignItems="flex-end">
-                     <Grid item><AccountCircle/></Grid>
-                     <Grid item>
-                        <TextField
-                           label='Username'
-                           style={field_style}
-                           onChange = {(event,newValue) => this.setState({username:newValue})} />
-                     </Grid>
-                  </Grid>
-
-                  {/* user email text field */}
-                  <Grid container spacing={8} alignItems="flex-end">
-                     <Grid item><Email/></Grid>
-                     <Grid item>
-                        <TextField
-                           label='Email'
-                           style={field_style}
-                           onChange = {(event,newValue) => this.setState({username:newValue})} />
-                     </Grid>
-                  </Grid>
-
-                  {/* password text field */}
-                  <Grid container spacing={8} alignItems="flex-end">
-                     <Grid item><VpnKey/></Grid>
-                     <Grid item>
-                        <TextField
-                           type="password"
-                           label='Password'
-                           style={field_style}
-                           onChange = {(event,newValue) => this.setState({password:newValue})} />
-                     </Grid>
-                  </Grid>
-
-                  <br/><br/>
-
-                  <Button variant="contained" color="primary" fullWidth={true} style={btn_style}> Register </Button>
-               </form>
-            </Grid>
          </Grid>
       );
    }
 }
-
-const field_style = {
-   width: 300,
-   color: "#ffffff",
-}
-const btn_style = {
-   marginTop: 10,
-};
 
 export default App;
