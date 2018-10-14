@@ -32,7 +32,9 @@ class Login extends Component {
    };
    handleLogin = () => {
       if (this.state.selectedValue == 1) {
+            window.location.href = "http://localhost:3000/admin";
       } else if (this.state.selectedValue == 2) {
+            window.location.href = "http://localhost:3000/canvasser";
       } else {
          window.location.href = "http://localhost:3000/manager";
       }
