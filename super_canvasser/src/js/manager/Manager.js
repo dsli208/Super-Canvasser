@@ -25,7 +25,11 @@ const styles = {
 };
 
 function logout() {
-  window.location.href = "http://localhost:3000";
+  window.location.href = "/";
+};
+
+function viewCampaignList() {
+  window.location.href = "/manager/campaigns";
 };
 
 function Manager(props) {
@@ -40,7 +44,7 @@ function Manager(props) {
           <Typography color="inherit" className={classes.grow}>
             Manager
           </Typography>
-          <Button color="inherit">Campaigns</Button>
+          <Button onClick={viewCampaignList} color="inherit">Campaigns</Button>
           <Button color="inherit">Dates</Button>
           <Button color="inherit">Canvassers</Button>
           <Button color="inherit">Locations</Button>

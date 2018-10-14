@@ -1,0 +1,37 @@
+{
+	"campaigns": [{
+		"id": 1,
+		"name": "campaign 1",
+		"tasks": [{
+			"id": 1,
+			"locations": ["address 1", "address 2", "address 3"],
+			"canvasser": "Trung Vo"
+		},{
+			"id": 2,
+			"locations": ["address 4", "address 5", "address 6"],
+			"canvasser": "Mike Mathew"
+		},{
+			"id": 3,
+			"locations": ["address 7", "address 8", "address 9"],
+			"canvasser": "Habin Park"
+		}],
+		"questions": ["Question 1", "Question 2", "Question 3", "Question 4"]
+	}, {
+		"id": 2,
+		"name": "campaign 2",
+		"tasks": [{
+			"id": 4,
+			"locations": ["address 1", "address 2", "address 3"],
+			"canvasser": "Aiko Chu"
+		},{
+			"id": 5,
+			"locations": ["address 4", "address 5", "address 6"],
+			"canvasser": "Andrew White"
+		},{
+			"id": 6,
+			"locations": ["address 7", "address 8", "address 9"],
+			"canvasser": "David Li"
+		}],
+		"questions": ["Question 5", "Question 6", "Question 7", "Question 8"]
+	}]
+}

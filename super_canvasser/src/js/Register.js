@@ -21,8 +21,23 @@ class Register extends Component {
    handleChange = event => {
       this.setState({
          selectedValue: event.target.value
+      }, () => {
+         if (this.state.selectedValue === '1') {
+         } else if (this.state.selectedValue === '2') {
+         } else {
+
+         }
       })
    };
+   handleLogin = () => {
+      if (this.state.selectedValue === '1') {
+      } else if (this.state.selectedValue === '2') {
+         window.location.href = "/canvasser";
+      } else {
+         window.location.href = "/manager/campaigns";
+      }
+   };
+
    render() {
    	const { classes } = this.props;
       return (
