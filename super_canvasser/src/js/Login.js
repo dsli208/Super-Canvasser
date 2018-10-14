@@ -8,6 +8,8 @@ import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import {BrowserRouter, Route, Link } from 'react-router-dom';
 import Manager from './manager/Manager';
+import Canvasser from './canvasser/Canvasser';
+
 
 
 

@@ -7,6 +7,8 @@ import LoginAndRegister from './LoginAndRegister';
 import {BrowserRouter, Route } from 'react-router-dom';
 import Manager from './manager/Manager';
 import Canvasser from './canvasser/Canvasser';
+import Admin from './admin/Admin';
+
 import Main from './Main';
 
 class App extends Component {
@@ -18,6 +20,7 @@ class App extends Component {
                <Route path='/' exact strict component={Main}/>
                <Route path='/manager' exact strict component={Manager}/>
                <Route path='/canvasser' exact strict component={Canvasser}/>
+               <Route path='/admin' exact strict component={Admin}/>
             </div>
          </BrowserRouter>
 

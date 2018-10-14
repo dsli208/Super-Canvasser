@@ -8,6 +8,7 @@ import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import {AccountCircle} from '@material-ui/icons';
 
+
 const styles = {
   root: {
     flexGrow: 1,
@@ -25,7 +26,7 @@ function logout() {
   window.location.href = "http://localhost:3000";
 };
 
-function Canvasser(props) {
+function Admin(props) {
   const { classes } = props;
   return (
     <div className={classes.root}>
@@ -35,25 +36,19 @@ function Canvasser(props) {
             <AccountCircle />
           </IconButton>
           <Typography color="inherit" className={classes.grow}>
-            Canvasser
+            Admin
           </Typography>
           <Button color="inherit">Tasklist(Addresses and Details)</Button>
           <Button color="inherit">Freedays</Button>
           <Button onClick={logout} color="inherit">Log out</Button>
         </Toolbar>
       </AppBar>
-
-      
-
-    
     </div>
   );
 }
 
-Canvasser.propTypes = {
+Admin.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-
-export default withStyles(styles)(Canvasser);
-
+export default withStyles(styles)(Admin);
