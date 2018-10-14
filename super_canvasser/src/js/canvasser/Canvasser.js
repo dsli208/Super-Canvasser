@@ -6,10 +6,7 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
 import {AccountCircle} from '@material-ui/icons';
-import {BrowserRouter, Route } from 'react-router-dom';
-
 
 const styles = {
   root: {
@@ -25,14 +22,10 @@ const styles = {
 };
 
 function logout() {
-  window.location.href = "/";
+  window.location.href = "http://localhost:3000";
 };
 
-function viewCampaignList() {
-  window.location.href = "/manager/campaigns";
-};
-
-function Manager(props) {
+function Canvasser(props) {
   const { classes } = props;
   return (
     <div className={classes.root}>
@@ -42,23 +35,25 @@ function Manager(props) {
             <AccountCircle />
           </IconButton>
           <Typography color="inherit" className={classes.grow}>
-            Manager
+            Canvasser
           </Typography>
-          <Button onClick={viewCampaignList} color="inherit">Campaigns</Button>
-          <Button color="inherit">Dates</Button>
-          <Button color="inherit">Canvassers</Button>
-          <Button color="inherit">Locations</Button>
-          <Button color="inherit">Questions</Button>
-          <Button color="inherit">Talking points</Button>
+          <Button color="inherit">Tasklist(Addresses and Details)</Button>
+          <Button color="inherit">Freedays</Button>
           <Button onClick={logout} color="inherit">Log out</Button>
         </Toolbar>
       </AppBar>
+
+      
+
+    
     </div>
   );
 }
 
-Manager.propTypes = {
+Canvasser.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(Manager);
+
+export default withStyles(styles)(Canvasser);
+

@@ -48,6 +48,7 @@ class LoginAndRegister extends React.Component {
             <Tab label="Log In" />
           </Tabs>
         </AppBar>
+        
         {value === 0 && <TabContainer><Register/></TabContainer>}
         {value === 1 && <TabContainer><Login/></TabContainer>}
       </div>
