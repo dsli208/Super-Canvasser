@@ -22,18 +22,18 @@ class Register extends Component {
       this.setState({
          selectedValue: event.target.value
       }, () => {
-         if (this.state.selectedValue == 1) {
-         } else if (this.state.selectedValue == 2) {
+         if (this.state.selectedValue === '1') {
+         } else if (this.state.selectedValue === '2') {
          } else {
 
          }
       })
    };
    handleLogin = () => {
-      if (this.state.selectedValue == 1) {
-      } else if (this.state.selectedValue == 2) {
+      if (this.state.selectedValue === '1') {
+      } else if (this.state.selectedValue === '2') {
       } else {
-         window.location.href = "http://localhost:3000/manager";
+         window.location.href = "/manager/campaigns";
       }
    };
    render() {

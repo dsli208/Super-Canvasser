@@ -6,6 +6,7 @@ import Grid from '@material-ui/core/Grid';
 import LoginAndRegister from './LoginAndRegister';
 import {BrowserRouter, Route } from 'react-router-dom';
 import Manager from './manager/Manager';
+import ManagerCampaignsList from './manager/ManagerCampaignsList';
 import Main from './Main';
 
 class App extends Component {
@@ -15,7 +16,7 @@ class App extends Component {
          <BrowserRouter>
             <div>
                <Route path='/' exact strict component={Main}/>
-               <Route path='/manager' exact strict component={Manager}/>
+               <Route path='/manager/campaigns' exact strict component={ManagerCampaignsList}/>
             </div>
          </BrowserRouter>
 

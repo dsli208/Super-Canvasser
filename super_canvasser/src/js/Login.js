@@ -14,7 +14,7 @@ class Login extends Component {
    constructor(props) {
       super(props);
       this.state = {
-         selectedValue: 1,
+         selectedValue: '1',
          managers: []
       };
    }
@@ -22,18 +22,18 @@ class Login extends Component {
       this.setState({
          selectedValue: event.target.value
       }, () => {
-         if (this.state.selectedValue == 1) {
-         } else if (this.state.selectedValue == 2) {
+         if (this.state.selectedValue === '1') {
+         } else if (this.state.selectedValue === '2') {
          } else {
 
          }
       })
    };
    handleLogin = () => {
-      if (this.state.selectedValue == 1) {
-      } else if (this.state.selectedValue == 2) {
+      if (this.state.selectedValue === '1') {
+      } else if (this.state.selectedValue === '2') {
       } else {
-         window.location.href = "http://localhost:3000/manager";
+         window.location.href = "/manager/campaigns";
       }
    };
    render() {
@@ -64,9 +64,9 @@ class Login extends Component {
                </Grid>
                <br/>
                <div justify='center'>
-                  <Radio checked={this.state.selectedValue == 1} value='1' onChange={this.handleChange} />Admin
-                  <Radio checked={this.state.selectedValue == 2} value='2' onChange={this.handleChange} />Canvasser
-                  <Radio checked={this.state.selectedValue == 3} value='3' onChange={this.handleChange} />Manager
+                  <Radio checked={this.state.selectedValue === '1'} value='1' onChange={this.handleChange} />Admin
+                  <Radio checked={this.state.selectedValue === '2'} value='2' onChange={this.handleChange} />Canvasser
+                  <Radio checked={this.state.selectedValue === '3'} value='3' onChange={this.handleChange} />Manager
                </div>
                <Button onClick={this.handleLogin} variant="contained" color="primary" fullWidth={true} style={btn_style}> Log In </Button>
             </form>
