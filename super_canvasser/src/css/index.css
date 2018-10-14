@@ -6,9 +6,3 @@ body {
   background-repeat: no-repeat;
   background-size: cover;
 }
-
-#root {
-	margin: 10% auto 10% auto;
-	max-width: 600px;
-	box-shadow: 0 0 5px 2px rgba(0,0,0,.35);
-}

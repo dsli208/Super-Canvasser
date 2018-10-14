@@ -34,7 +34,6 @@ class App extends Component {
                <Route path='/' component={LoginAndRegister}/>
             </BrowserRouter>
 
-            <input type="button" value="Add Students" onclick="window.location.href='Students.html';"/>
 
 
          </Grid>

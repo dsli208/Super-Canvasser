@@ -68,10 +68,7 @@ class Register extends Component {
                <Radio checked={this.state.selectedValue === '3'} value='3' onChange={this.handleChange} />Manager
 
                <Button variant="contained" color="primary" onclick="window.location.href='www.google.com';" fullWidth={true} style={btn_style}> Register </Button>
-               <form action="">
-         <input type="button" value="Add Students" onclick="window.location.href='www.google.com';"/>
-               </form> 
-               <p id="demo"></p>
+             
 
 
 
