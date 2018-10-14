@@ -10,6 +10,7 @@ import {BrowserRouter, Route, Link } from 'react-router-dom';
 import Manager from './manager/Manager';
 
 
+
 class Login extends Component {
    constructor(props) {
       super(props);
@@ -30,8 +31,10 @@ class Login extends Component {
       })
    };
    handleLogin = () => {
-      if (this.state.selectedValue === '1') {
+      if (this.state.selectedValue === '1' ) {
+         window.location.href = "/admin";
       } else if (this.state.selectedValue === '2') {
+         window.location.href = "/canvasser";
       } else {
          window.location.href = "/manager/campaigns";
       }
