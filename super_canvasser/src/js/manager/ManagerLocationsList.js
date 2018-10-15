@@ -26,7 +26,7 @@ class ManagerLocationsList extends React.Component {
               </div>
             </Grid>
             <Grid item xs={5} >
-              <div clssName='manager-map'>
+              <div className='manager-map'>
                 <br/> <h1>Map</h1> <br/>
                 <MyMap className="locations-map"/>
               </div>

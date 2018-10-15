@@ -1,6 +1,5 @@
 import React from 'react';
 import Typography from '@material-ui/core/Typography';
-import users from '../../data/users.json';
 import '../../css/manager.css';
 import Manager from './Manager';
 import ExpansionPanel from '@material-ui/core/ExpansionPanel';
@@ -13,24 +12,6 @@ import TableCanvassers from './TableCanvassers';
 
 
 class ManagerCanvassersList extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      canvassers: [],
-    }
-  }
-  componentDidMount() {
-    var canvasserList = []
-    {users.users.map((user) => {
-      if (user.role === 'canvasser') {
-        canvasserList.push({user})
-      }
-    })}
-    this.setState({
-      canvassers: canvasserList
-    })
-  }
-  
   render() {
     return (
       <div>

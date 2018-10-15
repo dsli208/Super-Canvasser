@@ -12,14 +12,26 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      users: []
+      users: [],
+      locations: []
     }
   }
   componentDidMount() {
+    // initially when the App is launched
+    // we will test to see all data is fetched correctly or not from the back-end 
+    // fetch users data
     fetch('/users')
       .then(res => res.json())
-      .then(users => this.setState({users}, () =>
-        console.log("fetched..", users)));
+      .then(users => this.setState({users}, () => {
+        console.log("fetched users..", users); 
+      }));
+
+    // fetch locations data
+    fetch('/locations')
+      .then(res => res.json())
+      .then(locations => this.setState({locations}, () => {
+        console.log("fetched locations..", locations); 
+      }));
   }
   render() {
     return (

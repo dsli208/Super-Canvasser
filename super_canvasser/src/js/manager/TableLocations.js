@@ -18,13 +18,6 @@ import Tooltip from '@material-ui/core/Tooltip';
 import DeleteIcon from '@material-ui/icons/Delete';
 import FilterListIcon from '@material-ui/icons/FilterList';
 import { lighten } from '@material-ui/core/styles/colorManipulator';
-import locations from '../../data/locations.json';
-
-let counter = 0;
-function createData(address, street, city, state, zipcode) {
-  counter += 1;
-  return { id: counter, address, street, city, state, zipcode };
-}
 
 function desc(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -51,11 +44,11 @@ function getSorting(order, orderBy) {
 }
 
 const rows = [
-  { id: 'address', numeric: false, disablePadding: true, label: 'Address' },
-  { id: 'street', numeric: false, disablePadding: false, label: 'Street' },
-  { id: 'city', numeric: false, disablePadding: false, label: 'City' },
-  { id: 'state', numeric: false, disablePadding: false, label: 'State' },
-  { id: 'zipcode', numeric: false, disablePadding: false, label: 'Zip code' },
+  { id: 'taskId', numeric: true, disablePadding: false, label: 'Task ID' },
+  { id: 'longitude', numeric: true, disablePadding: false, label: 'Longitude' },
+  { id: 'latitude', numeric: true, disablePadding: false, label: 'Latitude' },
+  { id: 'talkingPoint', numeric: false, disablePadding: false, label: 'Talking Point' },
+  { id: 'rate', numeric: true, disablePadding: false, label: 'Rate' },
 ];
 
 class EnhancedTableHead extends React.Component {
@@ -211,12 +204,13 @@ class TableLocations extends React.Component {
   };
   componentDidMount(props) {
     var locationsList = []
-    {locations.locations.map((location) => {
-      locationsList.push(location)
-    })}
-    this.setState({
-      data: locationsList
-    })
+    
+    // fetching data locations from back-end
+    fetch('/locations')
+      .then(res => res.json())
+      .then(locations => this.setState({
+        data: locations
+      }))
   }
   handleRequestSort = (event, property) => {
     const orderBy = property;
@@ -305,11 +299,11 @@ class TableLocations extends React.Component {
                         <Checkbox checked={isSelected} />
                       </TableCell>
                       
-                      <TableCell> {n.address} </TableCell>
-                      <TableCell> {n.street} </TableCell>
-                      <TableCell> {n.city} </TableCell>
-                      <TableCell> {n.state} </TableCell>
-                      <TableCell> {n.zipcode} </TableCell>
+                      <TableCell numeric> {n.taskId} </TableCell>
+                      <TableCell numeric> {n.longitude} </TableCell>
+                      <TableCell numeric> {n.latitude} </TableCell>
+                      <TableCell > {n.talkingPoint} </TableCell>
+                      <TableCell numeric> {n.rate} </TableCell>
                     </TableRow>
                   );
                 })}
