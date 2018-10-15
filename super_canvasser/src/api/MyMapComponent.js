@@ -1,36 +1,72 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import { compose, withProps } from "recompose";
-import {
-  withScriptjs,
-  withGoogleMap,
-  GoogleMap,
-  Marker
-} from "react-google-maps";
 
-const API_KEY = "AIzaSyCV7KUB0Kafmfs-VntgMStJOSouyMibknc";
+class MyMapComponent extends React.Component {
+  constructor() {
+    super();
+    this.state = {
+      zoom: 13,
+      maptype: 'roadmap',
+      place_formatted: '',
+      place_id: '',
+      place_location: '',
+    }
+  }
+  componentDidMount() {
+    let map = new window.google.maps.Map(document.getElementById('map'), {
+      center: {lat: -33.8688, lng: 151.2195},
+      zoom: 13,
+      mapTypeId: 'roadmap',
+    });
+    map.addListener('zoom_changed', () => {
+      this.setState({
+        zoom: map.getZoom(),
+      });
+    });
 
-const MyMapComponent = compose(
-  withProps({
-    /**
-     * Note: create and replace your own key in the Google console.
-     * https://console.developers.google.com/apis/dashboard
-     * The key "AIzaSyBkNaAGLEVq0YLQMi-PYEMabFeREadYe1Q" can be ONLY used in this sandbox (no forked).
-     */
-    googleMapURL:
-      "https://maps.googleapis.com/maps/api/js?key=" + API_KEY + "&libraries=geometry,drawing,places",
-    loadingElement: <div style={{ height: `100%` }} />,
-    containerElement: <div style={{ height: `400px` }} />,
-    mapElement: <div style={{ height: `100%` }} />
-  }),
-  withScriptjs,
-  withGoogleMap
-)(props => (
-  <GoogleMap defaultZoom={8} defaultCenter={{ lat: -34.397, lng: 150.644 }}>
-    {props.isMarkerShown && (
-      <Marker position={{ lat: -34.397, lng: 150.644 }} />
-    )}
-  </GoogleMap>
-));
+    map.addListener('maptypeid_changed', () => {
+      this.setState({
+        maptype: map.getMapTypeId(),
+      });
+    });
+    let marker = new window.google.maps.Marker({
+      map: map,
+      position: {lat: -33.8688, lng: 151.2195},
+    });
+
+    // initialize the autocomplete functionality using the #pac-input input box
+    let inputNode = document.getElementById('pac-input');
+    map.controls[window.google.maps.ControlPosition.TOP_LEFT].push(inputNode);
+    let autoComplete = new window.google.maps.places.Autocomplete(inputNode);
+
+    autoComplete.addListener('place_changed', () => {
+      let place = autoComplete.getPlace();
+      let location = place.geometry.location;
+
+      this.setState({
+        place_formatted: place.formatted_address,
+        place_id: place.place_id,
+        place_location: location.toString(),
+      });
+
+      // bring the selected place in view on the map
+      map.fitBounds(place.geometry.viewport);
+      map.setCenter(location);
+
+      marker.setPlace({
+        placeId: place.place_id,
+        location: location,
+      });
+    });
+  }
+
+  render() {
+    return (
+      <div id='app'>
+        <div id='map' />
+      </div>
+    );
+  }
+};
 
 export default MyMapComponent;

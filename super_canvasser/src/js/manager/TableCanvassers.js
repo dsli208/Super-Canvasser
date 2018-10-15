@@ -204,11 +204,21 @@ class TableCanvassers extends React.Component {
     order: 'asc',
     orderBy: 'id',
     selected: [],
-    data: users.users,
+    data: [],
     page: 0,
     rowsPerPage: 5,
   };
-
+  componentDidMount(props) {
+    var canvasserList = []
+    {users.users.map((user) => {
+      if (user.role === 'canvasser') {
+        canvasserList.push(user)
+      }
+    })}
+    this.setState({
+      data: canvasserList
+    })
+  }
   handleRequestSort = (event, property) => {
     const orderBy = property;
     let order = 'desc';
@@ -296,10 +306,10 @@ class TableCanvassers extends React.Component {
                         <Checkbox checked={isSelected} />
                       </TableCell>
                       
-                      <TableCell numeric>{n.firstName}</TableCell>
-                      <TableCell numeric>{n.lastName}</TableCell>
-                      <TableCell numeric>{n.email}</TableCell>
-                      <TableCell numeric>{n.role}</TableCell>
+                      <TableCell> {n.firstName} </TableCell>
+                      <TableCell> {n.lastName} </TableCell>
+                      <TableCell> {n.email} </TableCell>
+                      <TableCell> {n.role} </TableCell>
                     </TableRow>
                   );
                 })}

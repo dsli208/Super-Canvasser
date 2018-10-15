@@ -1,6 +1,7 @@
 import React from 'react';
 import Typography from '@material-ui/core/Typography';
 import users from '../../data/users.json';
+import '../../css/manager.css';
 import Manager from './Manager';
 import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
@@ -34,7 +35,10 @@ class ManagerCanvassersList extends React.Component {
     return (
       <div>
         <Manager/>
-        <TableCanvassers/>
+        <div className="canvasserlist">
+          <br/><h1>Canvassers list</h1>
+          <TableCanvassers/>
+        </div>
       </div>
     );
   };
