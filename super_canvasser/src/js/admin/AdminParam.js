@@ -21,8 +21,11 @@ class AdminParam extends React.Component {
         };
     }
 
+
     render() {
-        return(<Admin/>
+        return(
+            <div>
+            <Admin/>
             <Grid item xs={12} container justify='center'>
             <form className="form" justify='center'>
                {/* user email text field */}
@@ -49,5 +52,7 @@ class AdminParam extends React.Component {
                <br/>
             </form>
          </Grid>
+         </div>
+        );
     }
 }
