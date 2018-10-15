@@ -8,6 +8,18 @@ import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import {AccountCircle} from '@material-ui/icons';
 
+class Admin extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      users: [],
+      day_duration: 0,
+      avg_speed_travel: 0
+    };
+  }
+}
+
+
 
 const styles = {
   root: {

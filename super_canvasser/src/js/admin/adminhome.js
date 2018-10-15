@@ -17,7 +17,40 @@ import {BrowserRouter, Route } from 'react-router-dom';
 import ReactTable from "react-table";
 import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
-import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
+
+class AdminHome extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+          users: [],
+          day_duration: 0,
+          avg_speed_travel: 0
+        };
+    }
+    render() {
+        const data = [{id: '1', name: 'Michael Mathew', type:'Manager'}, 
+        {id: '2', name: 'Trung Vo', type:'Admin'}, 
+        {id: '3', name: 'Hanbin Park', type: 'Canvasser'}];
+      
+        const columns = [{
+          Header: 'User ID',
+          accessor: 'id' // String-based value accessors!
+        }, {
+          Header: 'Name',
+          accessor: 'name',
+          //Cell: props => <span className='number'>{props.value}</span> // Custom cell components!
+        }, {
+          id: 'User Type', // Required because our accessor is not a string
+          Header: 'type',
+          //accessor: d => d.friend.name // Custom value accessors!
+        }]
+
+        /*<ReactTable
+            data={data}
+            columns={columns} 
+        />*/
+    }
+}
 
 const styles = {
     root: {
@@ -41,26 +74,6 @@ const styles = {
   }
   function editUser() {
 
-  }
-
-  function render() {
-    const data = [];
-  
-    const columns = [{
-      Header: 'User ID',
-      accessor: 'id' // String-based value accessors!
-    }, {
-      Header: 'Name',
-      accessor: 'name',
-      //Cell: props => <span className='number'>{props.value}</span> // Custom cell components!
-    }, {
-      id: 'User Type', // Required because our accessor is not a string
-      Header: 'type',
-      //accessor: d => d.friend.name // Custom value accessors!
-    }, { // How to put in the edit and delete buttons?
-      Header: props => <span>Friend Age</span>, // Custom header components!
-      accessor: 'friend.age'
-    }]
   }
 
   function Admin(props) {
