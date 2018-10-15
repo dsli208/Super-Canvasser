@@ -5,7 +5,6 @@ import appLogo from '../img/app_logo.png';
 import Grid from '@material-ui/core/Grid';
 import LoginAndRegister from './LoginAndRegister';
 import {BrowserRouter, Route } from 'react-router-dom';
-import Manager from './manager/Manager';
 
 class Main extends Component {
    

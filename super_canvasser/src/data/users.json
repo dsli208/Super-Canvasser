@@ -1,0 +1,51 @@
+{
+	"users": [{
+		"id": 1,
+		"firstName": "Trung",
+		"lastName": "Vo",
+		"email": "trung.vo@stonybrook.edu",
+		"role": "canvasser"
+	},{
+		"id": 2,
+		"firstName": "Mike",
+		"lastName": "Mathew",
+		"email": "mike.mathew@stonybrook.edu",
+		"role": "canvasser"
+	},{
+		"id": 3,
+		"firstName": "Habin",
+		"lastName": "Park",
+		"email": "habin.park@stonybrook.edu",
+		"role": "canvasser"
+	},{
+		"id": 4,
+		"firstName": "Aiko",
+		"lastName": "Chu",
+		"email": "aiko.chu@stonybrook.edu",
+		"role": "canvasser"
+	},{
+		"id": 5,
+		"firstName": "Andrew",
+		"lastName": "White",
+		"email": "andrew.white@stonybrook.edu",
+		"role": "canvasser"
+	},{
+		"id": 6,
+		"firstName": "David",
+		"lastName": "Li",
+		"email": "david.li@stonybrook.edu",
+		"role": "canvasser"
+	},{
+		"id": 7,
+		"firstName": "Novak",
+		"lastName": "Djokovic",
+		"email": "novak.djokovic@stonybrook.edu",
+		"role": "manager"
+	},{
+		"id": 8,
+		"firstName": "Roger",
+		"lastName": "Federer",
+		"email": "roger.federer@stonybrook.edu",
+		"role": "admin"
+	}]
+}

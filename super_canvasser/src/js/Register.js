@@ -4,21 +4,13 @@ import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import {AccountCircle, VpnKey, Email} from '@material-ui/icons';
 import Radio from '@material-ui/core/Radio';
-import RadioGroup from '@material-ui/core/RadioGroup';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
 
-const styled = theme => ({
-	group: {
-		flexDirection: 'row',
-		justifyContent: 'space-around',
-	}
-});
 
 class Register extends Component {
    state = {
       selectedValue: '1',
    };
-   handleChange = event => {
+   handleChange = (event) => {
       this.setState({
          selectedValue: event.target.value
       }, () => {
@@ -29,7 +21,7 @@ class Register extends Component {
          }
       })
    };
-   handleLogin = () => {
+   handleRegister = () => {
       if (this.state.selectedValue === '1') {
       } else if (this.state.selectedValue === '2') {
          window.location.href = "/canvasser";
@@ -39,7 +31,6 @@ class Register extends Component {
    };
 
    render() {
-   	const { classes } = this.props;
       return (
          <Grid item xs={12} container justify='center'>
             <form className="form">
@@ -82,13 +73,7 @@ class Register extends Component {
                <Radio checked={this.state.selectedValue === '2'} value='2' onChange={this.handleChange} />Canvasser
                <Radio checked={this.state.selectedValue === '3'} value='3' onChange={this.handleChange} />Manager
 
-               <Button variant="contained" color="primary" onclick="window.location.href='www.google.com';" fullWidth={true} style={btn_style}> Register </Button>
-             
-
-
-
-
-
+               <Button onClick={this.handleRegister} variant="contained" color="primary" fullWidth={true} style={btn_style}> Register </Button>
             
             </form>
          </Grid>
