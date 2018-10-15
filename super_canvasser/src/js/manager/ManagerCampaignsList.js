@@ -85,4 +85,3 @@ class ManagerCampaignsList extends React.Component {
 }
 
 export default ManagerCampaignsList;
-

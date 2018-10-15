@@ -90,3 +90,4 @@ const btn_style = {
 };
 
 export default Register;
+

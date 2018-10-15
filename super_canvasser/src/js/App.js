@@ -28,14 +28,3 @@ class App extends Component {
 }
 
 export default App;
-
-
-
-//<input class="RegitserButton" color="primary" fullWidth={true} onlick="window.location.href='http://www.google.com/'" type="button" value="Register"/>
-
-//<Button variant="contained" color="primary" fullWidth={true} style={btn_style}> Register </Button>
-//<Confirm/>
-
-
-
-//					<Button onClick={() => {console.log("clicked")}} variant="contained" color="primary" fullWidth={true} style={btn_style}> Register </Button>
