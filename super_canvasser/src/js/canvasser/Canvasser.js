@@ -8,6 +8,7 @@ import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import {AccountCircle} from '@material-ui/icons';
 
+
 const styles = {
   root: {
     flexGrow: 1,
@@ -42,10 +43,6 @@ function Canvasser(props) {
           <Button onClick={logout} color="inherit">Log out</Button>
         </Toolbar>
       </AppBar>
-
-      
-
-    
     </div>
   );
 }
@@ -53,7 +50,6 @@ function Canvasser(props) {
 Canvasser.propTypes = {
   classes: PropTypes.object.isRequired,
 };
-
 
 export default withStyles(styles)(Canvasser);
 

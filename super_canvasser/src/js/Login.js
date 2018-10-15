@@ -2,15 +2,8 @@ import React, { Component } from 'react';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
-import {AccountCircle, VpnKey, Email} from '@material-ui/icons';
+import { VpnKey, Email} from '@material-ui/icons';
 import Radio from '@material-ui/core/Radio';
-import RadioGroup from '@material-ui/core/RadioGroup';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import {BrowserRouter, Route, Link } from 'react-router-dom';
-import Manager from './manager/Manager';
-import Canvasser from './canvasser/Canvasser';
-
-
 
 
 class Login extends Component {

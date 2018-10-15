@@ -6,9 +6,7 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
 import {AccountCircle} from '@material-ui/icons';
-import {BrowserRouter, Route } from 'react-router-dom';
 
 
 const styles = {
@@ -32,6 +30,14 @@ function viewCampaignList() {
   window.location.href = "/manager/campaigns";
 };
 
+function viewCanvasserList() {
+  window.location.href = '/manager/canvassers';
+}
+
+function viewLocationList() {
+  window.location.href = '/manager/locations';
+}
+
 function Manager(props) {
   const { classes } = props;
   return (
@@ -46,8 +52,8 @@ function Manager(props) {
           </Typography>
           <Button onClick={viewCampaignList} color="inherit">Campaigns</Button>
           <Button color="inherit">Dates</Button>
-          <Button color="inherit">Canvassers</Button>
-          <Button color="inherit">Locations</Button>
+          <Button onClick={viewCanvasserList} color="inherit">Canvassers</Button>
+          <Button onClick={viewLocationList} color="inherit">Locations</Button>
           <Button color="inherit">Questions</Button>
           <Button color="inherit">Talking points</Button>
           <Button onClick={logout} color="inherit">Log out</Button>

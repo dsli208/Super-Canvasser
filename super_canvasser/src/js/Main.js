@@ -6,8 +6,6 @@ import Grid from '@material-ui/core/Grid';
 import LoginAndRegister from './LoginAndRegister';
 import {BrowserRouter, Route } from 'react-router-dom';
 
-
-
 class Main extends Component {
    
    render() {
