@@ -1,3 +1,4 @@
+
 import React, { Component } from 'react';
 import Image from 'react-image-resizer';
 import '../css/App.css';
