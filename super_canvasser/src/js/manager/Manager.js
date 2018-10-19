@@ -7,7 +7,7 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import {AccountCircle} from '@material-ui/icons';
-
+import currentUser from '../../data/currentUser';
 
 const styles = {
   root: {
@@ -22,48 +22,69 @@ const styles = {
   },
 };
 
-function logout() {
-  window.location.href = "/";
-};
 
-function viewCampaignList() {
-  window.location.href = "/manager/campaigns";
-};
+class Manager extends React.Component  {
+  
+  constructor(props) {
+    super(props);
+    this.state = {
+      currentUserName: '',
+      currentUserObj: '',
+      currentUserFullName: '',
+    }
+  }
+  
+  componentDidMount() {
+    this.setState({
+      currentUserName: currentUser[0].username,
+      currentUserObj: currentUser[0],
+      currentUserFullName: currentUser[0].firstName + ' ' + currentUser[0].lastName
+    })
+  } 
 
-function viewCanvasserList() {
-  window.location.href = '/manager/canvassers';
-}
+  logout = () => {
+    window.location.href = '/';
+  }
 
-function viewLocationList() {
-  window.location.href = '/manager/locations';
-}
+  viewLocations = () => {
+    window.location.href = '/users/manager/' + this.state.currentUserName + '/locations';
+  }
 
-function Manager(props) {
-  const { classes } = props;
-  return (
-    <div className={classes.root}>
-      <AppBar position="static">
-        <Toolbar>
-          <IconButton className={classes.menuButton} color="inherit" aria-label="Menu">
-            <AccountCircle />
-          </IconButton>
-          <Typography color="inherit" className={classes.grow}>
-            Manager
-          </Typography>
-          <Button onClick={viewCampaignList} color="inherit">Campaigns</Button>
-          <Button color="inherit">Dates</Button>
-          <Button onClick={viewCanvasserList} color="inherit">Canvassers</Button>
-          <Button onClick={viewLocationList} color="inherit">Locations</Button>
-          <Button color="inherit">Questions</Button>
-          <Button color="inherit">Talking points</Button>
-          <Button onClick={logout} color="inherit">Log out</Button>
-        </Toolbar>
-      </AppBar>
-    </div>
-  );
+  viewCanvassers = () => {
+    window.location.href = '/users/manager/' + this.state.currentUserName + '/canvassers';
+  }
+
+  render() {
+    const { classes } = this.props;
+    return (
+      <div className={classes.root}>
+        <AppBar position="static">
+          <Toolbar>
+            <IconButton className={classes.menuButton} color="inherit" aria-label="Menu">
+              <AccountCircle />
+            </IconButton>
+            <Typography variant="title" color="inherit" className={classes.grow}>
+               {this.state.currentUserFullName}
+            </Typography>
+            <Button color="inherit">Campaigns</Button>
+            <Button color="inherit">Dates</Button>
+            <Button onClick={this.viewCanvassers} color="inherit">Canvassers</Button>
+            <Button onClick={this.viewLocations} color="inherit">Locations</Button>
+            <Button color="inherit">Questions</Button>
+            <Button color="inherit">Talking points</Button>
+            <Button onClick={this.logout} color="inherit">Log out</Button>
+          </Toolbar>
+        </AppBar>
+      </div>
+    );
+  }
 }
 
 Manager.propTypes = {
   classes: PropTypes.object.isRequired,
 };
+<<<<<<< HEAD
+=======
+
+>>>>>>> 52782120df6dcb7a3d00c822acb39eaeb2c927fd
 export default withStyles(styles)(Manager);

@@ -18,13 +18,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 import DeleteIcon from '@material-ui/icons/Delete';
 import FilterListIcon from '@material-ui/icons/FilterList';
 import { lighten } from '@material-ui/core/styles/colorManipulator';
-import users from '../../data/users.json';
 
-let counter = 0;
-function createData( firstName, lastName, email, role) {
-  counter += 1;
-  return { id: counter, firstName, lastName, email, role };
-}
 
 function desc(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -53,8 +47,9 @@ function getSorting(order, orderBy) {
 const rows = [
   { id: 'firstName', numeric: false, disablePadding: true, label: 'First Name' },
   { id: 'lastName', numeric: false, disablePadding: false, label: 'Last Name' },
-  { id: 'email', numeric: false, disablePadding: false, label: 'Email' },
   { id: 'role', numeric: false, disablePadding: false, label: 'Role' },
+  { id: 'email', numeric: false, disablePadding: false, label: 'Email' },
+  { id: 'phone', numeric: false, disablePadding: false, label: 'Phone Number' },
 ];
 
 class EnhancedTableHead extends React.Component {
@@ -204,11 +199,31 @@ class TableCanvassers extends React.Component {
     order: 'asc',
     orderBy: 'id',
     selected: [],
-    data: users.users,
+    data: [],
     page: 0,
     rowsPerPage: 5,
   };
+  componentDidMount(props) {
+    // list of canvassers
+    var canvasserList = []
 
+    // fetching from back-end server
+    // filter only canvassers from users list
+    fetch('/users')
+      .then(res => res.json())
+      .then(users => {
+        users.map(user => {
+          if (user.role === 'canvasser') {
+            canvasserList.push(user);
+          }
+        })
+      })
+
+    // set data to list of canvassers
+    this.setState({
+      data: canvasserList
+    })
+  }
   handleRequestSort = (event, property) => {
     const orderBy = property;
     let order = 'desc';
@@ -296,10 +311,11 @@ class TableCanvassers extends React.Component {
                         <Checkbox checked={isSelected} />
                       </TableCell>
                       
-                      <TableCell numeric>{n.firstName}</TableCell>
-                      <TableCell numeric>{n.lastName}</TableCell>
-                      <TableCell numeric>{n.email}</TableCell>
-                      <TableCell numeric>{n.role}</TableCell>
+                      <TableCell> {n.firstName} </TableCell>
+                      <TableCell> {n.lastName} </TableCell>
+                      <TableCell> {n.role} </TableCell>
+                      <TableCell> {n.email} </TableCell>
+                      <TableCell> {n.phone} </TableCell>
                     </TableRow>
                   );
                 })}
