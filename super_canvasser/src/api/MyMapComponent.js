@@ -63,7 +63,7 @@ class MyMapComponent extends React.Component {
   render() {
     return (
       <div id='app'>
-        <div id='map' />
+        <div id='map'/>
       </div>
     );
   }

@@ -7,19 +7,7 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import {AccountCircle} from '@material-ui/icons';
-
-class Admin extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      users: [],
-      day_duration: 0,
-      avg_speed_travel: 0
-    };
-  }
-}
-
-
+import currentUser from '../../data/currentUser';
 
 const styles = {
   root: {
@@ -34,29 +22,58 @@ const styles = {
   },
 };
 
-function logout() {
-  window.location.href = "http://localhost:3000";
-};
 
-function Admin(props) {
-  const { classes } = props;
-  return (
-    <div className={classes.root}>
-      <AppBar position="static">
-        <Toolbar>
-          <IconButton className={classes.menuButton} color="inherit" aria-label="Menu">
-            <AccountCircle />
-          </IconButton>
-          <Typography color="inherit" className={classes.grow}>
-            Admin
-          </Typography>
-          <Button color="inherit">Tasklist(Addresses and Details)</Button>
-          <Button color="inherit">Freedays</Button>
-          <Button onClick={logout} color="inherit">Log out</Button>
-        </Toolbar>
-      </AppBar>
-    </div>
-  );
+class Admin extends React.Component  {
+  
+  constructor(props) {
+    super(props);
+    this.state = {
+      currentUserName: '',
+      currentUserObj: '',
+      currentUserFullName: '',
+    }
+  }
+  
+  componentDidMount() {
+    this.setState({
+      currentUserName: currentUser[0].username,
+      currentUserObj: currentUser[0],
+      currentUserFullName: currentUser[0].firstName + ' ' + currentUser[0].lastName
+    })
+  } 
+
+  logout = () => {
+    window.location.href = '/';
+  }
+
+  viewUsers = () => {
+    window.location.href = '/users/admin/' + this.state.currentUserName + '/view';
+  }
+
+  updateInfo = () => {
+    window.location.href = '/users/admin/' + this.state.currentUserName + '/add';
+  }
+
+  render() {
+    const { classes } = this.props;
+    return (
+      <div className={classes.root}>
+        <AppBar position="static">
+          <Toolbar>
+            <IconButton className={classes.menuButton} color="inherit" aria-label="Menu">
+              <AccountCircle />
+            </IconButton>
+            <Typography variant="title" color="inherit" className={classes.grow}>
+               {this.state.currentUserFullName}
+            </Typography>
+            <Button onClick={this.viewUsers} color="inherit">View all users</Button>
+            <Button onClick={this.updateInfo} color="inherit">Update Info</Button>
+            <Button onClick={this.logout} color="inherit">Log out</Button>
+          </Toolbar>
+        </AppBar>
+      </div>
+    );
+  }
 }
 
 Admin.propTypes = {

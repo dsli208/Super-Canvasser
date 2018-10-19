@@ -17,7 +17,9 @@
     "react-swipeable-views": "^0.13.0",
     "react-table": "^6.8.6",
     "react-tap-event-plugin": "^3.0.3",
-    "react-toolbox": "^2.0.0-beta.13"
+    "react-toolbox": "^2.0.0-beta.13",
+    "react-web-tabs": "^1.0.1",
+    "write-json-file": "^3.0.2"
   },
   "scripts": {
     "start": "react-scripts start",

@@ -1,6 +1,3 @@
-.manager-location-list {
-	margin: 0 0 0 10%;
-}
-.canvasserlist {
+.canvasserlist, .locationlist {
 	margin: 0 10% 0 10%;
 }
