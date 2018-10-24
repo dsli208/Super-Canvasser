@@ -202,9 +202,7 @@ class TableLocations extends React.Component {
     page: 0,
     rowsPerPage: 5,
   };
-  componentDidMount(props) {
-    var locationsList = []
-    
+  componentDidMount(props) {    
     // fetching data locations from back-end
     fetch('/locations')
       .then(res => res.json())

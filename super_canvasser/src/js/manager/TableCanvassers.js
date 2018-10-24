@@ -212,7 +212,7 @@ class TableCanvassers extends React.Component {
     fetch('/users')
       .then(res => res.json())
       .then(users => {
-        users.map(user => {
+        users.forEach(user => {
           if (user.role === 'canvasser') {
             canvasserList.push(user);
           }
