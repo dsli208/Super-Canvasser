@@ -1,5 +1,4 @@
 import React from 'react';
-import Typography from '@material-ui/core/Typography';
 import campaigns from '../../data/campaigns.json';
 import Manager from './Manager';
 import ExpansionPanel from '@material-ui/core/ExpansionPanel';
@@ -63,7 +62,7 @@ class ManagerCampaignsList extends React.Component {
       campaigns: campaigns.campaigns
     },() => {
       var campaignsList = []
-      {this.state.campaigns.map(campaign => {
+      {this.state.campaigns.forEach(campaign => {
         var row = <CampaignRow key={campaign.id} {...campaign}/>
         campaignsList.push(row)
       })}

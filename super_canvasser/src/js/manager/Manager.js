@@ -83,8 +83,4 @@ class Manager extends React.Component  {
 Manager.propTypes = {
   classes: PropTypes.object.isRequired,
 };
-<<<<<<< HEAD
-=======
-
->>>>>>> 52782120df6dcb7a3d00c822acb39eaeb2c927fd
 export default withStyles(styles)(Manager);
