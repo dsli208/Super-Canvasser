@@ -88,7 +88,7 @@ const styles = {
             <Typography color="inherit" className={classes.grow}>
               Manager
             </Typography>
-            <Button color="inherit">Campaigns</Button>
+            <Button colornpm ="inherit">Campaigns</Button>
             
             <Button onClick={logout} color="inherit">Log out</Button>
           </Toolbar>
