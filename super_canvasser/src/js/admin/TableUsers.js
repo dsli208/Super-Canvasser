@@ -416,10 +416,15 @@ class TableUsers extends React.Component {
     this.setState({ selected: [] });
   };
 
+  handleDoubleClick = (event, id) => {
+      console.log(this.state.data[id-1]);
+
+      window.location.href = '/users/admin/' + currentUser[0].username + '/add?id='+id + '&firstName=' + this.state.data[id-1].firstName+ '&lastName=' + this.state.data[id-1].lastName+ '&username=' + this.state.data[id-1].username+ '&email=' + this.state.data[id-1].email+ '&role=' + this.state.data[id-1].role+'&phone=' + this.state.data[id-1].phone;
+
+
+  };
   handleClick = (event, id) => {
     console.log(this.state.data[id-1]);
-
-    window.location.href = '/users/admin/' + currentUser[0].username + '/add?id='+id + '&firstName=' + this.state.data[id-1].firstName+ '&lastName=' + this.state.data[id-1].lastName+ '&username=' + this.state.data[id-1].username+ '&email=' + this.state.data[id-1].email+ '&role=' + this.state.data[id-1].role+'&phone=' + this.state.data[id-1].phone;
 
     const { selected } = this.state;
     const selectedIndex = selected.indexOf(id);
@@ -478,6 +483,7 @@ class TableUsers extends React.Component {
                     <TableRow
                       hover
                       onClick={event => this.handleClick(event, n.id)}
+                      onDoubleClick={event => this.handleDoubleClick(event, n.id)}
                       role="checkbox"
                       aria-checked={isSelected}
                       tabIndex={-1}
