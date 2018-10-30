@@ -15,7 +15,7 @@ var connection = mysql.createConnection({
 
 // connect MySQL database
 connection.connect((err) => {
-	if (err) throw err;
+	if (err) console.log(err);
 	console.log('MySQL connected...');
 });
 
@@ -24,7 +24,7 @@ connection.connect((err) => {
 // fetch users data from database back-end to front-end React (GET request)
 server.get('/users', (req, res) => {
 	connection.query('SELECT * FROM users', function (error, results, fields) {
-	  if (error) throw error;
+	  if (error) console.log(err);
 	  //console.log('The solution is: ', results);
 	  res.send(JSON.stringify(results));
 	});
@@ -105,7 +105,7 @@ server.get('/users/:currentUserName', (req, res) => {
 // fetch locations data
 server.get('/locations', (req, res) => {
 	connection.query('SELECT * FROM locations', function (error, results, fields) {
-	  if (error) throw error;
+	  if (error) console.log(err);
 	  //console.log('The solution is: ', results);
 	  res.send(JSON.stringify(results));
 	});
