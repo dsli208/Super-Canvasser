@@ -6,6 +6,7 @@ import Radio from '@material-ui/core/Radio';
 import Button from '@material-ui/core/Button';
 import { PersonAdd, Timelapse } from '@material-ui/icons';
 import FormHelperText from '@material-ui/core/FormHelperText';
+import currentUser from "../../data/currentUser";
 
 
 const style = {
@@ -27,11 +28,18 @@ class AdminAddUser extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+        id: '',
       selectedValue: '1',
         firstName: '',
         lastName: '',
         username: '',
         email: '',
+        phone: '',
+        tmpFirstName: '',
+        tmpLastName: '',
+        tmpUsername: '',
+        tmpEmail: '',
+        tmpPhone: '',
 
         firstNameValid: true,
         lastNameValid: true,
@@ -42,13 +50,46 @@ class AdminAddUser extends React.Component {
     }
   }
 
-  handleChangeRadio = (event) => {
+    componentDidMount() {
+        const searchParams = new URLSearchParams(window.location.search);
+        const id = searchParams.get('id');
+        const firstName = searchParams.get('firstName');
+        const lastName = searchParams.get('lastName');
+        const username = searchParams.get('username');
+        const email = searchParams.get('email');
+        const phone = searchParams.get('phone');
+        var role = searchParams.get('role');
+
+        if(role === 'admin'){
+            role = '1';
+        }else if(role === 'canvasser'){
+            role = '2';
+        }else{
+            role = '3';
+        }
+
+        if(id !== null){
+            this.setState({
+                id : id,
+                tmpFirstName: firstName,
+                tmpLastName: lastName,
+                tmpUsername: username,
+                tmpEmail: email,
+                tmpPhone: phone,
+                selectedValue: role
+            })
+        }
+        console.log(role)
+    }
+
+    handleChangeRadio = (event) => {
     this.setState({
       selectedValue: event.target.value
     })
   }
 
     handleChangeField = (event) => {
+      this.setState({edit: true});
         if (event.target.type === 'text') {
             if (event.target.id === 'firstName') {
                 //first name
@@ -153,6 +194,104 @@ class AdminAddUser extends React.Component {
       }
   }
 
+    handleUpdateUser = () => {
+        const inFirstName = this.state.firstName;
+        const inLastName = this.state.lastName;
+        const inUserName = this.state.username;
+        const inEmail = this.state.email;
+
+        if(inFirstName === '' && inLastName === '' && inEmail === '' && inUserName === ''){
+            console.log('One of field should be filled!');
+        }else {
+            if (inFirstName === '' || inFirstName === this.state.tmpFirstName) {
+                var firstName = this.state.tmpFirstName;
+            } else{
+                firstName = inFirstName;
+            }
+
+            if (inLastName === '' || inLastName === this.state.tmpLastName) {
+                var lastName = this.state.tmpLastName;
+            } else if (inLastName !== '') {
+                lastName = inLastName;
+            }
+
+            if (inUserName === ''  || inUserName === this.state.tmpUsername) {
+                var username = this.state.tmpUsername;
+            } else{
+                fetch('/users')
+                    .then(res => res.json())
+                    .then(users => {
+                        var userObj = users.find((user) => user.username === inUserName);
+
+                        if (typeof userObj === 'undefined') {
+                            // username not exist => good
+                            console.log("work");
+                            username = inUserName;
+                            this.setState({
+                                userNameValid: true
+                            })
+                        } else {
+                            console.log('Existed username!');
+                            console.log(userObj);
+                            console.log(inUserName);
+                            this.setState({
+                                userNameValid: false
+                            })
+                        }
+                    })
+
+            }
+
+            if (inEmail === '' || inEmail === this.state.tmpEmail) {
+                var email = this.state.tmpEmail;
+            } else{
+                fetch('/users')
+                    .then(res => res.json())
+                    .then(users => {
+                        var userObj = users.find((user) => user.email === inEmail);
+
+                        if (typeof userObj === 'undefined') {
+                            // username not exist => good
+                            console.log("work");
+                            email = inEmail;
+                            this.setState({
+                                emailValid: true
+                            })
+                        } else {
+                            console.log('Existed email!');
+                            console.log(userObj);
+                            console.log(inEmail);
+                            this.setState({
+                                emailValid: false
+                            })
+                        }
+                    })
+
+            }
+
+            if (this.state.selectedValue === 1) {
+                var role = "admin";
+            } else if (this.state.selectedValue === 2) {
+                role = "canvasser";
+            } else {
+                role = "manager";
+            }
+
+
+            if(this.state.userNameValid && this.state.emailValid){
+                fetch(`/users/update?firstName=${firstName}&lastName=${lastName}&username=${username}&email=${email}&role=${role}&id=${this.state.id}`)
+                    .catch((err) => console.log(err))
+
+                console.log('Update user done!');
+            }
+
+        }
+
+
+
+
+    }
+
   handleUpdateParam = () => {
 
   }
@@ -166,7 +305,7 @@ class AdminAddUser extends React.Component {
           <form className="form" justify='center'>
               <Grid container spacing={8} alignItems="flex-end" justify='center'>
                 <Grid item><PersonAdd/></Grid>
-                <Grid item><h1> Add new user </h1></Grid>
+                <Grid item><h1> {this.state.id === '' ? 'Add new user' : 'Update User'}</h1></Grid>
               </Grid>
               <div style={pad}>
                 <Grid container spacing={8} alignItems="flex-end" justify='center'>
@@ -175,7 +314,7 @@ class AdminAddUser extends React.Component {
                      <TextField
                          id = 'firstName'
                         className = 'firstName'
-                        label='First Name'
+                        label= {this.state.tmpFirstName === '' ? 'First Name' : this.state.tmpFirstName}
                         fullWidth={true}
                      onChange={this.handleChangeField}/>
                       {this.state.firstNameValid ? null : <FormHelperText id="component-error-text">Please fill in!</FormHelperText> }
@@ -188,7 +327,7 @@ class AdminAddUser extends React.Component {
                      <TextField
                          id = 'lastName'
                         className = 'lastName'
-                        label='Last Name'
+                         label= {this.state.tmpLastName === '' ? 'Last Name' : this.state.tmpLastName}
                         fullWidth={true}
                          onChange={this.handleChangeField} />
                       {this.state.lastNameValid ? null : <FormHelperText id="component-error-text">Please fill in!</FormHelperText> }
@@ -201,7 +340,7 @@ class AdminAddUser extends React.Component {
                       <TextField
                           id = 'username'
                         className = 'username'
-                        label='Username'
+                          label= {this.state.tmpUsername === '' ? 'Username' : this.state.tmpUsername}
                         fullWidth={true}
                           onChange={this.handleChangeField}/>
                       {this.state.userNameValid ? null : <FormHelperText id="component-error-text">Existed username! Please use another username!</FormHelperText> }
@@ -214,7 +353,7 @@ class AdminAddUser extends React.Component {
                      <TextField
                          id = 'email'
                         className = 'email'
-                        label='Email Address'
+                         label= {this.state.tmpEmail === '' ? 'Email Address' : this.state.tmpEmail}
                         fullWidth={true}
                         onChange={this.handleChangeField}/>
                       {this.state.emailValid ? null : <FormHelperText id="component-error-text">Existed email! Please use another email!</FormHelperText> }
@@ -227,7 +366,7 @@ class AdminAddUser extends React.Component {
                      <TextField
                          id = 'phone'
                         className = 'phone'
-                        label='Phone Number'
+                         label= {this.state.tmpPhone === '' ? 'Phone Number' : this.state.tmpPhone}
                         fullWidth={true}
                         onChange={this.handleChangeField}/>
                   </Grid>
@@ -250,7 +389,7 @@ class AdminAddUser extends React.Component {
 
               <Grid container justify='center'>
                 <Grid item><br/>
-                  <Button onClick={this.handleAddUser} variant="contained" size='large' color="primary"> Add </Button>
+                  <Button onClick={this.state.id === '' ? this.handleAddUser : this.handleUpdateUser} variant="contained" size='large' color="primary"> {this.state.id === '' ? 'Add new user' : 'Update User'}</Button>
                 </Grid>
               </Grid>
               <br/><br/>
