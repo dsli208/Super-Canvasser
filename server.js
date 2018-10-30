@@ -9,8 +9,8 @@ server.set('port', process.env.PORT || 3001 );
 var connection = mysql.createConnection({
     host: "localhost",
     user: "root",
-    password: "root",						// put your MySQL db here
-    database: "super_canvasser"				// our database
+    password: "",						// put your MySQL db here
+    database: "Supser_canvasser"				// our database
 });
 
 // connect MySQL database
@@ -54,6 +54,22 @@ server.get('/users/add', (req, res) => {
 		})
 		res.send(JSON.stringify(results));
 	})
+})
+
+server.get('/users/update', (req, res) => {
+
+    const {firstName, lastName, username, email, role, phone, id} = req.query;
+    var sql = 'UPDATE users SET firstname=' + '\''+firstName+  '\''+', lastname=' + '\''+lastName + '\''+', username=' + '\''+username + '\''+', role=' + '\''+role + '\''+', email=' + '\''+email + '\''+', phone=' + '\''+phone + '\''+' WHERE id=' + '\''+id + '\'';
+
+    console.log(id);
+
+    connection.query(sql,(err, results, fields) => {
+        if (err) {
+            console.log(err);
+        }
+        console.log('Added user successfully!');
+        res.send(JSON.stringify(results));
+    })
 })
 
 // get current user from GUI React and save it to JSON file

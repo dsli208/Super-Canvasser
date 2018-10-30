@@ -22,7 +22,7 @@ import Modal from '@material-ui/core/Modal';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
-
+import currentUser from '../../data/currentUser';
 
 function desc(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -395,6 +395,7 @@ class TableUsers extends React.Component {
         })
       )
       .catch(err => console.log(err))
+
   }
   handleRequestSort = (event, property) => {
     const orderBy = property;
@@ -415,9 +416,16 @@ class TableUsers extends React.Component {
     this.setState({ selected: [] });
   };
 
+  handleDoubleClick = (event, id) => {
+      console.log(this.state.data[id-1]);
+
+      window.location.href = '/users/admin/' + currentUser[0].username + '/add?id='+id + '&firstName=' + this.state.data[id-1].firstName+ '&lastName=' + this.state.data[id-1].lastName+ '&username=' + this.state.data[id-1].username+ '&email=' + this.state.data[id-1].email+ '&role=' + this.state.data[id-1].role+'&phone=' + this.state.data[id-1].phone;
+
+
+  };
   handleClick = (event, id) => {
     console.log(this.state.data[id-1]);
-    
+
     const { selected } = this.state;
     const selectedIndex = selected.indexOf(id);
     let newSelected = [];
@@ -475,6 +483,7 @@ class TableUsers extends React.Component {
                     <TableRow
                       hover
                       onClick={event => this.handleClick(event, n.id)}
+                      onDoubleClick={event => this.handleDoubleClick(event, n.id)}
                       role="checkbox"
                       aria-checked={isSelected}
                       tabIndex={-1}
