@@ -209,6 +209,7 @@ class TableLocations extends React.Component {
       .then(locations => this.setState({
         data: locations
       }))
+      .catch(err => console.log(err))
   }
   handleRequestSort = (event, property) => {
     const orderBy = property;
