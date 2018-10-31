@@ -210,7 +210,12 @@ class EnhancedTableToolbar extends React.Component {
     this.handleOpen();
   }
   handleDelete = () => {
-    console.log('delete user');
+      for (var i = 0; i < this.props.index.length; i++) {
+          fetch(`/users/delete?id=${this.props.users[this.props.index[i]-1].id}`)
+              .catch((err) => console.log(err))
+
+          console.log('Delete user done!');
+      }
 
   }
   handleTFchange = (e) => {

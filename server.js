@@ -30,6 +30,17 @@ server.get('/users', (req, res) => {
 	});
 })
 
+//delete user
+server.get('/users/delete', (req, res) => {
+    const {id} = req.query;
+    var sql = 'DELETE FROM users WHERE id=' + id;
+    connection.query(sql, function (error, results, fields) {
+        if (error) console.log(err);
+        //console.log('The solution is: ', results);
+        res.send(JSON.stringify(results));
+    });
+})
+
 // add user
 server.get('/users/add', (req, res) => {
 	const {firstName, lastName, username, email, password, role} = req.query;
