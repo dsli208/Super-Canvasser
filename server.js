@@ -96,6 +96,69 @@ server.get('/locations', (req, res) => {
 })
 
 
+// add location
+server.get('/locations/add', (req, res) => {
+	const {fullAddress, street, city, state, zipcode, country, duration} = req.query;
+	
+	var sql = 'INSERT INTO locations (fullAddress, street, city, state, zipcode, country, duration) VALUES (';
+	
+	sql += '\'' + fullAddress + '\'';
+	sql += ',\'' + street + '\'';
+	sql += ',\'' + city + '\'';
+	sql += ',\'' + state + '\'';
+	sql += ',' + zipcode;
+	sql += ',\'' + country + '\'' ;
+	sql += ',' + duration + ')';
+
+	connection.query(sql, (err, results, fields) => {
+		if (err) {
+			console.log(err);
+		}
+		console.log('Added location successfully!');
+		res.send(JSON.stringify(results));
+	}) 
+})
+
+// delete location
+server.get('/locations/delete', (req, res) => {
+	const {fullAddress, street, city, state, zipcode, country, duration} = req.query;
+
+	var sql = 'DELETE FROM locations WHERE street=';
+	sql += '\'' + street + '\'';
+	
+	connection.query(sql, (err, results, fields) => {
+		if (err) {
+			console.log(err);
+		}
+		console.log('Delete location successfully!');
+		res.send(JSON.stringify(results));
+	})
+})
+
+// edit location
+server.get('/locations/edit', (req, res) => {
+	const {id, fullAddress, street, city, state, zipcode, country, duration} = req.query;
+
+	var sql = 'UPDATE locations SET ';
+	sql += 'fullAddress=\'' + fullAddress + '\',';
+	sql += 'street=\'' + street + '\', ';
+	sql += 'city=\'' + city + '\', ';
+	sql += 'state=\'' + state + '\', ';
+	sql += 'zipcode=' + zipcode + ', ';
+	sql += 'country=\'' + country + '\', ';
+	sql += 'duration=' + duration ;
+	sql += ' WHERE id=' + id;
+
+	connection.query(sql, (err, results, fields) => {
+		if (err) {
+			console.log(err);
+		}
+		console.log('Update location successfully!');
+		res.send(JSON.stringify(results));
+	})
+})
+
+
 server.listen(server.get('port'), () => {
 	console.log('Listening on port ' + server.get('port'));
 });

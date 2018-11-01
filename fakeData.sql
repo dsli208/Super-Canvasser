@@ -48,28 +48,29 @@ VALUES ('First 11', 'Last 11', 'first11last11', 'admin', 'first11.last11@stonybr
 
 DELETE FROM `super_canvasser`.`locations`;
 
-INSERT INTO `super_canvasser`.`locations` (`taskId`, `longitude`, `latitude`, `talkingPoint`, `rate`)
-VALUES (1, -73.140943, 40.925654, 'talking point 1', '5.0');
+INSERT INTO `super_canvasser`.`locations` (`fullAddress`, `street`, `city`, `state`, `zipcode`, `country`, `duration`)
+VALUES ('1147 N Country Rd, Stony Brook, New York, 11790, USA',
+		 '1147 N Country Rd', 'Stony Brook', 'New York', 11790, 'USA', 12);
 
-INSERT INTO `super_canvasser`.`locations` (`taskId`, `longitude`, `latitude`, `talkingPoint`, `rate`)
-VALUES (2, -73.215653, 40.893897, 'talking point 2', '6.0');
+INSERT INTO `super_canvasser`.`locations` (`fullAddress`, `street`, `city`, `state`, `zipcode`, `country`, `duration`)
+VALUES ('318 Wynn Ln, Port Jefferson, New York, 11777, USA',
+		 '318 Wynn Ln', 'Port Jefferson', 'New York', 11777, 'USA', 10);
 
-INSERT INTO `super_canvasser`.`locations` (`taskId`, `longitude`, `latitude`, `talkingPoint`, `rate`)
-VALUES (1, -119.417931, 36.778259, 'talking point 3', '7.0');
+INSERT INTO `super_canvasser`.`locations` (`fullAddress`, `street`, `city`, `state`, `zipcode`, `country`, `duration`)
+VALUES ('521 Lake Ave, St James, New York, 11780, USA',
+		 '521 Lake Ave', 'St James', 'New York', 11780, 'USA', 15);
 
-INSERT INTO `super_canvasser`.`locations` (`taskId`, `longitude`, `latitude`, `talkingPoint`, `rate`)
-VALUES (3, -111.093735, 34.048927, 'talking point 4', '8.0');
+INSERT INTO `super_canvasser`.`locations` (`fullAddress`, `street`, `city`, `state`, `zipcode`, `country`, `duration`)
+VALUES ('526 Main St, Islip, New York, 11751, USA',
+		 '526 Main St', 'Islip', 'New York', 11751, 'USA', 20);
 
-INSERT INTO `super_canvasser`.`locations` (`taskId`, `longitude`, `latitude`, `talkingPoint`, `rate`)
-VALUES (3, -99.901810, 31.968599, 'talking point 5', '9.0');
+INSERT INTO `super_canvasser`.`locations` (`fullAddress`, `street`, `city`, `state`, `zipcode`, `country`, `duration`)
+VALUES ('75 Washington Pl, New York, New York, 10011, USA',
+		 '75 Washington Pl', 'Stony Brook', 'New York', 10011, 'USA', 25);
 
-INSERT INTO `super_canvasser`.`locations` (`taskId`, `longitude`, `latitude`, `talkingPoint`, `rate`)
-VALUES (4, -97.743057, 30.267153, 'talking point 6', '10.0');
+INSERT INTO `super_canvasser`.`locations` (`fullAddress`, `street`, `city`, `state`, `zipcode`, `country`, `duration`)
+VALUES ('313 Smith Haven Mall, Lake Grove, New York, 11755, USA',
+		 '313 Smith Haven Mall', 'Lake Grove', 'New York', 11755, 'USA', 30);
 
-INSERT INTO `super_canvasser`.`locations` (`taskId`, `longitude`, `latitude`, `talkingPoint`, `rate`)
-VALUES (5, -73.140943, 40.925654, 'talking point 7', '11.0');
-
-INSERT INTO `super_canvasser`.`locations` (`taskId`, `longitude`, `latitude`, `talkingPoint`, `rate`)
-VALUES (4, -73.140943, 40.925654, 'talking point 8', '12.0');
 
 

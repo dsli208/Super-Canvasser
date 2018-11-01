@@ -14,10 +14,16 @@ import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
 import Checkbox from '@material-ui/core/Checkbox';
 import IconButton from '@material-ui/core/IconButton';
+import {Delete, Edit, LocationOn, ListAlt} from '@material-ui/icons';
 import Tooltip from '@material-ui/core/Tooltip';
 import DeleteIcon from '@material-ui/icons/Delete';
 import FilterListIcon from '@material-ui/icons/FilterList';
 import { lighten } from '@material-ui/core/styles/colorManipulator';
+import Modal from '@material-ui/core/Modal';
+import Button from '@material-ui/core/Button';
+import Grid from '@material-ui/core/Grid';
+import TextField from '@material-ui/core/TextField';
+
 
 function desc(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -44,11 +50,12 @@ function getSorting(order, orderBy) {
 }
 
 const rows = [
-  { id: 'taskId', numeric: true, disablePadding: false, label: 'Task ID' },
-  { id: 'longitude', numeric: true, disablePadding: false, label: 'Longitude' },
-  { id: 'latitude', numeric: true, disablePadding: false, label: 'Latitude' },
-  { id: 'talkingPoint', numeric: false, disablePadding: false, label: 'Talking Point' },
-  { id: 'rate', numeric: true, disablePadding: false, label: 'Rate' },
+  { id: 'fullAddress', numeric: false, disablePadding: false, label: 'Address' },
+  { id: 'street', numeric: false, disablePadding: false, label: 'Street' },
+  { id: 'city', numeric: false, disablePadding: false, label: 'City' },
+  { id: 'state', numeric: false, disablePadding: false, label: 'State' },
+  { id: 'zipcode', numeric: true, disablePadding: false, label: 'Zip code' },
+  { id: 'country', numeric: false, disablePadding: false, label: 'Country' },
 ];
 
 class EnhancedTableHead extends React.Component {
@@ -131,46 +138,374 @@ const toolbarStyles = theme => ({
   title: {
     flex: '0 0 auto',
   },
+  paper: {
+    position: 'absolute',
+    width: theme.spacing.unit * 50 + 300,
+    backgroundColor: theme.palette.background.paper,
+    boxShadow: theme.shadows[5],
+    padding: theme.spacing.unit * 4,
+  },
 });
 
-let EnhancedTableToolbar = props => {
-  const { numSelected, classes } = props;
 
-  return (
-    <Toolbar
-      className={classNames(classes.root, {
-        [classes.highlight]: numSelected > 0,
-      })}
-    >
-      <div className={classes.title}>
-        {numSelected > 0 ? (
-          <Typography color="inherit">
-            {numSelected} selected
+function getModalStyle() {
+  return {
+    top: `50%`,
+    left: `50%`,
+    transform: `translate(-50%, -50%)`,
+  };
+}
+
+function BodySelected({location}) {
+  if (location == null) {
+    return (
+      <div>
+        <Grid container justify='center'>
+          <Typography variant='title' id="modal-title">
+            Error!
           </Typography>
-        ) : (
-          <Typography id="tableTitle">
-            List of all Canvassers in the campaigns
+        </Grid>
+        <Grid container justify='center'>
+          <Typography variant='subheading' id="simple-modal-description">
+            Please select only 1 location to edit!
           </Typography>
-        )}
+        </Grid>
       </div>
-      <div className={classes.spacer} />
-      <div className={classes.actions}>
-        {numSelected > 0 ? (
-          <Tooltip title="Delete">
-            <IconButton aria-label="Delete">
-              <DeleteIcon />
-            </IconButton>
-          </Tooltip>
-        ) : (
-          <Tooltip title="Filter list">
-            <IconButton aria-label="Filter list">
-              <FilterListIcon />
-            </IconButton>
-          </Tooltip>
-        )}
+    )
+  } else {
+    return (
+      <div>
+        <Grid container justify='center'>
+          <Typography variant='display2' id="modal-title">
+            Edit location
+          </Typography>
+        </Grid>
+        <br/>
+        <Grid container justify='center'>
+          <Typography variant='title' id="modal-title">
+            {location.fullAddress}
+          </Typography>
+        </Grid>
       </div>
-    </Toolbar>
-  );
+    )
+  }
+}
+
+
+class EnhancedTableToolbar extends React.Component {
+  state = {
+    editModal_open: false,
+    deleteModal_open: false,
+
+    edit_street: '',
+    edit_city: '',
+    edit_state: '',
+    edit_zipcode: '',
+    edit_country: '',
+    edit_duration: '',
+  }
+
+  handleEditModal_open = () => {
+    const {locations , index} = this.props;
+    this.setState({ editModal_open: true });
+
+    var location = locations.find(location => location.id === index[0]);
+    if (typeof location === 'undefined')
+      return;
+    this.setState({
+      edit_street: location.street,
+      edit_city: location.city,
+      edit_state: location.state,
+      edit_zipcode: location.zipcode,
+      edit_country: location.country,
+      edit_duration: location.duration,
+    })
+  };
+
+  handleEditModal_close = () => {
+    this.setState({ editModal_open: false });
+  };
+
+  handleDelModal_open = () => {
+    this.setState({ deleteModal_open: true });
+  };
+
+  handleDelModal_close = () => {
+    this.setState({ deleteModal_open: false });
+  };  
+
+  handleTFchange = (event) => {
+    if (event.target.id === 'street') {
+      this.setState({edit_street: event.target.value})
+    } else if (event.target.id === 'city') {
+      this.setState({edit_city: event.target.value})
+    } else if (event.target.id === 'state') {
+      this.setState({edit_state: event.target.value})
+    } else if (event.target.id === 'zipcode') {
+      this.setState({edit_zipcode: event.target.value})
+    } else if (event.target.id === 'country') {
+      this.setState({edit_country: event.target.value})
+    } else if (event.target.id === 'duration') {
+      this.setState({edit_duration: event.target.value})
+    }
+  }
+
+  handleEdit = () => {
+    console.log('edit location');
+    const {locations , index} = this.props;
+
+    var location = locations.find(location => location.id === index[0]);
+    if (typeof location === 'undefined')
+      return;
+
+    location.street = this.state.edit_street;
+    location.city = this.state.edit_city;
+    location.state = this.state.edit_state;
+    location.zipcode = this.state.edit_zipcode;
+    location.country = this.state.edit_country;
+    location.duration = this.state.edit_duration;
+    location.fullAddress = location.street + ', ' + location.city
+                    + ', ' + location.state + ', ' + location.zipcode
+                    + ', ' + location.country;
+
+    this.props.handleEdit(location);
+
+    this.handleEditModal_close();
+  }
+
+  handleDelete = () => {
+    this.handleDelModal_open();
+    const {index, locations} = this.props;
+    var deleteLocation_list = [];
+
+    index.forEach(id => {
+      var location = locations.find(location => location.id === id);
+      if (typeof location === 'undefined') {
+        return;
+      }
+      deleteLocation_list.push(location);
+    })
+
+    this.props.handleDelete(deleteLocation_list);
+    this.handleDelModal_close();
+  }
+
+  handleDisplayMarker = () => {
+    //console.log('display: ', this.props.listCoords);
+    this.props.display(this.props.listCoords, true)
+  }
+  
+  render() {
+    const { numSelected, classes, locations, index } = this.props;
+    
+    // location to be edited
+    var location = {};
+    if (numSelected === 1) {
+      location = locations.find(location => location.id === index[0]);
+      if (typeof location === 'undefined')
+        location = null;
+    } else {
+      location = null;
+    }
+
+    return (
+      <Toolbar
+        className={classNames(classes.root, {
+          [classes.highlight]: numSelected > 0,
+        })}
+      >
+        <div className={classes.title}>
+          {numSelected > 0 ? (
+            <Typography color="inherit">
+              {numSelected} selected
+            </Typography>
+          ) : (
+            <Typography id="tableTitle">
+              List of all Canvassers in the campaigns
+            </Typography>
+          )}
+        </div>
+        <div className={classes.spacer} />
+      {/* ---------------- View results icon button--------------------*/}
+        <div className={classes.actions}>
+          {numSelected > 0 ? (
+            <Tooltip title="View results">
+              <IconButton aria-label="Result">
+                <ListAlt/>
+              </IconButton>
+            </Tooltip>
+          ) : (
+            null
+          )}
+        </div>
+
+      {/* ---------------- Display marker icon button--------------------*/}
+        <div className={classes.actions}>
+          {numSelected > 0 ? (
+            <Tooltip title="Display location">
+              <IconButton onClick={this.handleDisplayMarker} aria-label="Display">
+                <LocationOn />
+              </IconButton>
+            </Tooltip>
+          ) : (
+            null
+          )}
+        </div>
+
+        {/* ---------------- Edit icon button--------------------*/}
+        <div className={classes.actions}>
+          {numSelected > 0 ? (
+
+            <Tooltip title="Edit">
+              <IconButton onClick={this.handleEditModal_open} aria-label="Edit">
+                <Edit />
+              </IconButton>
+            </Tooltip>
+          ) : (
+            null
+          )}
+        </div>
+
+
+        {/* ------------------------  Modal for Edit location  ------------------------------ */}
+        <Modal
+          aria-labelledby="simple-modal-title"
+          aria-describedby="simple-modal-description"
+          open={this.state.editModal_open}
+          onClose={this.handleEditModal_close}
+        >
+          <div style={getModalStyle()} className={classes.paper}>
+            <BodySelected location={location}/>
+            <br/>
+            {location == null ? null : 
+              <form justify='center'>
+                <Grid container spacing={8} alignItems="flex-end" justify='center'>
+                  <Grid item xs={3}>Street:</Grid>
+                  <Grid item xs={6}>
+                      <TextField
+                        id='street'
+                        className = 'street'
+                        label='Street'
+                        onChange={this.handleTFchange}
+                        defaultValue={location.street}
+                        fullWidth={true} />
+                  </Grid>
+                </Grid>
+      
+                <Grid container spacing={8} alignItems="flex-end" justify='center'>
+                  <Grid item xs={3}>City:</Grid>
+                  <Grid item xs={6}> 
+                      <TextField
+                        id='city'
+                        className = 'city'
+                        label='City'
+                        onChange={this.handleTFchange}
+                        defaultValue={location.city}
+                        fullWidth={true} />
+                  </Grid>
+                </Grid>
+
+                <Grid container spacing={8} alignItems="flex-end" justify='center'>
+                  <Grid item xs={3}>State:</Grid>
+                  <Grid item xs={6}> 
+                      <TextField
+                        id='state'
+                        className = 'state'
+                        label='State'
+                        onChange={this.handleTFchange}
+                        defaultValue={location.state}
+                        fullWidth={true} />
+                  </Grid>
+                </Grid>
+
+                <Grid container spacing={8} alignItems="flex-end" justify='center'>
+                  <Grid item xs={3}>Zip code:</Grid>
+                  <Grid item xs={6}> 
+                      <TextField
+                        id='zipcode'
+                        className = 'zipcode'
+                        label='Zip code'
+                        onChange={this.handleTFchange}
+                        defaultValue={location.zipcode}
+                        fullWidth={true} />
+                  </Grid>
+                </Grid>
+
+                <Grid container spacing={8} alignItems="flex-end" justify='center'>
+                  <Grid item xs={3}>Country:</Grid>
+                  <Grid item xs={6}> 
+                      <TextField
+                        id='country'
+                        className = 'country'
+                        label='Country'
+                        onChange={this.handleTFchange}
+                        defaultValue={location.country}
+                        fullWidth={true} />
+                  </Grid>
+                </Grid>
+
+                <Grid container spacing={8} alignItems="flex-end" justify='center'>
+                  <Grid item xs={3}>Duration:</Grid>
+                  <Grid item xs={6}> 
+                      <TextField
+                        id='duration'
+                        className = 'duration'
+                        label='Duration'
+                        onChange={this.handleTFchange}
+                        defaultValue={location.duration}
+                        fullWidth={true} />
+                  </Grid>
+                </Grid>
+              </form>
+            }
+            <Grid container justify='center'>
+              {numSelected === 1? <div><br/><Button onClick={this.handleEdit} variant="contained" color="primary" style={{marginTop:'15px', marginRight: '8px'}}> Update </Button></div> : null}
+              {numSelected === 1? <div><br/><Button onClick={this.handleEditModal_close} variant="contained" color="default" style={{marginTop:'15px'}}> Cancel </Button></div> : null}
+              {numSelected === 1? null : <Button onClick={this.handleEditModal_close} variant="contained" color="primary" style={{marginTop: '15px'}}> Close </Button>}
+            </Grid>
+          </div>
+        </Modal>
+
+        {/* ------------------------  Modal for Delete location  ------------------------------ */}
+        <Modal
+          aria-labelledby="simple-modal-title"
+          aria-describedby="simple-modal-description"
+          open={this.state.deleteModal_open}
+          onClose={this.handleDelModal_close}
+        >
+          <div style={getModalStyle()} className={classes.paper}>
+            <Grid container justify='center' >
+              <Typography variant='subheading'>
+                Are you sure you want to delete following location(s)?
+              </Typography>
+            </Grid>
+            <br/>
+            <Grid container justify='center'>
+              <div><br/><Button onClick={this.handleDelete} variant="contained" color="primary" style={{marginTop:'15px', marginRight: '8px'}}> Yes, delete </Button></div>
+              <div><br/><Button onClick={this.handleDelModal_close} variant="contained" color="default" style={{marginTop:'15px'}}> No, cancel </Button></div>
+            </Grid>
+          </div>
+        </Modal>
+
+        {/* ---------------- Delete location icon button--------------------*/}
+        <div className={classes.actions}>
+          {numSelected > 0 ? (
+            <Tooltip title="Delete">
+              <IconButton onClick={this.handleDelModal_open} aria-label="Delete">
+                <DeleteIcon />
+              </IconButton>
+            </Tooltip>
+          ) : (
+            <Tooltip title="Filter list">
+              <IconButton aria-label="Filter list">
+                <FilterListIcon />
+              </IconButton>
+            </Tooltip>
+          )}
+        </div>
+      </Toolbar>
+    );
+  }
 };
 
 EnhancedTableToolbar.propTypes = {
@@ -193,23 +528,27 @@ const styles = theme => ({
   },
 });
 
+
+
+/* =================== Main class ============================*/
 class TableLocations extends React.Component {
   state = {
+    API_KEY: 'AIzaSyC3A1scukBQw2jyAUqwHHTw4Weob5ibZiY',
     order: 'asc',
     orderBy: 'id',
     selected: [],
-    data: [],
+    data: null,
     page: 0,
     rowsPerPage: 5,
+    listCoordinates: {},
   };
-  componentDidMount(props) {    
-    // fetching data locations from back-end
-    fetch('/locations')
-      .then(res => res.json())
-      .then(locations => this.setState({
-        data: locations
-      }))
+
+  componentWillMount() {
+    this.setState({
+      data: this.props.listLocation
+    })
   }
+
   handleRequestSort = (event, property) => {
     const orderBy = property;
     let order = 'desc';
@@ -223,11 +562,45 @@ class TableLocations extends React.Component {
 
   handleSelectAllClick = event => {
     if (event.target.checked) {
-      this.setState(state => ({ selected: state.data.map(n => n.id) }));
+      this.setState(state => ({ selected: state.data.map(n => n.id) }), 
+        () => this.getCoordList(this.state.selected, [])
+      );
       return;
     }
-    this.setState({ selected: [] });
+    this.setState({ selected: [] }, () => {
+      this.getCoordList(this.state.selected, [])
+    });
   };
+
+  ///// Use Geocoding API to convert address to longitude and latitude 
+  //// to display markers of all selected locations on the map
+  getCoordList = (selected, listCoordinates) => {
+    selected.forEach(id => {
+      var locationData = this.props.listLocation.find(location => location.id === id);
+      console.log(locationData);
+      if (typeof locationData === 'undefined') {
+        return;
+      }
+      var fullAddr = locationData.fullAddress;
+      var search_query = fullAddr.replace(/ /g, '+');
+      
+      // use API to fetch search result
+      fetch('https://maps.googleapis.com/maps/api/geocode/json?address=' + search_query + '&key=' + this.state.API_KEY)
+      .then(res => res.json())
+      .then(data => {
+        //console.log(data.results[0].geometry.location)
+        listCoordinates.push(data.results[0].geometry.location)
+      })
+      .catch(err => console.log(err))     
+    })
+
+    this.setState({ 
+      listCoordinates: listCoordinates,
+      data: this.props.listLocation,
+    }, () => {
+      this.props.selectedLocations(this.state.listCoordinates);
+    })
+  }
 
   handleClick = (event, id) => {
     const { selected } = this.state;
@@ -246,8 +619,13 @@ class TableLocations extends React.Component {
         selected.slice(selectedIndex + 1),
       );
     }
+    ///// Use Geocoding API to convert address to longitude and latitude 
+    //// to display markers of all selected locations on the map
+    this.setState({ selected: newSelected }, () => {
+      // display markers on map
+      this.getCoordList(this.state.selected, []);
+    });
 
-    this.setState({ selected: newSelected });
   };
 
   handleChangePage = (event, page) => {
@@ -260,14 +638,39 @@ class TableLocations extends React.Component {
 
   isSelected = id => this.state.selected.indexOf(id) !== -1;
 
-  render() {
-    const { classes } = this.props;
-    const { data, order, orderBy, selected, rowsPerPage, page } = this.state;
-    const emptyRows = rowsPerPage - Math.min(rowsPerPage, data.length - page * rowsPerPage);
+  displayHelper = (listLocations, selectChanged) => {
+    //console.log('here: ', listLocations)
+    this.props.display(listLocations, selectChanged)
+  }
 
+  deleteHelper = (deleteLocation_list) => {
+    //console.log('delete list: ', deleteLocation_list);
+    this.setState({ selected : []})
+    this.props.deleteLocation(deleteLocation_list);
+  }
+
+  editHelper = (location) => {
+    this.props.updateLocation(location);
+  }
+
+  render() {
+    if (!this.state.data) {
+      return <div/>
+    }
+    const { classes, listLocation } = this.props;
+    const { data, order, orderBy, selected, rowsPerPage, page } = this.state;
+    const emptyRows = rowsPerPage - Math.min(rowsPerPage, this.props.listLocation.length - page * rowsPerPage);
+    
     return (
       <Paper className={classes.root}>
-        <EnhancedTableToolbar numSelected={selected.length} />
+        <EnhancedTableToolbar numSelected={selected.length} 
+                locations={this.props.listLocation} 
+                index={selected} 
+                listCoords={this.state.listCoordinates} 
+                display={this.displayHelper} 
+                handleDelete={this.deleteHelper}
+                handleEdit={this.editHelper} />
+
         <div className={classes.tableWrapper}>
           <Table className={classes.table} aria-labelledby="tableTitle">
             <EnhancedTableHead
@@ -276,10 +679,10 @@ class TableLocations extends React.Component {
               orderBy={orderBy}
               onSelectAllClick={this.handleSelectAllClick}
               onRequestSort={this.handleRequestSort}
-              rowCount={data.length}
+              rowCount={this.props.listLocation.length}
             />
             <TableBody>
-              {stableSort(data, getSorting(order, orderBy))
+              {stableSort(this.props.listLocation, getSorting(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map(n => {
                   const isSelected = this.isSelected(n.id);
@@ -297,11 +700,13 @@ class TableLocations extends React.Component {
                         <Checkbox checked={isSelected} />
                       </TableCell>
                       
-                      <TableCell numeric> {n.taskId} </TableCell>
-                      <TableCell numeric> {n.longitude} </TableCell>
-                      <TableCell numeric> {n.latitude} </TableCell>
-                      <TableCell > {n.talkingPoint} </TableCell>
-                      <TableCell numeric> {n.rate} </TableCell>
+                      <TableCell> {n.fullAddress} </TableCell>
+                      <TableCell> {n.street} </TableCell>
+                      <TableCell> {n.city} </TableCell>
+                      <TableCell> {n.state} </TableCell>
+                      <TableCell numeric> {n.zipcode} </TableCell>
+                      <TableCell> {n.country} </TableCell>
+
                     </TableRow>
                   );
                 })}
@@ -315,7 +720,7 @@ class TableLocations extends React.Component {
         </div>
         <TablePagination
           component="div"
-          count={data.length}
+          count={this.props.listLocation.length}
           rowsPerPage={rowsPerPage}
           page={page}
           backIconButtonProps={{

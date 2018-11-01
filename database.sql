@@ -28,10 +28,12 @@ DROP TABLE IF EXISTS `super_canvasser`.`locations` ;
 
 CREATE  TABLE IF NOT EXISTS `super_canvasser`.`locations` (
 	`id` INT UNSIGNED NOT NULL AUTO_INCREMENT ,
-	`taskId` INT NOT NULL ,
-	`longitude` DOUBLE NOT NULL ,
-	`latitude` DOUBLE NOT NULL ,
-	`talkingPoint` VARCHAR(45) NOT NULL ,
-	`rate` DOUBLE NOT NULL ,
+	`fullAddress` VARCHAR(200) NOT NULL ,
+	`street` VARCHAR(50) NOT NULL ,
+	`city` VARCHAR(20) NOT NULL ,
+	`state` VARCHAR(10) NOT NULL ,
+	`zipcode` INT NOT NULL ,
+	`country` VARCHAR(20) NOT NULL ,
+	`duration` INT ,
 	PRIMARY KEY (`id`)
 ) ENGINE = InnoDB;
