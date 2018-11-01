@@ -20,26 +20,58 @@ const field_style = {
    color: "#ffffff",
 };
 
+class GoogleMapExample extends React.Component {
+  state = {
+    API_KEY: 'AIzaSyC3A1scukBQw2jyAUqwHHTw4Weob5ibZiY',
+    currentId: '',
+    currentAddress: '',
+  }
 
-const GoogleMapExample = withGoogleMap(props => (
-    <GoogleMap
-    defaultCenter = {{lat: 40.789143, lng: -73.134964}}
-    defaultZoom = { 9 }
-    ref={(map) => map && map.fitBounds(props.bounds)}
-    >
+  handleClick = (coord, idx) => {
+    var latitude = coord.lat;
+    var longitude = coord.lng;
+
+    fetch('https://maps.googleapis.com/maps/api/geocode/json?latlng=' + latitude + ',' + longitude + '&key=' + this.state.API_KEY)
+      .then(res => res.json())
+      .then(data => this.setState({ currentAddress: data.results[0].formatted_address }))
+      .catch(err => console.log(err))
+
+    this.setState({
+      currentId: idx
+    })
+  }
+
+  render() {
+    return(
+        <GoogleMap
+        defaultCenter = {{lat: 37.090240, lng: -95.712891}}
+        zoom = { 8 }
+        ref={(map) => map && map.fitBounds(this.props.bounds)}
+        >
+          
+          {this.props.listLocations.map((coord,idx) => 
+            <Marker key={idx} position={coord} label='view'
+              onClick={()=>this.handleClick(coord, idx)} >
+
+              {this.state.currentId === idx ?
+                <InfoWindow onCloseClick={() => this.setState({currentId: -1})}>
+                  <div>
+                    <p>{this.state.currentAddress.split(", ")[0]}</p>
+                    <p>{this.state.currentAddress.split(", ")[1]}, {this.state.currentAddress.split(", ")[2]}, {this.state.currentAddress.split(", ")[3]}</p>
+                  </div>
+                </InfoWindow> : null
+              }
+            </Marker>
+          )}
+          
+        </GoogleMap>
       
-      {props.listLocations.map((coord,idx) => 
-        <Marker key={idx} position={coord}>
-              <InfoWindow>
-                <p>hello</p>
-              </InfoWindow> : null
-            
-        </Marker>
-      )}
-      
-    </GoogleMap>
-  )
-);
+    )
+  }
+}
+
+GoogleMapExample = withGoogleMap(GoogleMapExample);
+
 
 class ManagerLocationsList extends React.Component {
   constructor(props) {
@@ -57,14 +89,11 @@ class ManagerLocationsList extends React.Component {
 
       selectedLocations: [],
       deleteLocation_list: [],
-      selectChanged: false,
-
       bounds: new window.google.maps.LatLngBounds(),
     }
   }
 
   componentWillMount() {
-    this.state.bounds.extend(new window.google.maps.LatLng({lat: 40.789143, lng: -73.134964}))
     this.loadLocationList() 
     this.loadMap()
   }
@@ -83,7 +112,7 @@ class ManagerLocationsList extends React.Component {
         var country = location.country.replace(/ /g, '+');
 
         fetch(`/locations/delete?fullAddress=` +
-           `${fullAddress}` + `&street=${street}`
+           `${fullAddress}&street=${street}`
            + `&city=${city}`
            + `&state=${state}`
            + `&zipcode=${zipcode}`
@@ -107,7 +136,7 @@ class ManagerLocationsList extends React.Component {
     var country = location.country.replace(/ /g, '+');
     var duration = location.duration;
 
-    fetch(`/locations/edit?id=` + `${location.id}` 
+    fetch(`/locations/edit?id=${location.id}` 
             + `&fullAddress=${fullAddress}`
             + `&street=${street}`
             + `&city=${city}`
@@ -130,7 +159,8 @@ class ManagerLocationsList extends React.Component {
                       selectedLocations={this.set_selectedLocations} 
                       display={this.displayLocations} 
                       deleteLocation={this.deleteLocation}
-                      updateLocation={this.updateLocation} />
+                      updateLocation={this.updateLocation} 
+                      />
 
         this.setState({
           locationTable: list
@@ -159,13 +189,12 @@ class ManagerLocationsList extends React.Component {
     })
   }
 
-  displayLocations = (displayList, selectChanged) => {
+  displayLocations = (displayList) => {
     displayList.map(location => {
       this.state.bounds.extend(new window.google.maps.LatLng(location.lat, location.lng));
     })
     this.setState({
       selectedLocations: displayList,
-      selectChanged: selectChanged,
     }, () => {
       this.loadMap()
     })
@@ -198,13 +227,13 @@ class ManagerLocationsList extends React.Component {
     var street = this.state.input_street.replace(/ /g, '+');
     var city = this.state.input_city.replace(/ /g, '+');
     var state = this.state.input_state.replace(/ /g, '+');
-    var zipcode = parseInt(this.state.input_zipcode);
+    var zipcode = parseInt(this.state.input_zipcode, 10);
     var country = this.state.input_country.replace(/ /g, '+');
-    var duration = parseInt(this.state.input_duration);
+    var duration = parseInt(this.state.input_duration, 10);
 
 
     fetch(`/locations/add?fullAddress=` +
-           `${fullAddress}` + `&street=${street}`
+           `${fullAddress}&street=${street}`
            + `&city=${city}`
            + `&state=${state}`
            + `&zipcode=${zipcode}`

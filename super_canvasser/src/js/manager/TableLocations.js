@@ -14,7 +14,7 @@ import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
 import Checkbox from '@material-ui/core/Checkbox';
 import IconButton from '@material-ui/core/IconButton';
-import {Delete, Edit, LocationOn, ListAlt} from '@material-ui/icons';
+import { Edit, LocationOn, ListAlt} from '@material-ui/icons';
 import Tooltip from '@material-ui/core/Tooltip';
 import DeleteIcon from '@material-ui/icons/Delete';
 import FilterListIcon from '@material-ui/icons/FilterList';
@@ -292,7 +292,7 @@ class EnhancedTableToolbar extends React.Component {
 
   handleDisplayMarker = () => {
     //console.log('display: ', this.props.listCoords);
-    this.props.display(this.props.listCoords, true)
+    this.props.display(this.props.listCoords)
   }
   
   render() {
@@ -657,8 +657,8 @@ class TableLocations extends React.Component {
     if (!this.state.data) {
       return <div/>
     }
-    const { classes, listLocation } = this.props;
-    const { data, order, orderBy, selected, rowsPerPage, page } = this.state;
+    const { classes } = this.props;
+    const { order, orderBy, selected, rowsPerPage, page } = this.state;
     const emptyRows = rowsPerPage - Math.min(rowsPerPage, this.props.listLocation.length - page * rowsPerPage);
     
     return (
