@@ -8,6 +8,7 @@ import ManagerCanvassersList from './manager/ManagerCanvassersList';
 import ManagerLocationsList from './manager/ManagerLocationsList';
 import Canvasser from './canvasser/Canvasser';
 import CanvasserViewMap from './canvasser/CanvasserViewMap';
+import CanvasserViewUpcoming from './canvasser/CanvasserViewUpcoming';
 import Admin from './admin/Admin';
 import AdminAddUser from './admin/AdminAddUser';
 import AdminView from './admin/AdminViewUsers';
@@ -35,6 +36,8 @@ class App extends Component {
           {/* ------- Canvasser stuff -------- */}
           <Route path='/users/canvasser' exact component={Canvasser}/>
           <Route path='/users/canvasser/:username/map' exact component={CanvasserViewMap}/>
+          <Route path='/users/canvasser/:username/upcoming' exact component={CanvasserViewUpcoming}/>
+
         </div>
       </BrowserRouter>
     );

@@ -1,5 +1,6 @@
 import React from "react";
 
+
 class MyMapComponent extends React.Component {
   constructor() {
     super();
