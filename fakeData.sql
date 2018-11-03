@@ -19,31 +19,31 @@ INSERT INTO `super_canvasser`.`users` (`firstName`,`lastName`, `username`, `role
 VALUES ('Mike', 'Mathew', 'mikemathew', 'canvasser', 'mike.mathew@stonybrook.edu', '6313277812', 'mikepass' );
 
 INSERT INTO `super_canvasser`.`users` (`firstName`,`lastName`, `username`, `role`, `email`, `phone`, `password`)
-VALUES ('First 4', 'Last 4', 'first4last4', 'canvasser', 'first4.last4@stonybrook.edu', '6313277812', 'first4pass' );
+VALUES ('David', 'Li', 'davidli', 'canvasser', 'david.li@stonybrook.edu', '6313277812', 'davidpass' );
 
 INSERT INTO `super_canvasser`.`users` (`firstName`,`lastName`, `username`, `role`, `email`, `phone`, `password`)
-VALUES ('First 5', 'Last 5', 'first5last5', 'canvasser', 'first5.last5@stonybrook.edu', '6313277812', 'first5pass' );
+VALUES ('Thomas', 'Johnson', 'thomasjohnson', 'canvasser', 'thomas.johnson@stonybrook.edu', '6313277812', 'thomaspass' );
 
 INSERT INTO `super_canvasser`.`users` (`firstName`,`lastName`, `username`, `role`, `email`, `phone`, `password`)
-VALUES ('First 6', 'Last 6', 'first6last6', 'canvasser', 'first6.last6@stonybrook.edu', '6313277812', 'first6pass' );
+VALUES ('Tommy', 'Shock', 'tommy', 'canvasser', 'tommy.shock@stonybrook.edu', '6313277812', 'tommypass' );
 
 INSERT INTO `super_canvasser`.`users` (`firstName`,`lastName`, `username`, `role`, `email`, `phone`, `password`)
-VALUES ('First 7', 'Last 7', 'first7last7', 'canvasser', 'first7.last7@stonybrook.edu', '6313277812', 'first7pass' );
+VALUES ('Roger', 'Federer', 'rogerfed', 'manager', 'roger.federer@stonybrook.edu', '6313277812', 'rogerpass' );
 
 INSERT INTO `super_canvasser`.`users` (`firstName`,`lastName`, `username`, `role`, `email`, `phone`, `password`)
-VALUES ('First 8', 'Last 8', 'first8last8', 'manager', 'first8.last8@stonybrook.edu', '6313277812', 'first8pass' );
+VALUES ('Novak', 'Djokovic', 'nole', 'manager', 'novak.djokovic@stonybrook.edu', '6313277812', 'novakpass' );
 
 INSERT INTO `super_canvasser`.`users` (`firstName`,`lastName`, `username`, `role`, `email`, `phone`, `password`)
-VALUES ('First 9', 'Last 9', 'first9last9', 'manager', 'first9.last9@stonybrook.edu', '6313277812', 'first9pass' );
+VALUES ('Mark', 'Zuckerberge', 'mark', 'manager', 'mark.zuckerberg@stonybrook.edu', '6313277812', 'markpass' );
 
 INSERT INTO `super_canvasser`.`users` (`firstName`,`lastName`, `username`, `role`, `email`, `phone`, `password`)
-VALUES ('First 10', 'Last 10', 'first10last10', 'admin', 'first10.last10@stonybrook.edu', '6313277812', 'first10pass' );
+VALUES ('Bill', 'Gates', 'billgates', 'admin', 'bill.gates@stonybrook.edu', '6313277812', 'billpass' );
 
 INSERT INTO `super_canvasser`.`users` (`firstName`,`lastName`, `username`, `role`, `email`, `phone`, `password`)
-VALUES ('First 11', 'Last 11', 'first11last11', 'admin', 'first11.last11@stonybrook.edu', '6313277812', 'first11pass' );
+VALUES ('Scott', 'Stoller', 'scott', 'admin', 'scott.stoller@stonybrook.edu', '6313277812', 'scottpass' );
 
 -- -----------------------------------------------------
--- insert into users table
+-- insert into locations table
 -- -----------------------------------------------------
 
 DELETE FROM `super_canvasser`.`locations`;
