@@ -16,7 +16,7 @@ class ManagerCanvassersList extends React.Component {
   render() {
     return (
       <div style={style}>
-        <Manager/>
+        <Manager username={this.props.match.params.username}/>
         <br/><br/>
         <div className="canvasserlist">
           <h1>Canvassers details</h1>

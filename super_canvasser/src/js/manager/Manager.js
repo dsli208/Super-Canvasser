@@ -7,7 +7,6 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import {AccountCircle} from '@material-ui/icons';
-import currentUser from '../../data/currentUser';
 
 const styles = {
   root: {
@@ -34,13 +33,28 @@ class Manager extends React.Component  {
     }
   }
   
-  componentDidMount() {
-    this.setState({
-      currentUserName: currentUser[0].username,
-      currentUserObj: currentUser[0],
-      currentUserFullName: currentUser[0].firstName + ' ' + currentUser[0].lastName
-    })
+  componentWillMount() {
+    if (typeof this.props.username === 'undefined') {
+      this.setState({
+        currentUserName: this.props.match.params.username,
+      }, () => this.getCurrentUser(this.state.currentUserName) )
+    } else {
+      this.setState({
+        currentUserName: this.props.username,
+      }, () => this.getCurrentUser(this.state.currentUserName))
+    }
   } 
+
+  getCurrentUser = (currentUserName) => {
+    fetch('/users').then(res => res.json())
+      .then(users => {
+        var currentUserObj = users.find(user => user.username === currentUserName);
+        this.setState({
+          currentUserObj: currentUserObj,
+          currentUserFullName: currentUserObj.firstName + ' ' + currentUserObj.lastName,
+        })
+      })
+  }
 
   logout = () => {
     window.location.href = '/';
@@ -52,6 +66,10 @@ class Manager extends React.Component  {
 
   viewCanvassers = () => {
     window.location.href = '/users/manager/' + this.state.currentUserName + '/canvassers';
+  }
+
+  viewQuestions = () => {
+    window.location.href = '/users/manager/' + this.state.currentUserName + '/questions';
   }
 
   render() {
@@ -66,12 +84,10 @@ class Manager extends React.Component  {
             <Typography variant="title" color="inherit" className={classes.grow}>
                {this.state.currentUserFullName}
             </Typography>
-            <Button color="inherit">Campaigns</Button>
-            <Button color="inherit">Dates</Button>
+            <Button color="inherit">Canvass Assignments</Button>
             <Button onClick={this.viewCanvassers} color="inherit">Canvassers</Button>
             <Button onClick={this.viewLocations} color="inherit">Locations</Button>
-            <Button color="inherit">Questions</Button>
-            <Button color="inherit">Talking points</Button>
+            <Button onClick={this.viewQuestions} color="inherit">Questions</Button>
             <Button onClick={this.logout} color="inherit">Log out</Button>
           </Toolbar>
         </AppBar>

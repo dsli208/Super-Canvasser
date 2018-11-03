@@ -74,7 +74,7 @@ class ManagerCampaignsList extends React.Component {
   render() {
     return (
       <div>
-        <Manager/>
+        <Manager username={this.props.match.params.username}/>
         <div>
           {this.state.campaignRow}
         </div>
