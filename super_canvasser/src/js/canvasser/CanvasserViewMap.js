@@ -38,7 +38,7 @@ class CanvasserViewMap extends React.Component {
             
             <TabList>
               <Tab tabFor="one">View locations list</Tab>
-              <Tab tabFor="two">Add location</Tab>
+              <Tab tabFor="two">Add Results</Tab>
             </TabList>
             
             <TabPanel tabId="one" className='tab1-content'>
@@ -62,44 +62,20 @@ class CanvasserViewMap extends React.Component {
             <TabPanel tabId="two">
               <form className="form" justify='center'>
                  <Grid container spacing={8} alignItems="flex-end" justify='center'>
-                    <Grid item md={4}>Longitude:</Grid>
+                    <Grid item md={4}>Results:</Grid>
                     <Grid item md={8}>
                        <TextField
-                          className = 'longitude'
-                          label='Longitude'
+                          className = 'results'
+                          label='Results'
                           style={field_style} />
                     </Grid>
                  </Grid>
 
-                 <Grid container spacing={8} alignItems="flex-end" justify='center'>
-                    <Grid item md={4}>Latitude:</Grid>
-                    <Grid item md={8}>
-                       <TextField
-                          className = 'latitude'
-                          label='Latitude'
-                          style={field_style} />
-                    </Grid>
-                 </Grid>
                  
-                 <Grid container spacing={8} alignItems="flex-end" justify='center'>
-                    <Grid item md={4}>Talking point:</Grid>
-                    <Grid item md={8}>
-                       <TextField
-                          className = 'talkingPoint'
-                          label='Talking point'
-                          style={field_style} />
-                    </Grid>
-                 </Grid>    
+                 
+                  
 
-                 <Grid container spacing={8} alignItems="flex-end" justify='center'>
-                    <Grid item md={4}>Visit duration:</Grid>
-                    <Grid item md={8}>
-                       <TextField
-                          className = 'duration'
-                          label='Visit duration'
-                          style={field_style} />
-                    </Grid>
-                 </Grid> 
+            
                  <br/><br/>
                  <Button variant="outlined"> Add </Button>           
               </form>

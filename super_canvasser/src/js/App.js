@@ -13,6 +13,7 @@ import Admin from './admin/Admin';
 import AdminAddUser from './admin/AdminAddUser';
 import AdminView from './admin/AdminViewUsers';
 import Main from './Main';
+import CanvasserResultsList from './canvasser/CanvasserResultsList';
 
 class App extends Component {  
   
@@ -37,6 +38,7 @@ class App extends Component {
           <Route path='/users/canvasser' exact component={Canvasser}/>
           <Route path='/users/canvasser/:username/map' exact component={CanvasserViewMap}/>
           <Route path='/users/canvasser/:username/upcoming' exact component={CanvasserViewUpcoming}/>
+          <Route path='/users/canvasser/:username/results' exact component={CanvasserResultsList}/>
 
         </div>
       </BrowserRouter>
