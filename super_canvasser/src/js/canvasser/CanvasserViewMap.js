@@ -3,17 +3,12 @@ import MapUsers from './MapUsers';
 import 'react-web-tabs/dist/react-web-tabs.css';
 import Canvasser from './Canvasser';
 
-<<<<<<< HEAD
 import '../../css/manager.css';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import MyMap from '../../api/MyMapComponent';
 import { Tabs, Tab, TabPanel, TabList } from 'react-web-tabs';
 import TextField from '@material-ui/core/TextField';
-
-=======
->>>>>>> Add Canvasser and Map files before stash
-
 
 const style = {
   backgroundColor: '#ffffff',
@@ -22,36 +17,12 @@ const style = {
   minWidth: '100%',
 };
 
-<<<<<<< HEAD
 const field_style = {
    width: 300,
    color: "#ffffff",
 };
 
-
-
-
- 
-
-
-
-
-
-
-
-
-
-
- 
-
-
-
-
-
 class CanvasserViewMap extends React.Component {
-
-
-
 
   myFunction= () => {
     let map = new window.google.maps.Map(document.getElementById('map'), {
@@ -102,10 +73,6 @@ class CanvasserViewMap extends React.Component {
     });
   }
 
-
-
-
-
   sortList = () => {
     var list, i, switching, b, shouldSwitch;
     list = document.getElementById("id01");
@@ -129,29 +96,11 @@ class CanvasserViewMap extends React.Component {
     }
   }
   
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-=======
-class CanvasserViewMap extends React.Component {
->>>>>>> Add Canvasser and Map files before stash
   render() {
     return (
       <div style={style}>
         <Canvasser/>
         <br/>
-<<<<<<< HEAD
 
         <div className='locationlist'>
           <Tabs
@@ -175,10 +124,6 @@ class CanvasserViewMap extends React.Component {
                 <Grid item xs={12} >
                   <div className='manager-map'>
                     <br/> <h1>Map</h1> <br/>
-
-
-              
-
 
                     <Button onClick={this.myFunction} variant="outlined"> Next Location </Button>           
                     <Button  onclick={this.sortList} variant="outlined"> Re-order Visits </Button>           
@@ -208,20 +153,11 @@ class CanvasserViewMap extends React.Component {
                     </Grid>
                  </Grid>
 
-                 
-                 
-                  
-
-            
                  <br/><br/>
                  <Button variant="outlined"> Add </Button>           
               </form>
             </TabPanel>
           </Tabs>
-=======
-        <div>
-          
->>>>>>> Add Canvasser and Map files before stash
         </div>
       </div>
     );
@@ -229,4 +165,3 @@ class CanvasserViewMap extends React.Component {
 }
 
 export default CanvasserViewMap;
-
