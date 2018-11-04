@@ -51,7 +51,7 @@ class CanvasserViewMap extends React.Component {
 
   myFunction= () => {
     let map = new window.google.maps.Map(document.getElementById('map'), {
-      center: {lat: -33.8688, lng: 151.2195},
+      center: {lat: -30.8688, lng: 151.2195},
       zoom: 13,
       mapTypeId: 'roadmap',
     });
@@ -68,7 +68,8 @@ class CanvasserViewMap extends React.Component {
     });
     let marker = new window.google.maps.Marker({
       map: map,
-      position: {lat: -33.8688, lng: 151.2195},
+      position: {lat: -30.8688, lng: 151.2195},
+      
     });
   
     // initialize the autocomplete functionality using the #pac-input input box
