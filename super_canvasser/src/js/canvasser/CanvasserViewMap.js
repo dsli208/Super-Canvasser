@@ -3,6 +3,7 @@ import MapUsers from './MapUsers';
 import 'react-web-tabs/dist/react-web-tabs.css';
 import Canvasser from './Canvasser';
 
+<<<<<<< HEAD
 import '../../css/manager.css';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
@@ -10,6 +11,8 @@ import MyMap from '../../api/MyMapComponent';
 import { Tabs, Tab, TabPanel, TabList } from 'react-web-tabs';
 import TextField from '@material-ui/core/TextField';
 
+=======
+>>>>>>> Add Canvasser and Map files before stash
 
 
 const style = {
@@ -19,6 +22,7 @@ const style = {
   minWidth: '100%',
 };
 
+<<<<<<< HEAD
 const field_style = {
    width: 300,
    color: "#ffffff",
@@ -139,11 +143,15 @@ class CanvasserViewMap extends React.Component {
 
 
 
+=======
+class CanvasserViewMap extends React.Component {
+>>>>>>> Add Canvasser and Map files before stash
   render() {
     return (
       <div style={style}>
         <Canvasser/>
         <br/>
+<<<<<<< HEAD
 
         <div className='locationlist'>
           <Tabs
@@ -210,6 +218,10 @@ class CanvasserViewMap extends React.Component {
               </form>
             </TabPanel>
           </Tabs>
+=======
+        <div>
+          
+>>>>>>> Add Canvasser and Map files before stash
         </div>
       </div>
     );
