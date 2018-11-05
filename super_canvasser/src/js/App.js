@@ -6,6 +6,7 @@ import Manager from './manager/Manager';
 import ManagerCampaignsList from './manager/ManagerCampaignsList';
 import ManagerCanvassersList from './manager/ManagerCanvassersList';
 import ManagerLocationsList from './manager/ManagerLocationsList';
+import ManagerAddCampaign from './manager/ManagerAddCampaign';
 import Canvasser from './canvasser/Canvasser';
 import CanvasserViewMap from './canvasser/CanvasserViewMap';
 import CanvasserViewUpcoming from './canvasser/CanvasserViewUpcoming';
@@ -31,6 +32,7 @@ class App extends Component {
           {/* ------- Manager stuff -------- */}
           <Route path='/users/manager/:username' exact component={Manager}/>
           <Route path='/users/manager/:username/campaigns' exact component={ManagerCampaignsList}/>
+            <Route path='/users/manager/:username/addCampaign' exact component={ManagerAddCampaign}/>
           <Route path='/users/manager/:username/canvassers' exact component={ManagerCanvassersList}/>
           <Route path='/users/manager/:username/locations' exact component={ManagerLocationsList}/>
 
