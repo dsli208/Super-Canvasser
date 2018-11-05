@@ -24,26 +24,6 @@ const field_style = {
    color: "#ffffff",
 };
 
-
-
-
- 
-
-
-
-
-
-
-
-
-
-
- 
-
-
-
-
-
 class CanvasserViewMap extends React.Component {
 
    ResultRow= () => {
@@ -113,10 +93,6 @@ class CanvasserViewMap extends React.Component {
     });
   }
 
-
-
-
-
   sortList = () => {
     var list, i, switching, b, shouldSwitch;
   list = document.getElementById("id01");
@@ -138,20 +114,6 @@ class CanvasserViewMap extends React.Component {
   }
   }
   
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   render() {
     return (
       <div style={style}>
@@ -217,11 +179,6 @@ MIL. FROM START &nbsp; ADDRESS
                     </Grid>
                  </Grid>
 
-                 
-                 
-                  
-
-            
                  <br/><br/>
                  <Button variant="outlined"> Add </Button>           
               </form>
@@ -234,4 +191,3 @@ MIL. FROM START &nbsp; ADDRESS
 }
 
 export default CanvasserViewMap;
-
