@@ -60,6 +60,8 @@ class Admin extends React.Component  {
     window.location.href = '/users/admin/' + this.state.currentUserName + '/add';
   }
 
+
+
   render() {
     const { classes } = this.props;
     return (

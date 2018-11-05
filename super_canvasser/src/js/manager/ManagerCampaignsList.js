@@ -6,6 +6,7 @@ import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Grid from '@material-ui/core/Grid';
+import Button from "@material-ui/core/Button/Button";
 
 function CampaignRow(campaign) {
   return (
@@ -71,6 +72,9 @@ class ManagerCampaignsList extends React.Component {
       })
     })
   }
+    handleAddCampaign = () => {
+
+    }
   render() {
     return (
       <div>
@@ -78,7 +82,13 @@ class ManagerCampaignsList extends React.Component {
         <div>
           {this.state.campaignRow}
         </div>
+          <Grid container justify='center'>
+              <Grid item><br/>
+                  <Button onClick={this.handleAddCampaign} variant="contained" size='large' color="primary"> Add Campaign </Button>
+              </Grid>
+          </Grid>
       </div>
+
     );
   };
 }

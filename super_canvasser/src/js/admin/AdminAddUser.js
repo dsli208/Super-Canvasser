@@ -6,6 +6,7 @@ import Radio from '@material-ui/core/Radio';
 import Button from '@material-ui/core/Button';
 import { PersonAdd, Timelapse } from '@material-ui/icons';
 import FormHelperText from '@material-ui/core/FormHelperText';
+import currentUser from "../../data/currentUser";
 
 
 const style = {
@@ -24,14 +25,21 @@ const pad = {
 }
 
 class AdminAddUser extends React.Component {
-	constructor(props) {
-		super(props);
-		this.state = {
-			selectedValue: '1',
-			firstName: '',
-			lastName: '',
-			username: '',
-			email: '',
+  constructor(props) {
+    super(props);
+    this.state = {
+        id: '',
+      selectedValue: '1',
+        firstName: '',
+        lastName: '',
+        username: '',
+        email: '',
+        phone: '',
+        tmpFirstName: '',
+        tmpLastName: '',
+        tmpUsername: '',
+        tmpEmail: '',
+        tmpPhone: '',
 
 			firstNameValid: true,
 			lastNameValid: true,
@@ -42,37 +50,70 @@ class AdminAddUser extends React.Component {
 		}
 	}
 
-	handleChangeRadio = (event) => {
-		this.setState({
-			selectedValue: event.target.value
-		})
-	}
+    componentDidMount() {
+        const searchParams = new URLSearchParams(window.location.search);
+        const id = searchParams.get('id');
+        const firstName = searchParams.get('firstName');
+        const lastName = searchParams.get('lastName');
+        const username = searchParams.get('username');
+        const email = searchParams.get('email');
+        const phone = searchParams.get('phone');
+        var role = searchParams.get('role');
 
-	handleChangeField = (event) => {
-		if (event.target.type === 'text') {
-			if (event.target.id === 'firstName') {
-				//first name
-				this.setState({
-						firstName: event.target.value
-				})
-			} else if (event.target.id === 'lastName') {
-				// last name
-				this.setState({
-						lastName: event.target.value
-				})
-			} else if (event.target.id === 'username') {
-				// username
-				this.setState({
-						username: event.target.value
-				})
-			} else {
-				// email
-				this.setState({
-						email: event.target.value
-				})
-			}
-		}
-	}
+        if(role === 'admin'){
+            role = '1';
+        }else if(role === 'canvasser'){
+            role = '2';
+        }else{
+            role = '3';
+        }
+
+        if(id !== null){
+            this.setState({
+                id : id,
+                tmpFirstName: firstName,
+                tmpLastName: lastName,
+                tmpUsername: username,
+                tmpEmail: email,
+                tmpPhone: phone,
+                selectedValue: role
+            })
+        }
+        console.log(role)
+    }
+
+    handleChangeRadio = (event) => {
+      this.setState({
+        selectedValue: event.target.value
+      })
+    }
+
+    handleChangeField = (event) => {
+      this.setState({edit: true});
+        if (event.target.type === 'text') {
+            if (event.target.id === 'firstName') {
+                //first name
+                this.setState({
+                    firstName: event.target.value
+                })
+            } else if (event.target.id === 'lastName') {
+                // last name
+                this.setState({
+                    lastName: event.target.value
+                })
+            } else if (event.target.id === 'username') {
+                // username
+                this.setState({
+                    username: event.target.value
+                })
+            } else {
+                // email
+                this.setState({
+                    email: event.target.value
+                })
+            }
+        }
+    }
 
 	handleAddUser = () => {
 		const inFirstName = this.state.firstName;
@@ -155,107 +196,183 @@ class AdminAddUser extends React.Component {
 
 	}
 
-	render() {
-		return (
-			<div style={style}>
-				<Admin />
-				<br />
-				<div style={wrap}>
-					<form className="form" justify='center'>
-						<Grid container spacing={8} alignItems="flex-end" justify='center'>
-								<Grid item><PersonAdd /></Grid>
-								<Grid item><h1> Add new user </h1></Grid>
-						</Grid>
-						<div style={pad}>
-							<Grid container spacing={8} alignItems="flex-end" justify='center'>
-								<Grid item xs={3}>First Name:</Grid>
-								<Grid item xs={6}>
-										<TextField
-												id='firstName'
-												className='firstName'
-												label='First Name'
-												fullWidth={true}
-												onChange={this.handleChangeField} />
-										{this.state.firstNameValid ? null : <FormHelperText id="component-error-text">Please fill in!</FormHelperText>}
-								</Grid>
-							</Grid>
-							<br />
-							<Grid container spacing={8} alignItems="flex-end" justify='center'>
-								<Grid item xs={3}>Last Name:</Grid>
-								<Grid item xs={6}>
-										<TextField
-												id='lastName'
-												className='lastName'
-												label='Last Name'
-												fullWidth={true}
-												onChange={this.handleChangeField} />
-										{this.state.lastNameValid ? null : <FormHelperText id="component-error-text">Please fill in!</FormHelperText>}
-								</Grid>
-							</Grid>
-							<br />
-							<Grid container spacing={8} alignItems="flex-end" justify='center'>
-									<Grid item xs={3}>Username:</Grid>
-									<Grid item xs={6}>
-											<TextField
-													id='username'
-													className='username'
-													label='Username'
-													fullWidth={true}
-													onChange={this.handleChangeField} />
-											{this.state.userNameValid ? null : <FormHelperText id="component-error-text">Existed username! Please use another username!</FormHelperText>}
-									</Grid>
-							</Grid>
-							<br />
-							<Grid container spacing={8} alignItems="flex-end" justify='center'>
-									<Grid item xs={3}>Email:</Grid>
-									<Grid item xs={6}>
-											<TextField
-													id='email'
-													className='email'
-													label='Email Address'
-													fullWidth={true}
-													onChange={this.handleChangeField} />
-											{this.state.emailValid ? null : <FormHelperText id="component-error-text">Existed email! Please use another email!</FormHelperText>}
-									</Grid>
-							</Grid>
-							<br />
-							<Grid container spacing={8} alignItems="flex-end" justify='center'>
-									<Grid item xs={3}>Phone:</Grid>
-									<Grid item xs={6}>
-											<TextField
-													id='phone'
-													className='phone'
-													label='Phone Number'
-													fullWidth={true}
-													onChange={this.handleChangeField} />
-									</Grid>
-							</Grid>
-						</div>
+    handleUpdateUser = () => {
+        const inFirstName = this.state.firstName;
+        const inLastName = this.state.lastName;
+        const inUserName = this.state.username;
+        const inEmail = this.state.email;
 
-						<br />
-						<Grid container justify='center'>
-								<Grid item><br />Role:</Grid>
-						</Grid>
-						<Grid container justify='center'>
-								<Grid item>
-										<div justify='center'>
-												<Radio checked={this.state.selectedValue === '1'} value='1' onChange={this.handleChangeRadio} />Admin
-												<Radio checked={this.state.selectedValue === '2'} value='2' onChange={this.handleChangeRadio} />Canvasser
-												<Radio checked={this.state.selectedValue === '3'} value='3' onChange={this.handleChangeRadio} />Manager
-										</div>
-								</Grid>
-						</Grid>
+        if(inFirstName === '' && inLastName === '' && inEmail === '' && inUserName === ''){
+            console.log('One of field should be filled!');
+        }else {
+            if (inFirstName === '' || inFirstName === this.state.tmpFirstName) {
+                var firstName = this.state.tmpFirstName;
+            } else{
+                firstName = inFirstName;
+            }
 
-						<Grid container justify='center'>
-								<Grid item><br />
-										<Button onClick={this.handleAddUser} variant="contained" size='large' color="primary"> Add </Button>
-								</Grid>
-						</Grid>
-						<br /><br />
-						<Grid container spacing={8} alignItems="flex-end" justify='center'>
-								<Grid item><Timelapse /></Grid>
-								<Grid item><h1> Update parameter </h1></Grid>
-						</Grid>
+            if (inLastName === '' || inLastName === this.state.tmpLastName) {
+                var lastName = this.state.tmpLastName;
+            } else if (inLastName !== '') {
+                lastName = inLastName;
+            }
+
+            if (inUserName === ''  || inUserName === this.state.tmpUsername) {
+                var username = this.state.tmpUsername;
+            } else{
+                fetch('/users')
+                    .then(res => res.json())
+                    .then(users => {
+                        var userObj = users.find((user) => user.username === inUserName);
+
+                        if (typeof userObj === 'undefined') {
+                            // username not exist => good
+                            console.log("work");
+                            username = inUserName;
+                            this.setState({
+                                userNameValid: true
+                            })
+                        } else {
+                            console.log('Existed username!');
+                            console.log(userObj);
+                            console.log(inUserName);
+                            this.setState({
+                                userNameValid: false
+                            })
+                        }
+                    })
+
+            }
+
+            if (inEmail === '' || inEmail === this.state.tmpEmail) {
+                var email = this.state.tmpEmail;
+            } else{
+                fetch('/users')
+                    .then(res => res.json())
+                    .then(users => {
+                        var userObj = users.find((user) => user.email === inEmail);
+
+                        if (typeof userObj === 'undefined') {
+                            // username not exist => good
+                            console.log("work");
+                            email = inEmail;
+                            this.setState({
+                                emailValid: true
+                            })
+                        } else {
+                            console.log('Existed email!');
+                            console.log(userObj);
+                            console.log(inEmail);
+                            this.setState({
+                                emailValid: false
+                            })
+                        }
+                    })
+
+            }
+
+            if (this.state.selectedValue === 1) {
+                var role = "admin";
+            } else if (this.state.selectedValue === 2) {
+                role = "canvasser";
+            } else {
+                role = "manager";
+            }
+
+
+            if(this.state.userNameValid && this.state.emailValid){
+                fetch(`/users/update?firstName=${firstName}&lastName=${lastName}&username=${username}&email=${email}&role=${role}&id=${this.state.id}`)
+                    .catch((err) => console.log(err))
+
+                console.log('Update user done!');
+            }
+
+        }
+
+
+
+
+    }
+
+  handleUpdateParam = () => {
+  }
+
+  render() {
+    return (
+      <div style={style}>
+        <Admin/>
+        <br/>
+        <div style={wrap}>
+          <form className="form" justify='center'>
+              <Grid container spacing={8} alignItems="flex-end" justify='center'>
+                <Grid item><PersonAdd/></Grid>
+                <Grid item><h1> {this.state.id === '' ? 'Add new user' : 'Update User'}</h1></Grid>
+              </Grid>
+              <div style={pad}>
+                <Grid container spacing={8} alignItems="flex-end" justify='center'>
+                  <Grid item xs={3}>First Name:</Grid>
+                  <Grid item xs={6}>
+                     <TextField
+                         id = 'firstName'
+                        className = 'firstName'
+                        label= {this.state.tmpFirstName === '' ? 'First Name' : this.state.tmpFirstName}
+                        fullWidth={true}
+                     onChange={this.handleChangeField}/>
+                      {this.state.firstNameValid ? null : <FormHelperText id="component-error-text">Please fill in!</FormHelperText> }
+                  </Grid>
+                </Grid>
+                <br/>
+                <Grid container spacing={8} alignItems="flex-end" justify='center'>
+                  <Grid item xs={3}>Last Name:</Grid>
+                  <Grid item xs={6}> 
+                     <TextField
+                         id = 'lastName'
+                        className = 'lastName'
+                         label= {this.state.tmpLastName === '' ? 'Last Name' : this.state.tmpLastName}
+                        fullWidth={true}
+                         onChange={this.handleChangeField} />
+                      {this.state.lastNameValid ? null : <FormHelperText id="component-error-text">Please fill in!</FormHelperText> }
+                  </Grid>
+                </Grid>
+               <br/>
+                <Grid container spacing={8} alignItems="flex-end" justify='center'>
+                  <Grid item xs={3}>Username:</Grid>
+                  <Grid item xs={6}>
+                      <TextField
+                          id = 'username'
+                        className = 'username'
+                          label= {this.state.tmpUsername === '' ? 'Username' : this.state.tmpUsername}
+                        fullWidth={true}
+                          onChange={this.handleChangeField}/>
+                      {this.state.userNameValid ? null : <FormHelperText id="component-error-text">Existed username! Please use another username!</FormHelperText> }
+                  </Grid>
+                </Grid>    
+                <br/>
+                <Grid container spacing={8} alignItems="flex-end" justify='center'>
+                  <Grid item xs={3}>Email:</Grid>
+                  <Grid item xs={6}>
+                     <TextField
+                         id = 'email'
+                        className = 'email'
+                         label= {this.state.tmpEmail === '' ? 'Email Address' : this.state.tmpEmail}
+                        fullWidth={true}
+                        onChange={this.handleChangeField}/>
+                      {this.state.emailValid ? null : <FormHelperText id="component-error-text">Existed email! Please use another email!</FormHelperText> }
+                  </Grid>
+                </Grid>
+                <br/>
+                <Grid container spacing={8} alignItems="flex-end" justify='center'>
+                  <Grid item xs={3}>Phone:</Grid>
+                  <Grid item xs={6}>
+                     <TextField
+                         id = 'phone'
+                        className = 'phone'
+                         label= {this.state.tmpPhone === '' ? 'Phone Number' : this.state.tmpPhone}
+                        fullWidth={true}
+                        onChange={this.handleChangeField}/>
+                  </Grid>
+                </Grid>
+              </div>
 
 						<div style={pad}>
 								<Grid container spacing={8} alignItems="flex-end" justify='center'>
@@ -275,11 +392,40 @@ class AdminAddUser extends React.Component {
 								</Grid>
 						</Grid>
 
-					</form>
-				</div>
-			</div>
-		);
-	};
+              <Grid container justify='center'>
+                <Grid item><br/>
+                  <Button onClick={this.state.id === '' ? this.handleAddUser : this.handleUpdateUser} variant="contained" size='large' color="primary"> {this.state.id === '' ? 'Add new user' : 'Update User'}</Button>
+                </Grid>
+              </Grid>
+              <br/><br/>
+              <Grid container spacing={8} alignItems="flex-end" justify='center'>
+                <Grid item><Timelapse/></Grid>
+                <Grid item><h1> Update parameter </h1></Grid>
+              </Grid>
+
+              <div style={pad}>
+                <Grid container spacing={8} alignItems="flex-end" justify='center'>
+                  <Grid item xs={3}>Work day duration:</Grid>
+                  <Grid item xs={6}>
+                     <TextField
+                        className = 'dayDuration'
+                        label='Work day duration'
+                        fullWidth={true} />
+                  </Grid>
+                </Grid>
+              </div>
+              <br/>
+              <Grid container justify='center'>
+                <Grid item><br/>
+                  <Button onClick={this.handleUpdateParam} variant="contained" size='large' color="primary"> Update </Button>
+                </Grid>
+              </Grid>
+
+            </form> 
+          </div>   
+      </div>
+    );
+  }
 }
 
 export default AdminAddUser;

@@ -7,7 +7,7 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import {AccountCircle} from '@material-ui/icons';
-
+import currentUser from '../../data/currentUser';
 
 const styles = {
   root: {
@@ -22,29 +22,78 @@ const styles = {
   },
 };
 
-function logout() {
-  window.location.href = "http://localhost:3000";
-};
 
-function Canvasser(props) {
-  const { classes } = props;
-  return (
-    <div className={classes.root}>
-      <AppBar position="static">
-        <Toolbar>
-          <IconButton className={classes.menuButton} color="inherit" aria-label="Menu">
-            <AccountCircle />
-          </IconButton>
-          <Typography color="inherit" className={classes.grow}>
-            Canvasser
-          </Typography>
-          <Button color="inherit">Tasklist(Addresses and Details)</Button>
-          <Button color="inherit">Freedays</Button>
-          <Button onClick={logout} color="inherit">Log out</Button>
-        </Toolbar>
-      </AppBar>
-    </div>
-  );
+class Canvasser extends React.Component  {
+  
+  constructor(props) {
+    super(props);
+    this.state = {
+      currentUserName: '',
+      currentUserObj: '',
+      currentUserFullName: '',
+    }
+  }
+  
+  componentDidMount() {
+    this.setState({
+      currentUserName: currentUser[0].username,
+      currentUserObj: currentUser[0],
+      currentUserFullName: currentUser[0].firstName + ' ' + currentUser[0].lastName
+    })
+  } 
+
+  logout = () => {
+    window.location.href = '/';
+  }
+
+  viewUsers = () => {
+    window.location.href = '/users/admin/' + this.state.currentUserName + '/view';
+  }
+
+  updateInfo = () => {
+    window.location.href = '/users/admin/' + this.state.currentUserName + '/add';
+  }
+
+  /////
+  viewMap = () => {
+    window.location.href = '/users/canvasser/' + this.state.currentUserName + '/map';
+  }
+
+  /////
+  viewUpcoming = () => {
+    window.location.href = '/users/canvasser/' + this.state.currentUserName + '/upcoming';
+  }
+
+  /////
+  viewResults = () => {
+    window.location.href = '/users/canvasser/' + this.state.currentUserName + '/results';
+  }
+  
+
+
+
+  render() {
+    const { classes } = this.props;
+    return (
+      <div className={classes.root}>
+        <AppBar position="static">
+          <Toolbar>
+            <IconButton className={classes.menuButton} color="inherit" aria-label="Menu">
+              <AccountCircle />
+            </IconButton>
+            <Typography variant="title" color="inherit" className={classes.grow}>
+               {this.state.currentUserFullName}
+            </Typography>
+            <Button  onClick={this.viewResults} color="inherit">Results</Button>
+            <Button  onClick={this.viewUpcoming} color="inherit">Upcoming Events</Button>
+            <Button onClick={this.viewMap} color="inherit">Map</Button>
+            <Button onClick={this.updateInfo} color="inherit">Update Info</Button>
+            <Button onClick={this.logout} color="inherit">Log out</Button>
+          </Toolbar>
+        </AppBar>
+      </div>
+    );
+  }
 }
 
 Canvasser.propTypes = {
@@ -52,4 +101,3 @@ Canvasser.propTypes = {
 };
 
 export default withStyles(styles)(Canvasser);
-
