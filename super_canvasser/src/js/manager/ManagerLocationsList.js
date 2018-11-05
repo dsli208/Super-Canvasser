@@ -5,8 +5,14 @@ import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import TableLocations from './TableLocations';
 import TextField from '@material-ui/core/TextField';
-import {AddLocation} from '@material-ui/icons';
+import {AddLocation , ListAlt} from '@material-ui/icons';
 import { withGoogleMap, GoogleMap, Marker, InfoWindow } from 'react-google-maps';
+import ExpansionPanel from '@material-ui/core/ExpansionPanel';
+import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
+import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import Typography from '@material-ui/core/Typography';
+
 
 const style = {
   backgroundColor: '#ffffff',
@@ -15,10 +21,6 @@ const style = {
   minWidth: '100%',
 };
 
-const field_style = {
-   width: 300,
-   color: "#ffffff",
-};
 
 class GoogleMapExample extends React.Component {
   state = {
@@ -89,13 +91,59 @@ class ManagerLocationsList extends React.Component {
 
       selectedLocations: [],
       deleteLocation_list: [],
-      bounds: new window.google.maps.LatLngBounds(),
+
+      resultLocations: null,
+      resultComponent: null,
+      bounds: null,
     }
   }
 
   componentWillMount() {
-    this.loadLocationList() 
-    this.loadMap()
+    setTimeout(() => {
+      this.load()
+    }, 500);
+  }
+
+  load = () => {
+    this.setState({
+      bounds: new window.google.maps.LatLngBounds()
+    }, () => {
+      this.loadResult()
+      this.loadLocationList() 
+      this.loadMap()
+    })
+  }
+
+  loadResult = () => {
+    var results = []
+
+    fetch('/locations')
+      .then(res => res.json())
+      .then(locations => {
+        this.setState({ resultLocations: locations})
+        locations.forEach((location, idx) => {
+          var res = 
+            <ExpansionPanel key={idx}>
+              <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+                <div style={{flexBasis: '70.33%'}}>
+                  <Typography style={{color: '#483D8B'}}> {location.street}</Typography>
+                  <Typography style={{color: '#483D8B'}}> {location.city}, {location.state} {location.zipcode}, {location.country}</Typography>
+                </div>
+                <div style={{flexBasis: '33.33%'}}><Typography style={{color: '#A9A9A9'}}> duration: {location.duration} mins</Typography></div>
+              </ExpansionPanelSummary>
+              <ExpansionPanelDetails>
+                <p>results</p>
+              </ExpansionPanelDetails>
+            </ExpansionPanel>
+          
+          results.push(res);
+        })
+      })
+      .catch(err => console.log(err))
+
+      this.setState({
+        resultComponent: results
+      })
   }
 
   deleteLocation = (deleteLocation_list) => {
@@ -120,7 +168,10 @@ class ManagerLocationsList extends React.Component {
         .catch(err => console.log(err))
         console.log('Delete location done!');
       })
-      this.setState({selectedLocations : []}, () => this.loadLocationList());
+      this.setState({selectedLocations : []}, () => {
+        this.loadResult();
+        this.loadLocationList();
+      });
     })
   }
 
@@ -147,6 +198,7 @@ class ManagerLocationsList extends React.Component {
       .catch(err => console.log(err))
       console.log('Update successfully!');
 
+    this.loadResult();
     this.loadLocationList();
   }
 
@@ -241,117 +293,91 @@ class ManagerLocationsList extends React.Component {
            + `&duration=${duration}`)
     .catch(err => console.log(err))
     console.log('Add location done!');
+    this.loadResult();
     this.loadLocationList();
   }
 
   render() {
-
     return (
       <div style={style}>
-        <Manager/>
+        <Manager username={this.props.match.params.username}/>
         <br/>
 
         <div className='locationlist'>
           <Grid container justify='center'>
-            <Grid item xs={6} style={{marginRight: '20px'}}>
+            <Grid item xs={7} style={{marginRight: '20px'}}>
               <div className="manager-location-list">
                 <br/>
                 <h1>Locations list</h1>
                 {this.state.locationTable}
               </div>
             </Grid>
-            <Grid item xs={5} >
+            <Grid item xs={4} >
               <div className='manager-map'>
                 <br/> <h1>Map</h1> <br/>
                 {this.state.locationMap}
               </div>
             </Grid>
+          </Grid>                    
 
-            <Grid container spacing={8} alignItems="flex-end" justify='center' style={{marginTop: '40px', marginBottom: '20px', backgroundColor: 'F0F8FF'}}>
-              <Grid item> <AddLocation/></Grid>
-              <Grid item> <h1>Add location</h1></Grid>
-            </Grid>
+          <Grid container justify='center'>
+            <Grid item xs={5} style={{marginRight: '15px'}}>
+              <Grid container spacing={8} alignItems="flex-end" style={{marginTop: '40px'}}>
+                <Grid item> <AddLocation/></Grid>
+                <Grid item> <h1>Add location</h1></Grid>
 
-            <Grid container style={{backgroundColor: '#F0F8FF', maxWidth: '600px', paddingBottom: '30px', boxShadow: '0px 0px 13px 0px rgba(0,0,0,0.89) '}} justify='center' >
-            <form className="form" justify='center'>
-              <Grid container spacing={8} alignItems="flex-end" justify='center'>
-                  <Grid item md={4}>Street:</Grid>
-                  <Grid item md={8}>
-                    <TextField
-                        id='street'
-                        className = 'street'
-                        label='Street'
-                        style={field_style}
-                        onChange={this.handleTFchange} />
-                  </Grid>
-              </Grid>
+                <TextField
+                          id='street'
+                          className = 'street'
+                          label='Enter street'
+                          style={{minWidth: '80%'}}
+                          onChange={this.handleTFchange} />
+                <TextField
+                          id='city'
+                          className = 'city'
+                          label='Enter city'
+                          style={{minWidth: '80%'}}
+                          onChange={this.handleTFchange} />
+                <TextField
+                          id='state'
+                          className = 'state'
+                          label='Enter state'
+                          style={{minWidth: '80%'}}
+                          onChange={this.handleTFchange} />
+                <TextField
+                          id='zipcode'
+                          className = 'zipcode'
+                          label='Enter zipcode'
+                          style={{minWidth: '80%'}}
+                          onChange={this.handleTFchange} />
+                <TextField
+                          id='country'
+                          className = 'country'
+                          label='Enter country'
+                          style={{minWidth: '80%'}}
+                          onChange={this.handleTFchange} />
+                <TextField
+                          id='duration'
+                          className = 'duration'
+                          label='Enter duration'
+                          style={{minWidth: '80%'}}
+                          onChange={this.handleTFchange} />
 
-              <Grid container spacing={8} alignItems="flex-end" justify='center'>
-                  <Grid item md={4}>City:</Grid>
-                  <Grid item md={8}>
-                    <TextField
-                        id='city'
-                        className = 'city'
-                        label='City'
-                        style={field_style}
-                        onChange={this.handleTFchange} />
-                  </Grid>
+                <Button onClick={this.handleAddLocation} variant="contained" color="primary" style={{marginTop: '50px'}} > Add new location </Button>
               </Grid>
               
-              <Grid container spacing={8} alignItems="flex-end" justify='center'>
-                  <Grid item md={4}>State:</Grid>
-                  <Grid item md={8}>
-                    <TextField
-                        id='state'
-                        className = 'state'
-                        label='State'
-                        style={field_style}
-                        onChange={this.handleTFchange} />
-                  </Grid>
-              </Grid>    
+            </Grid>
 
-              <Grid container spacing={8} alignItems="flex-end" justify='center'>
-                  <Grid item md={4}>Zip code:</Grid>
-                  <Grid item md={8}>
-                    <TextField
-                        id='zipcode'
-                        className = 'zipcode'
-                        label='Zip code'
-                        style={field_style}
-                        onChange={this.handleTFchange} />
-                  </Grid>
-              </Grid>    
-
-              <Grid container spacing={8} alignItems="flex-end" justify='center'>
-                  <Grid item md={4}>Country:</Grid>
-                  <Grid item md={8}>
-                    <TextField
-                        id='country'
-                        className = 'country'
-                        label='Country'
-                        style={field_style}
-                        onChange={this.handleTFchange} />
-                  </Grid>
-              </Grid>   
-
-              <Grid container spacing={8} alignItems="flex-end" justify='center'>
-                  <Grid item md={4}>Visit duration:</Grid>
-                  <Grid item md={8}>
-                    <TextField
-                        id='duration'
-                        className = 'duration'
-                        label='Visit duration'
-                        style={field_style}
-                        onChange={this.handleTFchange} />
-                  </Grid>
-              </Grid>    
-
-              <Grid container justify='center'>
-                <Grid item><br/><br/>
-                  <Button onClick={this.handleAddLocation} variant="contained" color="primary"> Add new location </Button>
-                </Grid>
-              </Grid>  
-            </form>
+            <Grid item xs={5} >
+              <Grid container spacing={8} alignItems="flex-end" style={{marginTop: '40px'}}>
+                <Grid item> <ListAlt/></Grid>
+                <Grid item> <h1>Results</h1></Grid>
+              </Grid>
+              <Grid container spacing={8} style={{marginTop:'20px', marginBottom: '20px'}}>
+                <div style={{width: '100%'}}>
+                  {this.state.resultComponent}
+                </div>
+              </Grid>
             </Grid>
           </Grid>
         </div>

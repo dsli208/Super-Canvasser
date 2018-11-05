@@ -6,6 +6,7 @@ import Manager from './manager/Manager';
 import ManagerCampaignsList from './manager/ManagerCampaignsList';
 import ManagerCanvassersList from './manager/ManagerCanvassersList';
 import ManagerLocationsList from './manager/ManagerLocationsList';
+import ManagerQuestions from './manager/ManagerQuestions';
 import Canvasser from './canvasser/Canvasser';
 import Admin from './admin/Admin';
 import AdminAddUser from './admin/AdminAddUser';
@@ -13,8 +14,7 @@ import AdminView from './admin/AdminViewUsers';
 import Main from './Main';
 
 class App extends Component {  
-  
-  render() {
+  render() {    
     return (
       <BrowserRouter>
         <div>
@@ -30,6 +30,7 @@ class App extends Component {
           <Route path='/users/manager/:username/campaigns' exact component={ManagerCampaignsList}/>
           <Route path='/users/manager/:username/canvassers' exact component={ManagerCanvassersList}/>
           <Route path='/users/manager/:username/locations' exact component={ManagerLocationsList}/>
+          <Route path='/users/manager/:username/questions' exact component={ManagerQuestions}/>
 
           {/* ------- Canvasser stuff -------- */}
           <Route path='/canvasser' exact component={Canvasser}/>

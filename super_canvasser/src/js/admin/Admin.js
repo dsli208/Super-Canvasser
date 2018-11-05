@@ -7,7 +7,6 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import {AccountCircle} from '@material-ui/icons';
-import currentUser from '../../data/currentUser';
 
 const styles = {
   root: {
@@ -34,11 +33,18 @@ class Admin extends React.Component  {
     }
   }
   
-  componentDidMount() {
+  componentWillMount() {
     this.setState({
-      currentUserName: currentUser[0].username,
-      currentUserObj: currentUser[0],
-      currentUserFullName: currentUser[0].firstName + ' ' + currentUser[0].lastName
+      currentUserName: this.props.match.params.username,
+    }, () => {
+      fetch('/users').then(res => res.json())
+      .then(users => {
+        var currentUserObj = users.find(user => user.username === this.state.currentUserName);
+        this.setState({
+          currentUserObj: currentUserObj,
+          currentUserFullName: currentUserObj.firstName + ' ' + currentUserObj.lastName,
+        })
+      })
     })
   } 
 

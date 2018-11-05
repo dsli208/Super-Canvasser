@@ -72,5 +72,26 @@ INSERT INTO `super_canvasser`.`locations` (`fullAddress`, `street`, `city`, `sta
 VALUES ('313 Smith Haven Mall, Lake Grove, New York, 11755, USA',
 		 '313 Smith Haven Mall', 'Lake Grove', 'New York', 11755, 'USA', 30);
 
+-- -----------------------------------------------------
+-- insert into questions table
+-- -----------------------------------------------------
 
+DELETE FROM `super_canvasser`.`questions`;
 
+INSERT INTO `super_canvasser`.`questions` (`locationId`, `question`, `answer`)
+VALUES (1, 'How do you like this product?', 'Good');
+
+INSERT INTO `super_canvasser`.`questions` (`locationId`, `question`, `answer`)
+VALUES (2, 'Do you know other products other than this product?', 'Yes');
+
+INSERT INTO `super_canvasser`.`questions` (`locationId`, `question`, `answer`)
+VALUES (3, 'On the scale of 10, how do you rate this product?', '');
+
+INSERT INTO `super_canvasser`.`questions` (`locationId`, `question`, `answer`)
+VALUES (2, 'How do you like this product?', 'Good');
+
+INSERT INTO `super_canvasser`.`questions` (`locationId`, `question`, `answer`)
+VALUES (1, 'On the scale of 10, how do you rate this product?', '9');
+
+INSERT INTO `super_canvasser`.`questions` (`locationId`, `question`, `answer`)
+VALUES (3, 'How do you like this product?', 'Good');

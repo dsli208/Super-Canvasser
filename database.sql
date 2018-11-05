@@ -37,3 +37,16 @@ CREATE  TABLE IF NOT EXISTS `super_canvasser`.`locations` (
 	`duration` INT ,
 	PRIMARY KEY (`id`)
 ) ENGINE = InnoDB;
+
+/*
+----- questions table -------
+*/
+
+DROP TABLE IF EXISTS `super_canvasser`.`questions` ;
+
+CREATE  TABLE IF NOT EXISTS `super_canvasser`.`questions` (
+	`locationId` INT UNSIGNED NOT NULL ,
+	`question` VARCHAR(500) NOT NULL ,
+	`answer` VARCHAR(500) NOT NULL ,
+	FOREIGN KEY (`locationId`) REFERENCES `super_canvasser`.`locations`(`id`)
+) ENGINE = InnoDB;

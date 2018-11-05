@@ -50,12 +50,12 @@ function getSorting(order, orderBy) {
 }
 
 const rows = [
-  { id: 'fullAddress', numeric: false, disablePadding: false, label: 'Address' },
   { id: 'street', numeric: false, disablePadding: false, label: 'Street' },
   { id: 'city', numeric: false, disablePadding: false, label: 'City' },
   { id: 'state', numeric: false, disablePadding: false, label: 'State' },
   { id: 'zipcode', numeric: true, disablePadding: false, label: 'Zip code' },
   { id: 'country', numeric: false, disablePadding: false, label: 'Country' },
+  { id: 'duration', numeric: true, disablePadding: false, label: 'Duration (mins)' },
 ];
 
 class EnhancedTableHead extends React.Component {
@@ -699,14 +699,13 @@ class TableLocations extends React.Component {
                       <TableCell padding="checkbox">
                         <Checkbox checked={isSelected} />
                       </TableCell>
-                      
-                      <TableCell> {n.fullAddress} </TableCell>
+                                            
                       <TableCell> {n.street} </TableCell>
                       <TableCell> {n.city} </TableCell>
                       <TableCell> {n.state} </TableCell>
                       <TableCell numeric> {n.zipcode} </TableCell>
                       <TableCell> {n.country} </TableCell>
-
+                      <TableCell numeric> {n.duration} </TableCell>
                     </TableRow>
                   );
                 })}

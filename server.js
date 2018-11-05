@@ -1,7 +1,7 @@
 const express 		= require('express');
-const server 		= express();
+const server 			= express();
 const mysql     	= require('mysql');
-var fs 				= require('fs');
+var fs 						= require('fs');
 
 server.set('port', process.env.PORT || 3001 );
 
@@ -47,12 +47,15 @@ server.get('/users/add', (req, res) => {
 			console.log(err);
 		}
 		console.log('Added user successfully!');
-		fs.writeFile('./super_canvasser/src/data/currentUser.json', JSON.stringify(results), 'utf8', (err) => {
-			if (err) {
-				console.log(err);
-			}
-		})
-		res.send(JSON.stringify(results));
+		var currentUser = {}
+		currentUser.firstName = firstName;
+		currentUser.lastName = lastName;
+		currentUser.username = username;
+		currentUser.email = email;
+		currentUser.password = password;
+		currentUser.role = role;
+
+		res.send(JSON.stringify(currentUser));
 	})
 })
 
@@ -66,11 +69,6 @@ server.get('/users/current', (req, res) => {
 		if (err) {
 			console.log(err);
 		}
-		fs.writeFile('./super_canvasser/src/data/currentUser.json', JSON.stringify(results), 'utf8', (err) => {
-			if (err) {
-				console.log(err);
-			}
-		})
 		res.send(JSON.stringify(results));
 	})
 })
@@ -158,6 +156,29 @@ server.get('/locations/edit', (req, res) => {
 	})
 })
 
+// search location ID based on address --> yield questions and answers
+server.get('/locations/search', (req,res) => {
+	const {id} = req.query;
+	var sql = `SELECT *`;
+	sql += ` FROM questions, locations WHERE questions.locationId = locations.id AND questions.locationId=${id}`;
+	
+	connection.query(sql, (err, results, fields) => {
+		if (err) console.log(err);
+		res.send(JSON.stringify(results));
+	})
+})
+
+// add question to location
+server.get('/locations/:locationId/questions/add', (req, res) => {
+	const {question, answer} = req.query;
+	var sql = 'INSERT INTO questions (locationId, question, answer) VALUES(';
+	sql += req.params.locationId + ',\'' + question + '\',\'' + answer + '\')';
+
+	connection.query(sql, (err, results, fields) => {
+		if (err) console.log(err);
+		res.send(JSON.stringify(results));
+	})
+})
 
 server.listen(server.get('port'), () => {
 	console.log('Listening on port ' + server.get('port'));
