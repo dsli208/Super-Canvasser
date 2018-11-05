@@ -9,6 +9,8 @@ import Button from '@material-ui/core/Button';
 import MyMap from '../../api/MyMapComponent';
 import { Tabs, Tab, TabPanel, TabList } from 'react-web-tabs';
 import TextField from '@material-ui/core/TextField';
+import locations from '../../data/locations.json';
+
 
 const style = {
   backgroundColor: '#ffffff',
@@ -23,6 +25,24 @@ const field_style = {
 };
 
 class CanvasserViewMap extends React.Component {
+
+   ResultRow= () => {
+    return (
+              <ul>
+              {locations.address.map((address, idx) => {
+                return (
+                  <li key={idx}>
+                    address {address} <br/>
+                    <ul>
+        
+                    </ul>
+                  </li>
+                )
+              })}
+              </ul>
+    )
+  }
+
 
   myFunction= () => {
     let map = new window.google.maps.Map(document.getElementById('map'), {
@@ -75,25 +95,23 @@ class CanvasserViewMap extends React.Component {
 
   sortList = () => {
     var list, i, switching, b, shouldSwitch;
-    list = document.getElementById("id01");
-    switching = true;
-    while (switching) {
-      switching = false;
-      b = list.getElementsByTagName("LI");
-      for (i = 0; i < (b.length - 1); i++) {
-        shouldSwitch = false;
-        if (b[i].innerHTML.toLowerCase() > b[i + 1].innerHTML.toLowerCase()) {
-          shouldSwitch = true;
-          break;
-        }
-      }
-      if (shouldSwitch) {
-        /*If a switch has been marked, make the switch
-        and mark the switch as done:*/
-        b[i].parentNode.insertBefore(b[i + 1], b[i]);
-        switching = true;
+  list = document.getElementById("id01");
+  switching = true;
+  while (switching) {
+    switching = false;
+    b = list.getElementsByTagName("LI");
+    for (i = 0; i < (b.length - 1); i++) {
+      shouldSwitch = false;
+      if (b[i].innerHTML.toLowerCase() > b[i + 1].innerHTML.toLowerCase()) {
+        shouldSwitch = true;
+        break;
       }
     }
+    if (shouldSwitch) {
+      b[i].parentNode.insertBefore(b[i + 1], b[i]);
+      switching = true;
+    }
+  }
   }
   
   render() {
@@ -125,16 +143,24 @@ class CanvasserViewMap extends React.Component {
                   <div className='manager-map'>
                     <br/> <h1>Map</h1> <br/>
 
-                    <Button onClick={this.myFunction} variant="outlined"> Next Location </Button>           
-                    <Button  onclick={this.sortList} variant="outlined"> Re-order Visits </Button>           
-                    <ul id="id01">
-  <li>Oslo</li>
-  <li>Stockholm</li>
-  <li>Helsinki</li>
-  <li>Berlin</li>
-  <li>Rome</li>
-  <li>Madrid</li>
+
+              
+
+
+                    <Button onClick={this.myFunction} variant="outlined"> Next Location </Button> 
+                    <Button  onClick={this.sortList} variant="outlined"> Re-order Visits </Button>  
+                    <Button  onClick={this.ResultRow} variant="outlined"> ListofAdresses </Button>  
+
+                    <br/>  
+MIL. FROM START &nbsp; ADDRESS
+<ul id="id01">
+  <li>4    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    23 TonyStreet, Oswand,  NY</li>
+  <li>2    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;     14 Drooper Driver, Osmin,  NY</li>
+  <li>1   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;     27 Aripper Drive, Hopplad,  NY</li>
 </ul>
+
+
+
                     <MyMap/>
                   </div>
                 </Grid>
