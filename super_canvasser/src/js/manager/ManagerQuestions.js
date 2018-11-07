@@ -31,6 +31,13 @@ const paper_styles = theme => ({
     paddingTop: theme.spacing.unit * 2,
     paddingBottom: theme.spacing.unit * 2,
   },
+  paper: {
+    position: 'absolute',
+    width: theme.spacing.unit * 50,
+    backgroundColor: theme.palette.background.paper,
+    boxShadow: theme.shadows[5],
+    padding: theme.spacing.unit * 4,
+  }
 });
 
 const modal_styles = theme => ({
@@ -52,6 +59,17 @@ function getModalStyle() {
 }
 
 class PaperSheet extends React.Component {
+  state = {
+    isDelete_open: false,
+
+  }
+  handleDelete = () => {
+    const { qa, locationId } = this.props;
+    var query = `/locations/${locationId}/questions/delete?question=${qa.question}`;
+    fetch(query).then(res => res.json()).catch(err => console.log(err))
+    console.log('Delete question successfully!');
+    this.props.reload();
+  }
   render() {
     const { classes, qa } = this.props;
     return (
@@ -66,8 +84,40 @@ class PaperSheet extends React.Component {
               </Typography>
             </div>   
           <Button color="primary" className={classes.button}> Update </Button>
-          <Button color="primary" className={classes.button}> Delete </Button>
+          <Button 
+            onClick={() => this.setState({isDelete_open : true})} 
+            color="primary" 
+            className={classes.button}> Delete </Button>
         </Paper>
+        {/* ---------------------- modal for delete question -------------------------- */}
+        <Modal
+          aria-labelledby="simple-modal-title"
+          aria-describedby="simple-modal-description"
+          open={this.state.isDelete_open}
+          onClose={() => this.setState({isDelete_open : false})}
+        >
+          <div style={getModalStyle()} className={classes.paper}>
+            <Grid container justify='center' >
+              <Typography variant='subheading'>
+                Are you sure you want to delete this question?
+              </Typography>
+            </Grid>
+            <br/>
+            <Grid container justify='center'>
+              <div><br/><Button 
+                            onClick={this.handleDelete} 
+                            variant="contained" 
+                            color="primary" 
+                            style={{marginTop:'15px', marginRight: '8px'}}> Yes, delete </Button></div>
+              <div><br/><Button 
+                            onClick={() => this.setState({isDelete_open: false})} 
+                            variant="contained" 
+                            color="default" 
+                            style={{marginTop:'15px'}}> No, cancel </Button>
+              </div>
+            </Grid>
+          </div>
+        </Modal>
       </div>
     );
   }
@@ -146,7 +196,7 @@ class LocationRow extends React.Component {
           <div>
             <List>
               {locationData.qaList.map((data,idx) => {
-                return <PaperSheet key={idx} qa={data} />
+                return <PaperSheet key={idx} qa={data} locationId={locationData.locationId} reload={this.props.reload}/>
               })}
               <Button 
                 onClick={() => this.setState({isOpen: true, addSuccess: false, isFilled: true}) }

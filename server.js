@@ -207,6 +207,19 @@ server.get('/locations/:locationId/questions/add', (req, res) => {
 	})
 })
 
+// delete question from location
+server.get('/locations/:locationId/questions/delete', (req, res) => {
+	const {question} = req.query;
+	const locationId = req.params.locationId;
+	var sql = 'DELETE FROM questions WHERE locationId=';
+	sql += locationId + ' AND question=\'' + question + '\'';
+
+	connection.query(sql, (err, results, fields) => {
+		if (err) console.log(err);
+		res.send(JSON.stringify(results));
+	})
+})
+
 server.listen(server.get('port'), () => {
 	console.log('Listening on port ' + server.get('port'));
 });
