@@ -1,13 +1,22 @@
 import React from 'react';
 import Manager from './Manager';
+import '../../css/App.css';
 import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
-import TableQuestions from './TableQuestions';
 import {QuestionAnswer} from '@material-ui/icons';
+import { withStyles } from '@material-ui/core/styles';
+import Paper from '@material-ui/core/Paper';
+import PropTypes from 'prop-types';
+import List from '@material-ui/core/List';
+import Button from '@material-ui/core/Button';
+import Modal from '@material-ui/core/Modal';
+import FormHelperText from '@material-ui/core/FormHelperText';
+import TextField from '@material-ui/core/TextField';
+
 
 const style = {
   backgroundColor: '#ffffff',
@@ -16,10 +25,113 @@ const style = {
   minWidth: '100%',
 };
 
-class LocationRow extends React.Component {
+const paper_styles = theme => ({
+  root: {
+    ...theme.mixins.gutters(),
+    paddingTop: theme.spacing.unit * 2,
+    paddingBottom: theme.spacing.unit * 2,
+  },
+});
+
+const modal_styles = theme => ({
+  paper: {
+    position: 'absolute',
+    width: theme.spacing.unit * 50,
+    backgroundColor: theme.palette.background.paper,
+    boxShadow: theme.shadows[5],
+    padding: theme.spacing.unit * 4,
+  },
+});
+
+function getModalStyle() {
+  return {
+    top: `50%`,
+    left: `50%`,
+    transform: `translate(-50%, -50%)`,
+  };
+}
+
+class PaperSheet extends React.Component {
   render() {
-    const { locationData} = this.props;
-    console.log(locationData.qaList);
+    const { classes, qa } = this.props;
+    return (
+      <div>
+        <Paper className={classes.root} elevation={1}>
+            <div justify='center'>
+              <Typography>
+                <strong>Question:</strong> {qa.question}
+              </Typography>
+              <Typography>
+                <strong>Answer:</strong> {qa.answer}
+              </Typography>
+            </div>   
+          <Button color="primary" className={classes.button}> Update </Button>
+          <Button color="primary" className={classes.button}> Delete </Button>
+        </Paper>
+      </div>
+    );
+  }
+}
+
+PaperSheet.propTypes = {
+  classes: PropTypes.object.isRequired,
+};
+
+PaperSheet = withStyles(paper_styles)(PaperSheet);
+
+
+
+class LocationRow extends React.Component {
+  state = {
+    locationId: this.props.locationData.locationId,
+    isOpen: false,
+    isChanged: false,
+    addSuccess: false,
+    isFilled: true,
+    questionTobeAdd: '',
+    qaComponent: null,
+  }
+
+  addQuestion = () => {
+    var question = this.state.questionTobeAdd;
+    if (question.length === 0) {
+      console.log('Please enter a question!');
+      this.setState({isFilled: false, addSuccess: false})
+      setTimeout(() => {
+        this.setState({ addSuccess: false,  })
+      }, 2000);
+      return;
+    }
+    this.setState({isFilled: true, addSuccess: true}, () => {
+      question = question.replace(/ /g, '+');
+      var query = '/locations/' + this.state.locationId + '/questions/add';
+      query += `?question=${question}&answer=`;
+      // perform query add question
+      fetch(query).then(res => res.json()).catch(err => console.log(err));
+      console.log('Add question successfully');
+      this.props.reload();
+    })
+    setTimeout(() => {
+      this.setState({ isOpen: false, addSuccess: false,  questionTobeAdd: ''})
+    }, 2000);
+
+  }
+
+  handleOpen = () => {
+    this.setState({ isOpen: true });
+  };
+
+  handleClose = () => {
+    this.setState({ isOpen: false });
+  };
+
+  handleTFChange = (event) => {
+    this.setState({questionTobeAdd: event.target.value})
+  }
+
+  render() {
+    const { locationData, classes} = this.props;
+    
     return (
       <ExpansionPanel >
         <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
@@ -31,13 +143,60 @@ class LocationRow extends React.Component {
         </ExpansionPanelSummary>
         
         <ExpansionPanelDetails>
-          <TableQuestions locationId={locationData.locationId} questionAnswer={locationData.qaList} load={this.props.load}/>
+          <div>
+            <List>
+              {locationData.qaList.map((data,idx) => {
+                return <PaperSheet key={idx} qa={data} />
+              })}
+              <Button 
+                onClick={() => this.setState({isOpen: true, addSuccess: false, isFilled: true}) }
+                variant="contained" 
+                color="primary" 
+                style={{marginTop: '10px'}} >
+                + Add question
+              </Button>
+            </List>
+            {/*--------------------- modal for add question --------------------- */}
+            <Modal
+              aria-labelledby="simple-modal-title"
+              aria-describedby="simple-modal-description"
+              open={this.state.isOpen}
+              onClose={this.handleClose}
+            >
+              <div style={getModalStyle()} className={classes.paper}>
+                <Grid container justify='center'>
+                  <Typography variant='display2' id="modal-title">
+                    Add new question
+                  </Typography>
+                </Grid>
+                <Grid container justify='center'>
+                  <TextField
+                      onChange={this.handleTFChange}
+                      className = 'question'
+                      label='Enter question'
+                      style={{minWidth: '80%'}} />
+                </Grid>
+                <Grid container justify='center'>
+                  {this.state.addSuccess ?
+                    <FormHelperText id="component-success-text">New question just added successfully!</FormHelperText> :null}
+                  {this.state.isFilled ? 
+                    null : <FormHelperText id="component-error-text">Please fill in the question!</FormHelperText> }
+                </Grid>
+                <Grid container justify='center'>
+                  <Button onClick={this.addQuestion} variant="contained" color="primary" style={{marginTop: '30px', marginRight: '15px'}} > Add </Button>
+                  <Button onClick={()=>this.setState({isOpen:false})} variant="contained" color="default" style={{marginTop: '30px'}} > Close </Button>
+                </Grid>
+              </div>
+            </Modal>
+          </div>
         </ExpansionPanelDetails>
         
       </ExpansionPanel> 
     )
   }
 }
+
+LocationRow = withStyles(modal_styles)(LocationRow);
 
 class ManagerQuestions extends React.Component {
   constructor(props) {
@@ -63,10 +222,9 @@ class ManagerQuestions extends React.Component {
     //console.log(this.state.locationsQA);
     var locationQA = [];
     this.state.locationsQA.forEach((locationData, idx) => {
-      var row = <LocationRow key={idx} locationData={locationData} load={this.reload}/>
+      var row = <LocationRow key={idx} locationData={locationData} reload={this.reload}/>
       locationQA.push(row);
     })
-    var old_state = this.state.locationComponent;
     this.setState({
       locationComponent: locationQA
     })
@@ -81,6 +239,7 @@ class ManagerQuestions extends React.Component {
       .then(locations => {
         this.setState({ locations: locations }, () => {
           locations.forEach((location, idx) => {
+            // perform search all questions and answer at this location
             var query = `/locations/search?id=${location.id}`;
             
             var qaList = [];

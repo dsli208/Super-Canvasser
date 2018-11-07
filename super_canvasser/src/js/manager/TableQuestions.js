@@ -180,7 +180,7 @@ class EnhancedTableToolbar extends React.Component {
       fetch(query).then(res => res.json()).catch(err => console.log(err));
       console.log('Add question successfully');
       
-      this.props.load(this.state.locationId, this.state.questionTobeAdd);
+      this.props.load(true);
     })
     setTimeout(() => {
       this.setState({ addOpen: false, addSuccess: false,  questionTobeAdd: ''})
@@ -381,8 +381,8 @@ class TableQuestions extends React.Component {
         <EnhancedTableToolbar 
           locationId={this.state.locationId}
           numSelected={selected.length} 
-          load={(locationId, question) => {
-            this.props.load(locationId, {question: question, answer: ''})
+          load={(isChanged) => {
+            this.props.load(isChanged)
           }} />
         <div className={classes.tableWrapper}>
           <Table className={classes.table} aria-labelledby="tableTitle">
