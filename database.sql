@@ -49,4 +49,5 @@ CREATE  TABLE IF NOT EXISTS `super_canvasser`.`questions` (
 	`question` VARCHAR(500) NOT NULL ,
 	`answer` VARCHAR(500) NOT NULL ,
 	FOREIGN KEY (`locationId`) REFERENCES `super_canvasser`.`locations`(`id`)
+	ON DELETE CASCADE
 ) ENGINE = InnoDB;
