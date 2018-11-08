@@ -79,19 +79,24 @@ VALUES ('313 Smith Haven Mall, Lake Grove, New York, 11755, USA',
 DELETE FROM `super_canvasser`.`questions`;
 
 INSERT INTO `super_canvasser`.`questions` (`locationId`, `question`, `answer`)
-VALUES (1, 'How do you like this product?', 'Good');
+VALUES (1, 'In a few sentences, tell us how do you like this product and how you would like us to improve in future?',
+				"Overall, this product is really good. I'd love to purchase some more in future." );
 
 INSERT INTO `super_canvasser`.`questions` (`locationId`, `question`, `answer`)
-VALUES (2, 'Do you know other products other than this product?', 'Yes');
+VALUES (2, 'Do you know other products other than this product?',
+				'Yes, I have a collection of these products bought from different stores.');
 
 INSERT INTO `super_canvasser`.`questions` (`locationId`, `question`, `answer`)
-VALUES (3, 'On the scale of 10, how do you rate this product?', '');
+VALUES (3, 'On the scale of 10, how do you rate this product?',
+				'Awesome!!!! I would give a rate of 5.0.');
 
 INSERT INTO `super_canvasser`.`questions` (`locationId`, `question`, `answer`)
-VALUES (2, 'How do you like this product?', 'Good');
+VALUES (2, 'How do you like this product?',
+				"It's pretty good, I hope to see its further improvement.");
 
 INSERT INTO `super_canvasser`.`questions` (`locationId`, `question`, `answer`)
-VALUES (1, 'On the scale of 10, how do you rate this product?', '9');
+VALUES (1, 'On the scale of 10, how do you rate this product?',
+				'Ahh ok, I would give it a 4.5.');
 
 INSERT INTO `super_canvasser`.`questions` (`locationId`, `question`, `answer`)
-VALUES (3, 'How do you like this product?', 'Good');
+VALUES (3, 'How do you like this product?', 'Good enough!!!');

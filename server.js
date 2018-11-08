@@ -207,6 +207,21 @@ server.get('/locations/:locationId/questions/add', (req, res) => {
 	})
 })
 
+// update question at a location
+server.get('/locations/:locationId/questions/update', (req, res) => {
+	const {oldQ, newQ} = req.query;
+	var sql = 'UPDATE questions SET question=';
+	sql += '\'' + newQ + '\'';
+	sql += ', answer=' + '\'\'';
+	sql += ' WHERE locationId=' + req.params.locationId;
+	sql += ' AND question=\'' + oldQ + '\'';
+
+	connection.query(sql, (err, results, fields) => {
+		if (err) console.log(err);
+		res.send(JSON.stringify(results));
+	})
+})
+
 // delete question from location
 server.get('/locations/:locationId/questions/delete', (req, res) => {
 	const {question} = req.query;

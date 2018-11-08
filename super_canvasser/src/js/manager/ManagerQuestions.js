@@ -33,21 +33,11 @@ const paper_styles = theme => ({
   },
   paper: {
     position: 'absolute',
-    width: theme.spacing.unit * 50,
+    width: theme.spacing.unit * 50 + 200,
     backgroundColor: theme.palette.background.paper,
     boxShadow: theme.shadows[5],
     padding: theme.spacing.unit * 4,
   }
-});
-
-const modal_styles = theme => ({
-  paper: {
-    position: 'absolute',
-    width: theme.spacing.unit * 50,
-    backgroundColor: theme.palette.background.paper,
-    boxShadow: theme.shadows[5],
-    padding: theme.spacing.unit * 4,
-  },
 });
 
 function getModalStyle() {
@@ -61,8 +51,38 @@ function getModalStyle() {
 class PaperSheet extends React.Component {
   state = {
     isDelete_open: false,
-
+    isUpdate_open: false,
+    edit_question: '',
   }
+
+  openUpdate_modal = () => {
+    this.setState({isUpdate_open: true})
+    const { qa } = this.props;
+    this.setState({
+      edit_question: qa.question
+    })
+  }
+
+  handleTFChange = (event) => {
+    //console.log(event.target.value);
+    this.setState({ edit_question: event.target.value })
+  }
+
+  handleUpdate = () => {
+    //console.log(this.state.edit_question);
+    const { qa, locationId } = this.props;
+    var old_question = qa.question.replace(/ /g, '+');
+    var new_question = this.state.edit_question.replace(/ /g, '+');
+
+    var query = `/locations/${locationId}/questions/update?oldQ=${old_question}&newQ=${new_question}`;
+    // perform query update
+    console.log(query);
+    fetch(query).then(res => res.json()).catch(err => console.log(err))
+    console.log('Update question successfully!');
+    this.setState({ isUpdate_open: false })
+    this.props.reload();
+  }
+
   handleDelete = () => {
     const { qa, locationId } = this.props;
     var query = `/locations/${locationId}/questions/delete?question=${qa.question}`;
@@ -70,6 +90,7 @@ class PaperSheet extends React.Component {
     console.log('Delete question successfully!');
     this.props.reload();
   }
+
   render() {
     const { classes, qa } = this.props;
     return (
@@ -83,12 +104,44 @@ class PaperSheet extends React.Component {
                 <strong>Answer:</strong> {qa.answer}
               </Typography>
             </div>   
-          <Button color="primary" className={classes.button}> Update </Button>
+          <Button 
+            onClick={this.openUpdate_modal}
+            color="primary" 
+            className={classes.button}> Update </Button>
           <Button 
             onClick={() => this.setState({isDelete_open : true})} 
             color="primary" 
             className={classes.button}> Delete </Button>
         </Paper>
+        {/* ---------------------- modal for update question -------------------------- */}
+        <Modal
+          aria-labelledby="simple-modal-title"
+          aria-describedby="simple-modal-description"
+          open={this.state.isUpdate_open}
+          onClose={() => this.setState({isUpdate_open : false})}
+        >
+            <div style={getModalStyle()} className={classes.paper}>
+                <Grid container justify='center'>
+                  <Typography variant='display2' id="modal-title">
+                    Update question
+                  </Typography>
+                </Grid>
+                <Grid container justify='center'>
+                  <TextField
+                      onChange={this.handleTFChange}
+                      className = 'question'
+                      label='Enter question'
+                      defaultValue={qa.question}
+                      style={{minWidth: '80%'}} />
+                </Grid>
+                
+                <Grid container justify='center'>
+                  <Button onClick={this.handleUpdate} variant="contained" color="primary" style={{marginTop: '30px', marginRight: '15px'}} > Update </Button>
+                  <Button onClick={()=>this.setState({isUpdate_open:false})} variant="contained" color="default" style={{marginTop: '30px'}} > Cancel </Button>
+                </Grid>
+            </div>
+        </Modal>
+
         {/* ---------------------- modal for delete question -------------------------- */}
         <Modal
           aria-labelledby="simple-modal-title"
@@ -193,7 +246,7 @@ class LocationRow extends React.Component {
         </ExpansionPanelSummary>
         
         <ExpansionPanelDetails>
-          <div>
+          <div style={{margin: '0 auto 0 auto'}}>
             <List>
               {locationData.qaList.map((data,idx) => {
                 return <PaperSheet key={idx} qa={data} locationId={locationData.locationId} reload={this.props.reload}/>
@@ -246,7 +299,7 @@ class LocationRow extends React.Component {
   }
 }
 
-LocationRow = withStyles(modal_styles)(LocationRow);
+LocationRow = withStyles(paper_styles)(LocationRow);
 
 class ManagerQuestions extends React.Component {
   constructor(props) {
@@ -326,12 +379,18 @@ class ManagerQuestions extends React.Component {
       <div style={style}>
         <Manager username={this.props.match.params.username}/>
         <div className="questionList" style={{margin: '30px 15% 30px 15%'}}>
-          <Grid container alignItems='flex-end' justify='center' style={{marginBottom: '20px'}}>
+          <Grid container alignItems='flex-end' justify='center' >
             <Grid item style={{marginRight: '15px'}}>
               <QuestionAnswer/>
             </Grid>
             <Grid item>
               <h1>Questions details</h1>
+            </Grid>
+          </Grid>
+          
+          <Grid container justify='center' style={{marginBottom: '20px'}} >
+            <Grid item>
+              <Typography> Click on each location to view its collection of questions.</Typography>
             </Grid>
           </Grid>
           {this.state.locationComponent}           
