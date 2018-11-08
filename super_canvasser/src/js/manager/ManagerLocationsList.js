@@ -12,6 +12,9 @@ import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Typography from '@material-ui/core/Typography';
+import Paper from '@material-ui/core/Paper';
+import { withStyles } from '@material-ui/core/styles';
+import List from '@material-ui/core/List';
 
 
 const style = {
@@ -75,6 +78,36 @@ class GoogleMapExample extends React.Component {
 GoogleMapExample = withGoogleMap(GoogleMapExample);
 
 
+const paper_styles = theme => ({
+  root: {
+    ...theme.mixins.gutters(),
+    paddingTop: theme.spacing.unit * 2,
+    paddingBottom: theme.spacing.unit * 2,
+  }
+});
+
+
+class PaperSheet extends React.Component {
+  render() {
+    const {classes, qa} = this.props;
+    return (
+      <Paper className={classes.root} elevation={1}>
+        <div justify='center'>
+          <Typography>
+            <strong>Question:</strong> {qa.question}
+          </Typography>
+          <Typography>
+            <strong>Answer:</strong> {qa.answer}
+          </Typography>
+        </div>
+      </Paper>
+    )
+  }
+}
+
+PaperSheet = withStyles(paper_styles)(PaperSheet);
+
+
 class ManagerLocationsList extends React.Component {
   constructor(props) {
     super(props);
@@ -122,8 +155,20 @@ class ManagerLocationsList extends React.Component {
       .then(locations => {
         this.setState({ resultLocations: locations})
         locations.forEach((location, idx) => {
-          var res = 
+          var query = `/locations/search?id=${location.id}`;
+            
+          var qaList = [];
+          fetch(query).then(res => res.json())
+          .then(data => {
+            data.forEach(qa => {
+              qaList.push({ question: qa.question, answer: qa.answer })
+            })
+          }).catch(err => console.log(err));
+
+          setTimeout(() => {
+            var res = 
             <ExpansionPanel key={idx}>
+
               <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
                 <div style={{flexBasis: '70.33%'}}>
                   <Typography style={{color: '#483D8B'}}> {location.street}</Typography>
@@ -131,19 +176,30 @@ class ManagerLocationsList extends React.Component {
                 </div>
                 <div style={{flexBasis: '33.33%'}}><Typography style={{color: '#A9A9A9'}}> duration: {location.duration} mins</Typography></div>
               </ExpansionPanelSummary>
+              
               <ExpansionPanelDetails>
-                <p>results</p>
+                <div style={{margin: '0 auto 0 auto'}}>
+                  <List>
+                    {qaList.map((qa,idx) => {
+                      return <PaperSheet key={idx} qa={qa} locationId={location.id} />
+                    })}
+                  </List>
+                </div>
               </ExpansionPanelDetails>
+
             </ExpansionPanel>
           
-          results.push(res);
+            results.push(res);
+          }, 1000);
         })
       })
       .catch(err => console.log(err))
 
-      this.setState({
-        resultComponent: results
-      })
+      setTimeout(() => {
+        this.setState({
+          resultComponent: results
+        })
+      }, 2500)
   }
 
   deleteLocation = (deleteLocation_list) => {
@@ -242,7 +298,7 @@ class ManagerLocationsList extends React.Component {
   }
 
   displayLocations = (displayList) => {
-    displayList.map(location => {
+    displayList.forEach(location => {
       this.state.bounds.extend(new window.google.maps.LatLng(location.lat, location.lng));
     })
     this.setState({
