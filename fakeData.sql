@@ -72,6 +72,14 @@ INSERT INTO `super_canvasser`.`locations` (`fullAddress`, `street`, `city`, `sta
 VALUES ('313 Smith Haven Mall, Lake Grove, New York, 11755, USA',
 		 '313 Smith Haven Mall', 'Lake Grove', 'New York', 11755, 'USA', 30);
 
+INSERT INTO `super_canvasser`.`locations` (`fullAddress`, `street`, `city`, `state`, `zipcode`, `country`, `duration`)
+VALUES ('15 Hollow Rd, Stony Brook, New York, 11790, USA',
+		 '15 Hollow Rd', 'Stony Brook', 'New York', 11790, 'USA', 30);
+
+INSERT INTO `super_canvasser`.`locations` (`fullAddress`, `street`, `city`, `state`, `zipcode`, `country`, `duration`)
+VALUES ('100 Nicolls Rd, Stony Brook, New York, 11790, USA',
+		 '100 Nicolls Rd', 'Stony Brook', 'New York', 11790, 'USA', 30);
+
 -- -----------------------------------------------------
 -- insert into questions table
 -- -----------------------------------------------------
@@ -100,3 +108,57 @@ VALUES (1, 'On the scale of 10, how do you rate this product?',
 
 INSERT INTO `super_canvasser`.`questions` (`locationId`, `question`, `answer`)
 VALUES (3, 'How do you like this product?', 'Good enough!!!');
+
+-- -----------------------------------------------------
+-- insert into tasks table
+-- -----------------------------------------------------
+INSERT INTO `super_canvasser`.`tasks` (`id`, `locationId`)
+VALUES (1, 1);
+
+INSERT INTO `super_canvasser`.`tasks` (`id`, `locationId`)
+VALUES (1, 2);
+
+INSERT INTO `super_canvasser`.`tasks` (`id`, `locationId`)
+VALUES (2, 3);
+
+INSERT INTO `super_canvasser`.`tasks` (`id`, `locationId`)
+VALUES (2, 4);
+
+INSERT INTO `super_canvasser`.`tasks` (`id`, `locationId`)
+VALUES (3, 5);
+
+INSERT INTO `super_canvasser`.`tasks` (`id`, `locationId`)
+VALUES (3, 6);
+
+INSERT INTO `super_canvasser`.`tasks` (`id`, `locationId`)
+VALUES (4, 7);
+
+INSERT INTO `super_canvasser`.`tasks` (`id`, `locationId`)
+VALUES (4, 8);
+
+-- -----------------------------------------------------
+-- insert into assignments table
+-- -----------------------------------------------------
+
+DELETE FROM `super_canvasser`.`assignments`;
+
+INSERT INTO `super_canvasser`.`assignments` (`userId`, `date`, `month`, `year`, `taskId`)
+VALUES (3, 31, 10, 2018, 1);
+
+INSERT INTO `super_canvasser`.`assignments` (`userId`, `date`, `month`, `year`, `taskId`)
+VALUES (3, 22, 10, 2018, 2);
+
+INSERT INTO `super_canvasser`.`assignments` (`userId`, `date`, `month`, `year`, `taskId`)
+VALUES (3, 12, 05, 2018, 3);
+
+INSERT INTO `super_canvasser`.`assignments` (`userId`, `date`, `month`, `year`, `taskId`)
+VALUES (3, 12, 02, 2018, 4);
+
+INSERT INTO `super_canvasser`.`assignments` (`userId`, `date`, `month`, `year`)
+VALUES (4, 09, 10, 2018);
+
+INSERT INTO `super_canvasser`.`assignments` (`userId`, `date`, `month`, `year`)
+VALUES (4, 13, 08, 2018);
+
+INSERT INTO `super_canvasser`.`assignments` (`userId`, `date`, `month`, `year`)
+VALUES (4, 24, 08, 2018);

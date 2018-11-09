@@ -100,6 +100,37 @@ server.get('/users/current', (req, res) => {
 	})
 })
 
+// get all users whose role is specified
+server.get('/users/role/:role', (req, res) => {
+	var sql = 'SELECT * from users WHERE role=\'' + req.params.role + '\'';
+	connection.query(sql, (err, results, fields) => {
+		if (err) {
+			console.log(err);
+		}
+		res.send(JSON.stringify(results));
+	})
+})
+
+server.get('/users/canvasser/assignments/:userId', (req, res) => {
+	var sql = 'SELECT * FROM assignments WHERE userId=' + req.params.userId;
+	connection.query(sql, (err, results, fields) => {
+		if (err) {
+			console.log(err);
+		}
+		res.send(JSON.stringify(results));
+	})
+})
+
+server.get('/users/canvasser/tasks/:taskId', (req, res) => {
+	var sql = 'SELECT * FROM tasks WHERE id=' + req.params.taskId;
+	connection.query(sql, (err, results, fields) => {
+		if (err) {
+			console.log(err);
+		}
+		res.send(JSON.stringify(results));
+	})
+})
+
 // get current user
 server.get('/users/:currentUserName', (req, res) => {
 	let sql = 'SELECT * FROM users WHERE username=' + '\'' + req.params.currentUserName + '\'';
@@ -120,6 +151,15 @@ server.get('/locations', (req, res) => {
 	});
 })
 
+server.get('/locations/searching/:id', (req, res) => {
+	var sql = 'SELECT * FROM locations WHERE id=' + req.params.id;
+	
+	connection.query(sql, function (error, results, fields) {
+	  if (error) console.log(error);
+	  //console.log('The solution is: ', results);
+	  res.send(JSON.stringify(results));
+	});
+})
 
 // add location
 server.get('/locations/add', (req, res) => {
@@ -185,9 +225,9 @@ server.get('/locations/edit', (req, res) => {
 
 // search location ID based on address --> yield questions and answers
 server.get('/locations/search', (req,res) => {
-	const {id} = req.query;
-	var sql = `SELECT *`;
-	sql += ` FROM questions, locations WHERE questions.locationId = locations.id AND questions.locationId=${id}`;
+	const {locationId} = req.query;
+	var sql = 'SELECT *';
+	sql += ' FROM questions, locations WHERE questions.locationId = locations.id AND questions.locationId=' + locationId;
 	
 	connection.query(sql, (err, results, fields) => {
 		if (err) console.log(err);
