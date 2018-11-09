@@ -1,5 +1,4 @@
 import React from 'react';
-import '../../css/manager.css';
 import Manager from './Manager';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
@@ -155,7 +154,7 @@ class ManagerLocationsList extends React.Component {
       .then(locations => {
         this.setState({ resultLocations: locations})
         locations.forEach((location, idx) => {
-          var query = `/locations/search?id=${location.id}`;
+          var query = `/locations/search?locationId=${location.id}`;
             
           var qaList = [];
           fetch(query).then(res => res.json())
@@ -359,7 +358,7 @@ class ManagerLocationsList extends React.Component {
         <Manager username={this.props.match.params.username}/>
         <br/>
 
-        <div className='locationlist'>
+        <div className='locationlist' style={{margin: '0 3.5% 30px 3.5%'}}>
           <Grid container justify='center'>
             <Grid item xs={7} style={{marginRight: '20px'}}>
               <div className="manager-location-list">

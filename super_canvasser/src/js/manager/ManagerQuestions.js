@@ -343,7 +343,7 @@ class ManagerQuestions extends React.Component {
         this.setState({ locations: locations }, () => {
           locations.forEach((location, idx) => {
             // perform search all questions and answer at this location
-            var query = `/locations/search?id=${location.id}`;
+            var query = `/locations/search?locationId=${location.id}`;
             
             var qaList = [];
             fetch(query).then(res => res.json())
