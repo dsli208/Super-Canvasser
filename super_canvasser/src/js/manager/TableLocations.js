@@ -321,7 +321,7 @@ class EnhancedTableToolbar extends React.Component {
             </Typography>
           ) : (
             <Typography id="tableTitle">
-              List of all Canvassers in the campaigns
+              List of all locations in the campaigns
             </Typography>
           )}
         </div>

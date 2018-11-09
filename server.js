@@ -45,13 +45,13 @@ server.get('/users/delete', (req, res) => {
 server.get('/users/add', (req, res) => {
 	const {firstName, lastName, username, email, password, role} = req.query;
 	var sql = 'INSERT INTO users (firstName, lastName, username, role, email, phone, password) VALUES (';
-	sql += '\'' + firstName + '\'';
-	sql += ',\'' + lastName + '\'';
-	sql += ',\'' + username + '\'';
-	sql += ',\'' + role + '\'';
-	sql += ',\'' + email + '\'';
-	sql += ',\'' + '\'';
-	sql += ',\'' + password + '\')'; 
+	sql += "\"" + firstName + "\"";
+	sql += ",\"" + lastName + "\"";
+	sql += ",\"" + username + "\"";
+	sql += ",\"" + role + "\"";
+	sql += ",\"" + email + "\"";
+	sql += ",\"" + "\"";
+	sql += ",\"" + password + "\")"; 
 
 	connection.query(sql, (err, results, fields) => {
 		if (err) {
@@ -73,7 +73,8 @@ server.get('/users/add', (req, res) => {
 server.get('/users/update', (req, res) => {
 
     const {firstName, lastName, username, email, role, phone, id} = req.query;
-    var sql = 'UPDATE users SET firstname=' + '\''+firstName+  '\''+', lastname=' + '\''+lastName + '\''+', username=' + '\''+username + '\''+', role=' + '\''+role + '\''+', email=' + '\''+email + '\''+', phone=' + '\''+phone + '\''+' WHERE id=' + '\''+id + '\'';
+		var sql = 'UPDATE users SET firstname=' + "\"" + firstName+  "\"" + ", lastname=" + "\"" +lastName + "\"" + ", username=" + "\"" + username + "\"";
+		sql += ", role=" + "\"" +role + "\"" + ", email=" + "\"" +email + "\"" + ", phone=" + "\"" + phone + "\"" + " WHERE id=" + id;
 
     console.log(id);
 
@@ -167,13 +168,13 @@ server.get('/locations/add', (req, res) => {
 	
 	var sql = 'INSERT INTO locations (fullAddress, street, city, state, zipcode, country, duration) VALUES (';
 	
-	sql += '\'' + fullAddress + '\'';
-	sql += ',\'' + street + '\'';
-	sql += ',\'' + city + '\'';
-	sql += ',\'' + state + '\'';
-	sql += ',' + zipcode;
-	sql += ',\'' + country + '\'' ;
-	sql += ',' + duration + ')';
+	sql += "\"" + fullAddress + "\"";
+	sql += ",\"" + street + "\"";
+	sql += ",\"" + city + "\"";
+	sql += ",\"" + state + "\"";
+	sql += "," + zipcode;
+	sql += ",\"" + country + "\"" ;
+	sql += "," + duration + ")";
 
 	connection.query(sql, (err, results, fields) => {
 		if (err) {
@@ -188,8 +189,8 @@ server.get('/locations/add', (req, res) => {
 server.get('/locations/delete', (req, res) => {
 	const {fullAddress, street, city, state, zipcode, country, duration} = req.query;
 
-	var sql = 'DELETE FROM locations WHERE street=';
-	sql += '\'' + street + '\'';
+	var sql = "DELETE FROM locations WHERE street=";
+	sql += "\"" + street + "\"";
 	
 	connection.query(sql, (err, results, fields) => {
 		if (err) {
@@ -204,15 +205,15 @@ server.get('/locations/delete', (req, res) => {
 server.get('/locations/edit', (req, res) => {
 	const {id, fullAddress, street, city, state, zipcode, country, duration} = req.query;
 
-	var sql = 'UPDATE locations SET ';
-	sql += 'fullAddress=\'' + fullAddress + '\',';
-	sql += 'street=\'' + street + '\', ';
-	sql += 'city=\'' + city + '\', ';
-	sql += 'state=\'' + state + '\', ';
-	sql += 'zipcode=' + zipcode + ', ';
-	sql += 'country=\'' + country + '\', ';
-	sql += 'duration=' + duration ;
-	sql += ' WHERE id=' + id;
+	var sql = "UPDATE locations SET ";
+	sql += "fullAddress=\"" + fullAddress + "\",";
+	sql += "street=\"" + street + "\", ";
+	sql += "city=\"" + city + "\", ";
+	sql += "state=\"" + state + "\", ";
+	sql += "zipcode=" + zipcode + ", ";
+	sql += "country=\"" + country + "\", ";
+	sql += "duration=" + duration ;
+	sql += " WHERE id=" + id;
 
 	connection.query(sql, (err, results, fields) => {
 		if (err) {
@@ -238,8 +239,8 @@ server.get('/locations/search', (req,res) => {
 // add question to location
 server.get('/locations/:locationId/questions/add', (req, res) => {
 	const {question, answer} = req.query;
-	var sql = 'INSERT INTO questions (locationId, question, answer) VALUES(';
-	sql += req.params.locationId + ',\'' + question + '\',\'' + answer + '\')';
+	var sql = "INSERT INTO questions (locationId, question, answer) VALUES(";
+	sql += req.params.locationId + ",\"" + question + "\",\"" + answer + "\")";
 
 	connection.query(sql, (err, results, fields) => {
 		if (err) console.log(err);
@@ -250,11 +251,11 @@ server.get('/locations/:locationId/questions/add', (req, res) => {
 // update question at a location
 server.get('/locations/:locationId/questions/update', (req, res) => {
 	const {oldQ, newQ} = req.query;
-	var sql = 'UPDATE questions SET question=';
-	sql += '\'' + newQ + '\'';
-	sql += ', answer=' + '\'\'';
-	sql += ' WHERE locationId=' + req.params.locationId;
-	sql += ' AND question=\'' + oldQ + '\'';
+	var sql = "UPDATE questions SET question=";
+	sql += "\"" + newQ + "\"";
+	sql += ", answer=" + "\"\"";
+	sql += " WHERE locationId=" + req.params.locationId;
+	sql += " AND question=\"" + oldQ + "\"";
 
 	connection.query(sql, (err, results, fields) => {
 		if (err) console.log(err);
@@ -266,8 +267,8 @@ server.get('/locations/:locationId/questions/update', (req, res) => {
 server.get('/locations/:locationId/questions/delete', (req, res) => {
 	const {question} = req.query;
 	const locationId = req.params.locationId;
-	var sql = 'DELETE FROM questions WHERE locationId=';
-	sql += locationId + ' AND question=\'' + question + '\'';
+	var sql = "DELETE FROM questions WHERE locationId=";
+	sql += locationId + " AND question=\"" + question + "\"";
 
 	connection.query(sql, (err, results, fields) => {
 		if (err) console.log(err);

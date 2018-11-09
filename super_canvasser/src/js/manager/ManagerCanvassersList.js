@@ -227,7 +227,8 @@ class ManagerCanvassersList extends React.Component {
         <Manager username={this.props.match.params.username}/>
         <br/><br/>
         <div className="canvasserlist" style={{margin: '0 15% 30px 15%'}} >
-          <h1>Canvasser Assignments</h1>
+          <h1>Canvasser Assignments</h1> <br/>
+          <Typography>Canvas assignments for each canvasser (including tasks with corresponding date and set of locations along with questions).</Typography>
           <br/><br/>
           
           {canvassers.map((canvasser, idx) => {

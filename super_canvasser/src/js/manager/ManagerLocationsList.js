@@ -198,7 +198,7 @@ class ManagerLocationsList extends React.Component {
         this.setState({
           resultComponent: results
         })
-      }, 2500)
+      }, 1500)
   }
 
   deleteLocation = (deleteLocation_list) => {

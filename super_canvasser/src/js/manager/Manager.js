@@ -6,7 +6,7 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
-import {AccountCircle} from '@material-ui/icons';
+import { AccountCircle } from '@material-ui/icons';
 
 const styles = {
   root: {
@@ -22,8 +22,8 @@ const styles = {
 };
 
 
-class Manager extends React.Component  {
-  
+class Manager extends React.Component {
+
   constructor(props) {
     super(props);
     this.state = {
@@ -32,18 +32,18 @@ class Manager extends React.Component  {
       currentUserFullName: '',
     }
   }
-  
+
   componentWillMount() {
     if (typeof this.props.username === 'undefined') {
       this.setState({
         currentUserName: this.props.match.params.username,
-      }, () => this.getCurrentUser(this.state.currentUserName) )
+      }, () => this.getCurrentUser(this.state.currentUserName))
     } else {
       this.setState({
         currentUserName: this.props.username,
       }, () => this.getCurrentUser(this.state.currentUserName))
     }
-  } 
+  }
 
   getCurrentUser = (currentUserName) => {
     fetch('/users').then(res => res.json())
@@ -53,7 +53,7 @@ class Manager extends React.Component  {
           currentUserObj: currentUserObj,
           currentUserFullName: currentUserObj.firstName + ' ' + currentUserObj.lastName,
         })
-      })
+      }).catch(err => console.log(err))
   }
 
   logout = () => {
@@ -64,16 +64,16 @@ class Manager extends React.Component  {
     window.location.href = '/users/manager/' + this.state.currentUserName + '/locations';
   }
 
-  viewCanvassers = () => {
-    window.location.href = '/users/manager/' + this.state.currentUserName + '/canvassers';
+  viewCanvasserAssignments = () => {
+    window.location.href = '/users/manager/' + this.state.currentUserName + '/canvasserAssignments';
   }
 
   viewQuestions = () => {
     window.location.href = '/users/manager/' + this.state.currentUserName + '/questions';
   }
-    viewAddCampaigns = () => {
-        window.location.href = '/users/manager/' + this.state.currentUserName + '/addCampaign';
-    }
+  viewCampaigns = () => {
+    window.location.href = '/users/manager/' + this.state.currentUserName + '/campaigns';
+  }
 
   render() {
     const { classes } = this.props;
@@ -85,13 +85,10 @@ class Manager extends React.Component  {
               <AccountCircle />
             </IconButton>
             <Typography variant="title" color="inherit" className={classes.grow}>
-               {this.state.currentUserFullName}
+              {this.state.currentUserFullName}
             </Typography>
-            <Button color="inherit">Canvass Assignments</Button>
-            <Button color="inherit">Campaigns</Button>
-              <Button onClick={this.viewAddCampaigns} color="inherit">Add Campaigns</Button>
-            <Button color="inherit">Dates</Button>
-            <Button onClick={this.viewCanvassers} color="inherit">Canvassers</Button>
+            <Button onClick={this.viewCampaigns} color="inherit">Campaigns</Button>
+            <Button onClick={this.viewCanvasserAssignments} color="inherit">Canvasser Assignments</Button>
             <Button onClick={this.viewLocations} color="inherit">Locations</Button>
             <Button onClick={this.viewQuestions} color="inherit">Questions</Button>
             <Button onClick={this.logout} color="inherit">Log out</Button>

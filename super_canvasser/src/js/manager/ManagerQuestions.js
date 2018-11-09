@@ -88,6 +88,7 @@ class PaperSheet extends React.Component {
     var query = `/locations/${locationId}/questions/delete?question=${qa.question}`;
     fetch(query).then(res => res.json()).catch(err => console.log(err))
     console.log('Delete question successfully!');
+    this.setState({ isDelete_open: false })
     this.props.reload();
   }
 
@@ -216,7 +217,7 @@ class LocationRow extends React.Component {
     })
     setTimeout(() => {
       this.setState({ isOpen: false, addSuccess: false,  questionTobeAdd: ''})
-    }, 2000);
+    }, 1500);
 
   }
 
