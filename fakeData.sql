@@ -80,6 +80,30 @@ INSERT INTO `super_canvasser`.`locations` (`fullAddress`, `street`, `city`, `sta
 VALUES ('100 Nicolls Rd, Stony Brook, New York, 11790, USA',
 		 '100 Nicolls Rd', 'Stony Brook', 'New York', 11790, 'USA', 30);
 
+INSERT INTO `super_canvasser`.`locations` (`fullAddress`, `street`, `city`, `state`, `zipcode`, `country`, `duration`)
+VALUES ('75 Arlington St, Boston, Massachusetts, 02116, USA',
+		 '75 Arlington St', 'Boston', 'Massachusetts', 02116, 'USA', 15);
+
+INSERT INTO `super_canvasser`.`locations` (`fullAddress`, `street`, `city`, `state`, `zipcode`, `country`, `duration`)
+VALUES ('1704 Washington St, Boston, Massachusetts, 02118, USA',
+		 '1704 Washington St', 'Boston', 'Massachusetts', 02118, 'USA', 20);
+
+INSERT INTO `super_canvasser`.`locations` (`fullAddress`, `street`, `city`, `state`, `zipcode`, `country`, `duration`)
+VALUES ('383 Congress St, Boston, Massachusetts, 02210, USA',
+		 '383 Congress St', 'Boston', 'Massachusetts', 02210, 'USA', 25);
+
+INSERT INTO `super_canvasser`.`locations` (`fullAddress`, `street`, `city`, `state`, `zipcode`, `country`, `duration`)
+VALUES ('3 N Square, Boston, Massachusetts, 02113, USA',
+		 '3 N Square', 'Boston', 'Massachusetts', 02113, 'USA', 30);
+
+INSERT INTO `super_canvasser`.`locations` (`fullAddress`, `street`, `city`, `state`, `zipcode`, `country`, `duration`)
+VALUES ('150 Eastbrook Rd, Smoketown, PA, 17576, USA',
+		 '150 Eastbrook Rd', 'Smoketown', 'PA', 17576, 'USA', 30);
+
+INSERT INTO `super_canvasser`.`locations` (`fullAddress`, `street`, `city`, `state`, `zipcode`, `country`, `duration`)
+VALUES ('15 S Main St, New Hope, PA, 18938, USA',
+		 '15 S Main St', 'New Hope', 'PA', 18938, 'USA', 30);
+
 -- -----------------------------------------------------
 -- insert into questions table
 -- -----------------------------------------------------
@@ -136,6 +160,24 @@ VALUES (4, 7);
 INSERT INTO `super_canvasser`.`tasks` (`id`, `locationId`)
 VALUES (4, 8);
 
+INSERT INTO `super_canvasser`.`tasks` (`id`, `locationId`)
+VALUES (5, 9);
+
+INSERT INTO `super_canvasser`.`tasks` (`id`, `locationId`)
+VALUES (5, 10);
+
+INSERT INTO `super_canvasser`.`tasks` (`id`, `locationId`)
+VALUES (6, 11);
+
+INSERT INTO `super_canvasser`.`tasks` (`id`, `locationId`)
+VALUES (6, 12);
+
+INSERT INTO `super_canvasser`.`tasks` (`id`, `locationId`)
+VALUES (7, 13);
+
+INSERT INTO `super_canvasser`.`tasks` (`id`, `locationId`)
+VALUES (7, 14);
+
 -- -----------------------------------------------------
 -- insert into assignments table
 -- -----------------------------------------------------
@@ -148,11 +190,11 @@ VALUES (3, 31, 10, 2018, 1);
 INSERT INTO `super_canvasser`.`assignments` (`userId`, `date`, `month`, `year`, `taskId`)
 VALUES (3, 22, 10, 2018, 2);
 
-INSERT INTO `super_canvasser`.`assignments` (`userId`, `date`, `month`, `year`, `taskId`)
-VALUES (3, 12, 05, 2018, 3);
+INSERT INTO `super_canvasser`.`assignments` (`userId`, `date`, `month`, `year`)
+VALUES (3, 12, 05, 2018);
 
-INSERT INTO `super_canvasser`.`assignments` (`userId`, `date`, `month`, `year`, `taskId`)
-VALUES (3, 12, 02, 2018, 4);
+INSERT INTO `super_canvasser`.`assignments` (`userId`, `date`, `month`, `year`)
+VALUES (3, 12, 02, 2018);
 
 INSERT INTO `super_canvasser`.`assignments` (`userId`, `date`, `month`, `year`)
 VALUES (4, 09, 10, 2018);
@@ -162,3 +204,9 @@ VALUES (4, 13, 08, 2018);
 
 INSERT INTO `super_canvasser`.`assignments` (`userId`, `date`, `month`, `year`)
 VALUES (4, 24, 08, 2018);
+
+INSERT INTO `super_canvasser`.`assignments` (`userId`, `date`, `month`, `year`, `taskId`)
+VALUES (4, 15, 07, 2018, 3);
+
+INSERT INTO `super_canvasser`.`assignments` (`userId`, `date`, `month`, `year`, `taskId`)
+VALUES (4, 04, 08, 2018, 4);

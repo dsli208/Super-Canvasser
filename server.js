@@ -19,7 +19,7 @@ connection.connect((err) => {
 	console.log('MySQL connected...');
 });
 
-
+// =====================================  USER stuff  =======================================================
 // perform queries here
 // fetch users data from database back-end to front-end React (GET request)
 server.get('/users', (req, res) => {
@@ -143,6 +143,7 @@ server.get('/users/:currentUserName', (req, res) => {
 	});
 })
 
+// =====================================  LOCATION stuff  =======================================================
 // fetch locations data
 server.get('/locations', (req, res) => {
 	connection.query('SELECT * FROM locations', function (error, results, fields) {
@@ -236,16 +237,6 @@ server.get('/locations/search', (req,res) => {
 	})
 })
 
-// un-assign task to certain canvasser from assignments table (given canvasserId, taskId)
-server.get('/locations/unassign/:canvasserId/:taskId', (req, res) => {
-	var sql = "DELETE FROM assignments WHERE userId=" + req.params.canvasserId + " AND taskId=" + req.params.taskId;
-	connection.query(sql, (err, results, fields) => {
-		if (err) console.log(err);
-		console.log('Unassigned task successfully!');
-		res.send(JSON.stringify(results));
-	})
-})
-
 // add question to location
 server.get('/locations/:locationId/questions/add', (req, res) => {
 	const {question, answer} = req.query;
@@ -282,6 +273,40 @@ server.get('/locations/:locationId/questions/delete', (req, res) => {
 
 	connection.query(sql, (err, results, fields) => {
 		if (err) console.log(err);
+		res.send(JSON.stringify(results));
+	})
+})
+
+// =====================================  TASKS stuff  =======================================================
+// retrieve all unassigned tasks
+server.get('/tasks/unassigned', (req, res) => {
+	var sql = "SELECT DISTINCT id FROM tasks WHERE id NOT IN (SELECT taskId FROM assignments WHERE taskId IS NOT NULL)";
+	connection.query(sql, (err, results, fields) => {
+		if (err) console.log(err);
+		res.send(JSON.stringify(results));
+	})
+})
+
+// un-assign task to certain canvasser from assignments table (given canvasserId, taskId)
+server.get('/tasks/unassign/:canvasserId/:taskId', (req, res) => {
+	var sql = "UPDATE assignments SET taskId=NULL WHERE userId=" + req.params.canvasserId + " AND taskId=" + req.params.taskId;
+	connection.query(sql, (err, results, fields) => {
+		if (err) console.log(err);
+		console.log('Unassigned task successfully!');
+		res.send(JSON.stringify(results));
+	})
+})
+
+// assign task to certain canvasser from assignments table (given canvasserId, taskId)
+server.get('/tasks/assign/:canvasserId/:taskId/day', (req, res) => {
+	const {date, month, year} = req.query;
+	var sql = "UPDATE assignments SET taskId=" + req.params.taskId;
+	sql += " WHERE userId=" + req.params.canvasserId + " AND date=" + date;
+	sql += " AND month=" + month + " AND year=" + year;
+	
+	connection.query(sql, (err, results, fields) => {
+		if (err) console.log(err);
+		console.log('Assigned task successfully!');
 		res.send(JSON.stringify(results));
 	})
 })

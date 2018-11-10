@@ -1,6 +1,5 @@
 import React from 'react';
 import Manager from './Manager';
-import canvasserAssignments from '../../data/canvasserAssignments';
 import Typography from '@material-ui/core/Typography';
 import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
@@ -13,6 +12,7 @@ import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
 import Modal from '@material-ui/core/Modal';
 import Grid from '@material-ui/core/Grid';
+import SelectFreeDateAndTask from './SelectFreeDateAndTask';
 
 
 const style = {
@@ -55,7 +55,7 @@ class PaperSheet extends React.Component {
     const {canvasserId, assignment} = this.props;
     const taskId = assignment.taskName;
   
-    var query = `/locations/unassign/${canvasserId}/${taskId}`;
+    var query = `/tasks/unassign/${canvasserId}/${taskId}`;
     fetch(query).then(res => res.json()).catch(err => console.log(err))
     this.setState({ isDelete_open: false })
     this.props.reload();
@@ -91,7 +91,7 @@ class PaperSheet extends React.Component {
           <Button 
             onClick={() => this.setState({isDelete_open : true})} 
             color="primary" 
-            className={classes.button}> Delete </Button>
+            className={classes.button}> Unassign </Button>
 
             {/* ---------------------- modal for delete question -------------------------- */}
             <Modal
@@ -141,13 +141,31 @@ class ManagerCanvassersList extends React.Component {
     super(props);
     this.state = {
       canvassers: [],
+      unassignTasks: [],
       dataIsFetched: false,
       mainComponent: null,
     }
   }
   
   componentDidMount() {
-    this.componentInit();
+    this.init();
+  }
+
+  init = () => {
+    // get all unassigned tasks
+    fetch('/tasks/unassigned').then(res => res.json())
+    .then(unassigned => {
+      this.setState({unassignTasks: unassigned})
+    })
+    .catch(err => console.log(err))
+    
+    setTimeout(() => {
+      this.componentInit();
+    }, 900)
+  }
+
+  reloadAfterAssign = (data) => {
+    this.init();
   }
 
   renderMainComponent = () => {
@@ -163,10 +181,9 @@ class ManagerCanvassersList extends React.Component {
         <br/><br/>
         
         {canvassers.map((canvasser, idx) => {
-            //console.log(canvasser)
-          
             var assignList = canvasser.assignments;
-          
+            var unassignList = canvasser.unassignments;
+
             return (
               <ExpansionPanel key={idx}>
                 <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
@@ -185,10 +202,17 @@ class ManagerCanvassersList extends React.Component {
                     <List>
                       {assignList.map((assignment, idx) => {
                         return (
-                          <PaperSheet key={idx} assignment={assignment} canvasserId={canvasser.userInfo.id} reload={this.componentInit} />
+                          <PaperSheet key={idx} assignment={assignment} canvasserId={canvasser.userInfo.id} reload={this.init} />
                         )
                       })}
                     </List>
+                    <SelectFreeDateAndTask 
+                        canvasserId={canvasser.userInfo.id}
+                        unassignDates={unassignList} 
+                        unassignTasks={this.state.unassignTasks} 
+                        reloadAfterAssign={this.reloadAfterAssign} />
+                    
+
                   </div>
                 </ExpansionPanelDetails>
               </ExpansionPanel>
@@ -207,6 +231,7 @@ class ManagerCanvassersList extends React.Component {
         var canvasserInfo = {};
         canvasserInfo['userInfo'] = canvasser;
         var listAssignment = [];
+        var listUnassignment = [];
 
         var query = `/users/canvasser/assignments/${canvasser.id}`;
         fetch(query).then(res => res.json())
@@ -255,16 +280,22 @@ class ManagerCanvassersList extends React.Component {
               setTimeout(() => {
                 listAssignment.push(assignment);  
               }, 1200);
+            } else {
+              var date = task.month + '/' + task.date + '/' + task.year;
+              listUnassignment.push(date);  
             }
           })
         })
         .catch(err => console.log(err))
+
         setTimeout(() => {
           canvasserInfo['assignments'] = listAssignment;
+          canvasserInfo['unassignments'] = listUnassignment;
           canvasserList.push(canvasserInfo);
           //console.log(canvasserInfo);
         },1300)
       })
+
       setTimeout(() => {
         this.setState({
           canvassers: canvasserList,
