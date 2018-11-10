@@ -49,10 +49,18 @@ class PaperSheet extends React.Component {
   state = {
     isDelete_open: false
   }
+
   handleDelete = () => {
     console.log('delete assignment');
+    const {canvasserId, assignment} = this.props;
+    const taskId = assignment.taskName;
+  
+    var query = `/locations/unassign/${canvasserId}/${taskId}`;
+    fetch(query).then(res => res.json()).catch(err => console.log(err))
     this.setState({ isDelete_open: false })
+    this.props.reload();
   }
+
   render() {
     const {classes, assignment} = this.props;
     
@@ -64,7 +72,7 @@ class PaperSheet extends React.Component {
           </Typography>
           
           {assignment.locations.map((locationData, index) => {
-            console.log(locationData);
+            //console.log(locationData);
             return (
             <div key={index}>
               <Typography><strong style={{color: '#DC143C'}}>Location:</strong> {locationData.fullAddress} &nbsp;&nbsp;&nbsp; <span style={{color: '#A9A9A9'}} > Duration: {locationData.duration} mins </span> </Typography>
@@ -134,11 +142,61 @@ class ManagerCanvassersList extends React.Component {
     this.state = {
       canvassers: [],
       dataIsFetched: false,
+      mainComponent: null,
     }
   }
   
   componentDidMount() {
     this.componentInit();
+  }
+
+  renderMainComponent = () => {
+    const {canvassers} = this.state;
+
+    this.setState({
+      mainComponent: <div style={style}>
+      <Manager username={this.props.match.params.username}/>
+      <br/><br/>
+      <div className="canvasserlist" style={{margin: '0 15% 30px 15%'}} >
+        <h1>Canvasser Assignments</h1> <br/>
+        <Typography>Canvas assignments for each canvasser (including tasks with corresponding date and set of locations along with questions).</Typography>
+        <br/><br/>
+        
+        {canvassers.map((canvasser, idx) => {
+            //console.log(canvasser)
+          
+            var assignList = canvasser.assignments;
+          
+            return (
+              <ExpansionPanel key={idx}>
+                <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+                  <div style={{flexBasis: '50%'}}>
+                    <Typography variant='subheading' style={{color: '#483D8B'}}> {canvasser.userInfo.firstName} {canvasser.userInfo.lastName}</Typography>
+                    <Typography variant='subheading' style={{color: '#A9A9A9'}}> @{canvasser.userInfo.username} | {canvasser.userInfo.role} </Typography>
+                  </div>
+                  <div style={{flexBasis: '50%'}}>
+                    <Typography style={{color: '#A9A9A9'}}> Email: {canvasser.userInfo.email} </Typography>
+                    <Typography style={{color: '#A9A9A9'}}> Phone number: {canvasser.userInfo.phone} </Typography>
+                  </div>
+                </ExpansionPanelSummary>
+
+                <ExpansionPanelDetails>
+                  <div style={{margin: '0 auto 0 auto'}} >
+                    <List>
+                      {assignList.map((assignment, idx) => {
+                        return (
+                          <PaperSheet key={idx} assignment={assignment} canvasserId={canvasser.userInfo.id} reload={this.componentInit} />
+                        )
+                      })}
+                    </List>
+                  </div>
+                </ExpansionPanelDetails>
+              </ExpansionPanel>
+            )
+        })}
+      </div>
+    </div>
+    })
   }
 
   componentInit = () => {
@@ -211,6 +269,8 @@ class ManagerCanvassersList extends React.Component {
         this.setState({
           canvassers: canvasserList,
           dataIsFetched: true,
+        }, () => {
+          this.renderMainComponent();
         })
       }, 1400) 
     })
@@ -219,53 +279,9 @@ class ManagerCanvassersList extends React.Component {
 
 
   render() {
-    const {canvassers} = this.state;
     return (
       <div>
-      {!this.state.dataIsFetched ? null : 
-        <div style={style}>
-        <Manager username={this.props.match.params.username}/>
-        <br/><br/>
-        <div className="canvasserlist" style={{margin: '0 15% 30px 15%'}} >
-          <h1>Canvasser Assignments</h1> <br/>
-          <Typography>Canvas assignments for each canvasser (including tasks with corresponding date and set of locations along with questions).</Typography>
-          <br/><br/>
-          
-          {canvassers.map((canvasser, idx) => {
-              //console.log(canvasser)
-            
-              var assignList = canvasser.assignments;
-            
-              return (
-                <ExpansionPanel key={idx}>
-                  <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-                    <div style={{flexBasis: '50%'}}>
-                      <Typography variant='subheading' style={{color: '#483D8B'}}> {canvasser.userInfo.firstName} {canvasser.userInfo.lastName}</Typography>
-                      <Typography variant='subheading' style={{color: '#A9A9A9'}}> @{canvasser.userInfo.username} | {canvasser.userInfo.role} </Typography>
-                    </div>
-                    <div style={{flexBasis: '50%'}}>
-                      <Typography style={{color: '#A9A9A9'}}> Email: {canvasser.userInfo.email} </Typography>
-                      <Typography style={{color: '#A9A9A9'}}> Phone number: {canvasser.userInfo.phone} </Typography>
-                    </div>
-                  </ExpansionPanelSummary>
-
-                  <ExpansionPanelDetails>
-                    <div style={{margin: '0 auto 0 auto'}} >
-                      <List>
-                        {assignList.map((assignment, idx) => {
-                          return (
-                            <PaperSheet key={idx} assignment={assignment} />
-                          )
-                        })}
-                      </List>
-                    </div>
-                  </ExpansionPanelDetails>
-                </ExpansionPanel>
-              )
-          })}
-        </div>
-      </div>
-      }
+        {this.state.mainComponent}
       </div>
     )
     

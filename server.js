@@ -236,6 +236,16 @@ server.get('/locations/search', (req,res) => {
 	})
 })
 
+// un-assign task to certain canvasser from assignments table (given canvasserId, taskId)
+server.get('/locations/unassign/:canvasserId/:taskId', (req, res) => {
+	var sql = "DELETE FROM assignments WHERE userId=" + req.params.canvasserId + " AND taskId=" + req.params.taskId;
+	connection.query(sql, (err, results, fields) => {
+		if (err) console.log(err);
+		console.log('Unassigned task successfully!');
+		res.send(JSON.stringify(results));
+	})
+})
+
 // add question to location
 server.get('/locations/:locationId/questions/add', (req, res) => {
 	const {question, answer} = req.query;
