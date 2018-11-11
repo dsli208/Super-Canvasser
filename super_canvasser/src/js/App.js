@@ -23,15 +23,14 @@ class App extends Component {
         <div>
           <Route path='/' exact component={Main}/>
           {/* ------- Admin stuff -------- */}
-          <Route path='/users/admin' exact component={Admin}/>
-          <Route path='/users/admin/:username' exact component={Admin}/>
+          <Route path='/users/admin/:username' exact component={AdminView}/>
           <Route path='/users/admin/:username/add' exact component={AdminAddUser}/>
           <Route path='/users/admin/:username/view' exact component={AdminView}/>
 
           {/* ------- Manager stuff -------- */}
-          <Route path='/users/manager/:username' exact component={Manager}/>
+          <Route path='/users/manager/:username' exact component={ManagerCanvassersList}/>
           <Route path='/users/manager/:username/campaigns' exact component={ManagerCampaignsList}/>
-          <Route path='/users/manager/:username/canvassers' exact component={ManagerCanvassersList}/>
+          <Route path='/users/manager/:username/canvasserAssignments' exact component={ManagerCanvassersList}/>
           <Route path='/users/manager/:username/locations' exact component={ManagerLocationsList}/>
           <Route path='/users/manager/:username/questions' exact component={ManagerQuestions}/>
 

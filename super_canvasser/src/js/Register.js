@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
-import { AccountCircle, VpnKey, Email, Face } from '@material-ui/icons';
+import { AccountCircle, VpnKey, Email, Face, Phone } from '@material-ui/icons';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import Radio from '@material-ui/core/Radio';
 import '../css/App.css';
@@ -15,6 +15,7 @@ class Register extends Component {
     firstName: '',
     lastName: '',
     username: '',
+    phone: '',
     email: '',
     password: '',
     role: '',
@@ -93,10 +94,10 @@ class Register extends Component {
                   passwordValid: true,
                   success: true
                 })
-                const { firstName, lastName, username, email, password } = this.state;
+                const { firstName, lastName, username, phone, email, password } = this.state;
                 var role = inRole;
-
-                fetch(`/users/add?firstName=${firstName}&lastName=${lastName}&username=${username}&email=${email}&password=${password}&role=${role}`)
+                console.log(role);
+                fetch(`/users/add?firstName=${firstName}&lastName=${lastName}&username=${username}&phone=${phone}&email=${email}&password=${password}&role=${role}`)
                   .catch((err) => console.log(err))
 
                 console.log('Registered user done!');
@@ -135,13 +136,17 @@ class Register extends Component {
         this.setState({
           username: event.target.value
         })
-      } else {
+      } else if (event.target.id === 'email') {
         // email
         this.setState({
           email: event.target.value
         })
+      } else if (event.target.id === 'phone') {
+        // phone
+        this.setState({
+          phone: event.target.value
+        })
       }
-
     } else {
       // password
       this.setState({
@@ -195,6 +200,19 @@ class Register extends Component {
                 onChange={this.handleChangeField} />
               {this.state.userNameValid ? null : <FormHelperText id="component-error-text">Existed username! Please use another username!</FormHelperText>}
             </Grid>
+          </Grid>
+
+          {/* phone text field */}
+          <Grid container spacing={8} alignItems="flex-end" justify='center'>
+            <Grid item><Phone /></Grid>
+            <Grid item>
+              <TextField
+                id='phone'
+                label='Phone'
+                style={field_style}
+                onChange={this.handleChangeField} />
+            </Grid>
+
           </Grid>
 
           {/* user email text field */}
