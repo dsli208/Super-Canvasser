@@ -96,7 +96,7 @@ class Register extends Component {
                 })
                 const { firstName, lastName, username, phone, email, password } = this.state;
                 var role = inRole;
-                console.log(role);
+                
                 fetch(`/users/add?firstName=${firstName}&lastName=${lastName}&username=${username}&phone=${phone}&email=${email}&password=${password}&role=${role}`)
                   .catch((err) => console.log(err))
 
