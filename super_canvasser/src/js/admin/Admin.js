@@ -34,19 +34,27 @@ class Admin extends React.Component  {
   }
   
   componentWillMount() {
-    this.setState({
-      currentUserName: this.props.match.params.username,
-    }, () => {
-      fetch('/users').then(res => res.json())
+    if (typeof this.props.username === 'undefined') {
+      this.setState({
+        currentUserName: this.props.match.params.username,
+      }, () => this.getCurrentUser(this.state.currentUserName) )
+    } else {
+      this.setState({
+        currentUserName: this.props.username,
+      }, () => this.getCurrentUser(this.state.currentUserName))
+    }
+  } 
+
+  getCurrentUser = (currentUserName) => {
+    fetch('/users').then(res => res.json())
       .then(users => {
-        var currentUserObj = users.find(user => user.username === this.state.currentUserName);
+        var currentUserObj = users.find(user => user.username === currentUserName);
         this.setState({
           currentUserObj: currentUserObj,
           currentUserFullName: currentUserObj.firstName + ' ' + currentUserObj.lastName,
         })
       })
-    })
-  } 
+  }
 
   logout = () => {
     window.location.href = '/';

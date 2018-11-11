@@ -15,7 +15,7 @@ import Paper from '@material-ui/core/Paper';
 import Checkbox from '@material-ui/core/Checkbox';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
-import {Delete, Edit} from '@material-ui/icons';
+import { Delete, Edit } from '@material-ui/icons';
 import FilterListIcon from '@material-ui/icons/FilterList';
 import { lighten } from '@material-ui/core/styles/colorManipulator';
 import Modal from '@material-ui/core/Modal';
@@ -121,13 +121,13 @@ const toolbarStyles = theme => ({
   highlight:
     theme.palette.type === 'light'
       ? {
-          color: theme.palette.secondary.main,
-          backgroundColor: lighten(theme.palette.secondary.light, 0.85),
-        }
+        color: theme.palette.secondary.main,
+        backgroundColor: lighten(theme.palette.secondary.light, 0.85),
+      }
       : {
-          color: theme.palette.text.primary,
-          backgroundColor: theme.palette.secondary.dark,
-        },
+        color: theme.palette.text.primary,
+        backgroundColor: theme.palette.secondary.dark,
+      },
   spacer: {
     flex: '1 1 100%',
   },
@@ -154,7 +154,7 @@ function getModalStyle() {
   };
 }
 
-function BodySelected({user}) {
+function BodySelected({ user }) {
   if (user == null) {
     return (
       <div>
@@ -196,9 +196,26 @@ function BodySelected({user}) {
 class EnhancedTableToolbar extends React.Component {
   state = {
     open: false,
+
+    edit_firstName: '',
+    edit_lastName: '',
+    edit_userName: '',
+    edit_email: '',
+    edit_phone: '',
   }
   handleOpen = () => {
+    const {users, selected} = this.props;
     this.setState({ open: true });
+    var user = users.find(user => user.id === selected[0]);
+    if (typeof user === 'undefined')
+      return;
+    this.setState({
+      edit_firstName: user.firstName,
+      edit_lastName: user.lastName,
+      edit_userName: user.username,
+      edit_email: user.email,
+      edit_phone: user.phone,
+    })
   };
 
   handleClose = () => {
@@ -209,23 +226,64 @@ class EnhancedTableToolbar extends React.Component {
     console.log('edit user');
     this.handleOpen();
   }
+
   handleDelete = () => {
-      for (var i = 0; i < this.props.index.length; i++) {
-          fetch(`/users/delete?id=${this.props.users[this.props.index[i]-1].id}`)
-              .catch((err) => console.log(err))
+    const {users, selected} = this.props;
 
-          console.log('Delete user done!');
-      }
+    for (var i = 0; i < selected.length; i++) {
+      var id = selected[i];
+      fetch(`/users/delete?id=${id}`)
+        .catch((err) => console.log(err))
 
+      console.log('Delete user done!');
+      this.props.reDefinedSelected();
+      this.props.reload();
+    }    
   }
-  handleTFchange = (e) => {
-    console.log(e.target.value)
+
+  handleTFchange = (event) => {
+    if (event.target.id === 'firstName') {
+      this.setState({edit_firstName: event.target.value})
+    } else if (event.target.id === 'lastName') {
+      this.setState({edit_lastName: event.target.value})
+    } else if (event.target.id === 'username') {
+      this.setState({edit_userName: event.target.value})
+    } else if (event.target.id === 'email') {
+      this.setState({edit_email: event.target.value})
+    } else if (event.target.id === 'phone') {
+      this.setState({edit_phone: event.target.value})
+    } 
   }
+
+  handleUpdate = () => {
+    const {users, selected} = this.props;
+    this.setState({ open: true });
+    var user = users.find(user => user.id === selected[0]);
+    if (typeof user === 'undefined')
+      return;
+    
+    user.firstName = this.state.edit_firstName;
+    user.lastName = this.state.edit_lastName;
+    user.username = this.state.edit_userName;
+    user.email = this.state.edit_email;
+    user.phone = this.state.edit_phone;
+
+    var query = `/users/update?firstName=${user.firstName}&lastName=${user.lastName}&username=${user.username}&email=${user.email}&phone=${user.phone}&id=${user.id}&role=${user.role}`;
+    fetch(query).then(res => res.json()).catch(err => console.log(err));
+
+    this.setState({ open: false });
+    this.props.reDefinedSelected();
+    this.props.reload();
+  }
+
   render() {
-    const { numSelected, classes, users, index } = this.props;
+    const { numSelected, classes, users, selected } = this.props;
+
     var user = {};
     if (numSelected === 1) {
-      user = users[index[0]-1];
+      user = users.find(user => user.id === selected[0]);
+      if (typeof user === 'undefined')
+        user = null;
     } else {
       user = null;
     }
@@ -242,10 +300,10 @@ class EnhancedTableToolbar extends React.Component {
               {numSelected} selected
             </Typography>
           ) : (
-            <Typography variant='title' id="tableTitle">
-              Users list
+              <Typography variant='title' id="tableTitle">
+                Users information
             </Typography>
-          )}
+            )}
         </div>
         <div className={classes.spacer} />
         <div className={classes.actions}>
@@ -256,8 +314,8 @@ class EnhancedTableToolbar extends React.Component {
               </IconButton>
             </Tooltip>
           ) : (
-            null
-          )}
+              null
+            )}
         </div>
         <Modal
           aria-labelledby="simple-modal-title"
@@ -265,80 +323,85 @@ class EnhancedTableToolbar extends React.Component {
           open={this.state.open}
           onClose={this.handleClose}
         >
-          
+
           <div style={getModalStyle()} className={classes.paper}>
-            <BodySelected user={user}/>
-            <br/>
-            {user == null ? null : 
+            <BodySelected user={user} />
+            <br />
+            {user == null ? null :
               <form justify='center'>
                 <Grid container spacing={8} alignItems="flex-end" justify='center'>
                   <Grid item xs={3}>First Name:</Grid>
                   <Grid item xs={6}>
-                      <TextField
-                        className = 'firstName'
-                        label='First Name'
-                        onChange={this.handleTFchange}
-                        defaultValue={user.firstName}
-                        fullWidth={true} />
+                    <TextField
+                      id='firstName'
+                      className='firstName'
+                      label='First Name'
+                      onChange={this.handleTFchange}
+                      defaultValue={user.firstName}
+                      fullWidth={true} />
                   </Grid>
                 </Grid>
-      
+
                 <Grid container spacing={8} alignItems="flex-end" justify='center'>
                   <Grid item xs={3}>Last Name:</Grid>
-                  <Grid item xs={6}> 
-                      <TextField
-                        className = 'lastName'
-                        label='Last Name'
-                        onChange={this.handleTFchange}
-                        defaultValue={user.lastName}
-                        fullWidth={true} />
+                  <Grid item xs={6}>
+                    <TextField
+                      id='lastName'
+                      className='lastName'
+                      label='Last Name'
+                      onChange={this.handleTFchange}
+                      defaultValue={user.lastName}
+                      fullWidth={true} />
                   </Grid>
                 </Grid>
 
                 <Grid container spacing={8} alignItems="flex-end" justify='center'>
                   <Grid item xs={3}>Username:</Grid>
-                  <Grid item xs={6}> 
-                      <TextField
-                        className = 'username'
-                        label='Username'
-                        onChange={this.handleTFchange}
-                        defaultValue={user.username}
-                        fullWidth={true} />
+                  <Grid item xs={6}>
+                    <TextField
+                      id='username'
+                      className='username'
+                      label='Username'
+                      onChange={this.handleTFchange}
+                      defaultValue={user.username}
+                      fullWidth={true} />
                   </Grid>
                 </Grid>
 
                 <Grid container spacing={8} alignItems="flex-end" justify='center'>
                   <Grid item xs={3}>Email address:</Grid>
-                  <Grid item xs={6}> 
-                      <TextField
-                        className = 'email'
-                        label='Email address'
-                        onChange={this.handleTFchange}
-                        defaultValue={user.email}
-                        fullWidth={true} />
+                  <Grid item xs={6}>
+                    <TextField
+                      id='email'
+                      className='email'
+                      label='Email address'
+                      onChange={this.handleTFchange}
+                      defaultValue={user.email}
+                      fullWidth={true} />
                   </Grid>
                 </Grid>
 
                 <Grid container spacing={8} alignItems="flex-end" justify='center'>
                   <Grid item xs={3}>Phone:</Grid>
-                  <Grid item xs={6}> 
-                      <TextField
-                        className = 'phone'
-                        label='Phone number'
-                        onChange={this.handleTFchange}
-                        defaultValue={user.phone}
-                        fullWidth={true} />
+                  <Grid item xs={6}>
+                    <TextField
+                      id='phone'
+                      className='phone'
+                      label='Phone number'
+                      onChange={this.handleTFchange}
+                      defaultValue={user.phone}
+                      fullWidth={true} />
                   </Grid>
                 </Grid>
               </form>
             }
             <Grid container justify='center'>
-              {numSelected === 1? <div><br/><Button variant="contained" color="primary" style={{marginTop:'15px', marginRight: '8px'}}> Update </Button></div> : null}
-              {numSelected === 1? <div><br/><Button onClick={this.handleClose} variant="contained" color="default" style={{marginTop:'15px'}}> Cancel </Button></div> : null}
-              {numSelected === 1? null : <Button onClick={this.handleClose} variant="contained" color="primary" style={{marginTop: '15px'}}> Close </Button>}
+              {numSelected === 1 ? <div><br /><Button onClick={this.handleUpdate} variant="contained" color="primary" style={{ marginTop: '15px', marginRight: '8px' }}> Update </Button></div> : null}
+              {numSelected === 1 ? <div><br /><Button onClick={this.handleClose} variant="contained" color="default" style={{ marginTop: '15px' }}> Cancel </Button></div> : null}
+              {numSelected === 1 ? null : <Button onClick={this.handleClose} variant="contained" color="primary" style={{ marginTop: '15px' }}> Close </Button>}
             </Grid>
           </div>
-          
+
         </Modal>
         <div className={classes.actions}>
           {numSelected > 0 ? (
@@ -348,12 +411,12 @@ class EnhancedTableToolbar extends React.Component {
               </IconButton>
             </Tooltip>
           ) : (
-            <Tooltip title="Filter list">
-              <IconButton aria-label="Filter list">
-                <FilterListIcon />
-              </IconButton>
-            </Tooltip>
-          )}
+              <Tooltip title="Filter list">
+                <IconButton aria-label="Filter list">
+                  <FilterListIcon />
+                </IconButton>
+              </Tooltip>
+            )}
         </div>
       </Toolbar>
     );
@@ -387,21 +450,16 @@ class TableUsers extends React.Component {
     selected: [],
     data: [],
     page: 0,
-    rowsPerPage: 5,
+    rowsPerPage: 10,
   };
-  componentDidMount(props) {
-    // fetching from back-end server
-    fetch('/users')
-      .then(res => res.json())
-      .then(users => 
-        // set data to list of canvassers
-        this.setState({
-          data: users
-        })
-      )
-      .catch(err => console.log(err))
-
+ 
+  componentWillMount() {
+    this.setState({
+      data: this.props.data,
+      selected: this.props.selected,
+    })
   }
+
   handleRequestSort = (event, property) => {
     const orderBy = property;
     let order = 'desc';
@@ -422,15 +480,14 @@ class TableUsers extends React.Component {
   };
 
   handleDoubleClick = (event, id) => {
-      console.log(this.state.data[id-1]);
+    const {data} = this.state;
+    var clickId = data.findIndex(user => user.id === id);
+    var user = this.state.data[clickId];
 
-      window.location.href = '/users/admin/' + currentUser[0].username + '/add?id='+id + '&firstName=' + this.state.data[id-1].firstName+ '&lastName=' + this.state.data[id-1].lastName+ '&username=' + this.state.data[id-1].username+ '&email=' + this.state.data[id-1].email+ '&role=' + this.state.data[id-1].role+'&phone=' + this.state.data[id-1].phone;
-
-
+    window.location.href = '/users/admin/' + user.username + '/add?id=' + id + '&firstName=' + user.firstName + '&lastName=' + user.lastName + '&username=' + user.username + '&email=' + user.email + '&role=' + user.role + '&phone=' + user.phone;
   };
-  handleClick = (event, id) => {
-    console.log(this.state.data[id-1]);
 
+  handleClick = (event, id) => {
     const { selected } = this.state;
     const selectedIndex = selected.indexOf(id);
     let newSelected = [];
@@ -462,13 +519,18 @@ class TableUsers extends React.Component {
   isSelected = id => this.state.selected.indexOf(id) !== -1;
 
   render() {
-    const { classes } = this.props;
-    const { data, order, orderBy, selected, rowsPerPage, page } = this.state;
+    const { classes, data } = this.props;
+    const { order, orderBy, rowsPerPage, selected, page } = this.state;
     const emptyRows = rowsPerPage - Math.min(rowsPerPage, data.length - page * rowsPerPage);
 
     return (
       <Paper className={classes.root}>
-        <EnhancedTableToolbar numSelected={selected.length} users={data} index={selected}/>
+        <EnhancedTableToolbar 
+            numSelected={selected.length} 
+            users={data} 
+            selected={selected} 
+            reload={this.props.reload}
+            reDefinedSelected={()=>{this.setState({selected: []})}} />
         <div className={classes.tableWrapper}>
           <Table className={classes.table} aria-labelledby="tableTitle">
             <EnhancedTableHead
@@ -498,7 +560,7 @@ class TableUsers extends React.Component {
                       <TableCell padding="checkbox">
                         <Checkbox checked={isSelected} />
                       </TableCell>
-                      
+
                       <TableCell> {n.firstName} </TableCell>
                       <TableCell> {n.lastName} </TableCell>
                       <TableCell> {n.username} </TableCell>

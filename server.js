@@ -43,14 +43,15 @@ server.get('/users/delete', (req, res) => {
 
 // add user
 server.get('/users/add', (req, res) => {
-	const {firstName, lastName, username, email, password, role} = req.query;
+	const {firstName, lastName, username, email, phone, password, role} = req.query;
+	
 	var sql = 'INSERT INTO users (firstName, lastName, username, role, email, phone, password) VALUES (';
 	sql += "\"" + firstName + "\"";
 	sql += ",\"" + lastName + "\"";
 	sql += ",\"" + username + "\"";
 	sql += ",\"" + role + "\"";
 	sql += ",\"" + email + "\"";
-	sql += ",\"" + "\"";
+	sql += ",\"" + phone + "\"";
 	sql += ",\"" + password + "\")"; 
 
 	connection.query(sql, (err, results, fields) => {
@@ -73,16 +74,15 @@ server.get('/users/add', (req, res) => {
 server.get('/users/update', (req, res) => {
 
     const {firstName, lastName, username, email, role, phone, id} = req.query;
-		var sql = 'UPDATE users SET firstname=' + "\"" + firstName+  "\"" + ", lastname=" + "\"" +lastName + "\"" + ", username=" + "\"" + username + "\"";
+		var sql = 'UPDATE users SET firstName=' + "\"" + firstName+  "\"" + ", lastName=" + "\"" +lastName + "\"" + ", username=" + "\"" + username + "\"";
 		sql += ", role=" + "\"" +role + "\"" + ", email=" + "\"" +email + "\"" + ", phone=" + "\"" + phone + "\"" + " WHERE id=" + id;
 
-    console.log(id);
+    console.log(sql);
 
     connection.query(sql,(err, results, fields) => {
         if (err) {
             console.log(err);
         }
-        console.log('Added user successfully!');
         res.send(JSON.stringify(results));
     })
 })
