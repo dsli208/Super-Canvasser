@@ -143,6 +143,33 @@ server.get('/users/:currentUserName', (req, res) => {
 	});
 })
 
+// add free dates into assignments table
+server.get('/users/canvasser/addFreeDate', (req, res) => {
+	var {userId, date, month, year} = req.query;
+	var sql = "INSERT INTO assignments (userId, date, month, year) VALUES(";
+	sql += userId + "," + date + "," + month + "," + year + ")";
+	connection.query(sql, (err, results, fields) => {
+		if (err) {
+			console.log(err);
+		}
+		res.send(JSON.stringify(results));
+	});
+})
+
+// delete free date in assignments table
+server.get('/users/canvasser/deleteFreeDate', (req, res) => {
+	var {userId, date, month, year} = req.query;
+	var sql = "DELETE FROM assignments WHERE userId=";
+	sql += userId + " AND date=" + date + " AND month=" + month + " AND year=" + year;
+
+	connection.query(sql, (err, results, fields) => {
+		if (err) {
+			console.log(err);
+		}
+		res.send(JSON.stringify(results));
+	});
+})
+
 // =====================================  LOCATION stuff  =======================================================
 // fetch locations data
 server.get('/locations', (req, res) => {

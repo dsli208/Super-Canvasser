@@ -2,15 +2,16 @@
 import React, { Component } from 'react';
 import '../css/App.css';
 import {BrowserRouter, Route } from 'react-router-dom';
-import Manager from './manager/Manager';
+//import Manager from './manager/Manager';
 import ManagerCampaignsList from './manager/ManagerCampaignsList';
 import ManagerCanvassersList from './manager/ManagerCanvassersList';
 import ManagerLocationsList from './manager/ManagerLocationsList';
 import ManagerQuestions from './manager/ManagerQuestions';
 import Canvasser from './canvasser/Canvasser';
 import CanvasserViewMap from './canvasser/CanvasserViewMap';
-import CanvasserViewUpcoming from './canvasser/CanvasserViewUpcoming';
-import Admin from './admin/Admin';
+import canvasserAssignments from './canvasser/CanvasserAssignments';
+//import CanvasserViewUpcoming from './canvasser/CanvasserViewUpcoming';
+//import Admin from './admin/Admin';
 import AdminAddUser from './admin/AdminAddUser';
 import AdminView from './admin/AdminViewUsers';
 import Main from './Main';
@@ -35,9 +36,10 @@ class App extends Component {
           <Route path='/users/manager/:username/questions' exact component={ManagerQuestions}/>
 
           {/* ------- Canvasser stuff -------- */}
-          <Route path='/users/canvasser' exact component={Canvasser}/>
+          <Route path='/users/canvasser/:username' exact component={Canvasser}/>
+          <Route path='/users/canvasser/:username/assignments' exact component={canvasserAssignments}/>
           <Route path='/users/canvasser/:username/map' exact component={CanvasserViewMap}/>
-          <Route path='/users/canvasser/:username/upcoming' exact component={CanvasserViewUpcoming}/>
+          {/* <Route path='/users/canvasser/:username/upcoming' exact component={CanvasserViewUpcoming}/> */}
           <Route path='/users/canvasser/:username/results' exact component={CanvasserResultsList}/>
 
         </div>
