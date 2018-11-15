@@ -15,7 +15,7 @@ import Paper from '@material-ui/core/Paper';
 import { withStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
 
-
+window.__MUI_USE_NEXT_TYPOGRAPHY_VARIANTS__ = true;
 const style = {
   backgroundColor: '#ffffff',
   position: 'absolute',
@@ -376,60 +376,101 @@ class ManagerLocationsList extends React.Component {
           </Grid>                    
 
           <Grid container justify='center'>
-            <Grid item xs={5} style={{marginRight: '15px'}}>
+            <Grid item xs={12} style={{marginRight: '0 auto 0 auto'}}>
               <Grid container spacing={8} alignItems="flex-end" style={{marginTop: '40px'}}>
-                <Grid item> <AddLocation/></Grid>
-                <Grid item> <h1>Add location</h1></Grid>
+                <Grid container spacing={8} alignItems="flex-end" justify='center' >
+                  <Grid item> <AddLocation/></Grid>
+                  <Grid item> <h1>Add location</h1></Grid>
+                </Grid>
 
-                <TextField
+                <Grid container spacing={8} alignItems="flex-end" justify='center' >
+                  <Grid item xs={3}>Street:</Grid>
+                  <Grid item xs={6}>
+                    <TextField
                           id='street'
                           className = 'street'
                           label='Enter street'
-                          style={{minWidth: '80%'}}
+                          style={{minWidth: '100%'}}
                           onChange={this.handleTFchange} />
-                <TextField
+                  </Grid>
+                </Grid>
+
+                <Grid container spacing={8} alignItems="flex-end" justify='center' >
+                  <Grid item xs={3}>City:</Grid>
+                  <Grid item xs={6}>
+                    <TextField
                           id='city'
                           className = 'city'
                           label='Enter city'
-                          style={{minWidth: '80%'}}
+                          style={{minWidth: '100%'}}
                           onChange={this.handleTFchange} />
-                <TextField
+                  </Grid>
+                </Grid>
+                
+                <Grid container spacing={8} alignItems="flex-end" justify='center' >
+                  <Grid item xs={3}>State:</Grid>
+                  <Grid item xs={6}>
+                    <TextField
                           id='state'
                           className = 'state'
                           label='Enter state'
-                          style={{minWidth: '80%'}}
+                          style={{minWidth: '100%'}}
                           onChange={this.handleTFchange} />
-                <TextField
+                  </Grid>
+                </Grid>
+                
+                <Grid container spacing={8} alignItems="flex-end" justify='center' >
+                  <Grid item xs={3}>Zip code:</Grid>
+                  <Grid item xs={6}>
+                    <TextField
                           id='zipcode'
                           className = 'zipcode'
                           label='Enter zipcode'
-                          style={{minWidth: '80%'}}
+                          style={{minWidth: '100%'}}
                           onChange={this.handleTFchange} />
-                <TextField
+                  </Grid>
+                </Grid>
+
+                <Grid container spacing={8} alignItems="flex-end" justify='center' >
+                  <Grid item xs={3}>Country:</Grid>
+                  <Grid item xs={6}>
+                    <TextField
                           id='country'
                           className = 'country'
                           label='Enter country'
-                          style={{minWidth: '80%'}}
+                          style={{minWidth: '100%'}}
                           onChange={this.handleTFchange} />
-                <TextField
+                  </Grid>
+                </Grid>
+
+                <Grid container spacing={8} alignItems="flex-end" justify='center' >
+                  <Grid item xs={3}>Visit duration:</Grid>
+                  <Grid item xs={6}>
+                    <TextField
                           id='duration'
                           className = 'duration'
                           label='Enter duration'
-                          style={{minWidth: '80%'}}
+                          style={{minWidth: '100%'}}
                           onChange={this.handleTFchange} />
-
-                <Button onClick={this.handleAddLocation} variant="contained" color="primary" style={{marginTop: '50px'}} > Add new location </Button>
+                  </Grid>
+                </Grid>
+                
+                <Grid container spacing={8} alignItems="flex-end" justify='center' >
+                  <Button onClick={this.handleAddLocation} variant="contained" color="primary" style={{marginTop: '30px'}} > Add new location </Button>
+                </Grid>
               </Grid>
               
             </Grid>
 
-            <Grid item xs={5} >
-              <Grid container spacing={8} alignItems="flex-end" style={{marginTop: '40px'}}>
-                <Grid item> <ListAlt/></Grid>
-                <Grid item> <h1>Results</h1></Grid>
+            <Grid item xs={12} >
+              <Grid container spacing={8} alignItems="flex-end" style={{marginTop: '70px'}}>
+                <Grid container spacing={8} alignItems="flex-end" justify='center' >
+                  <Grid item> <ListAlt/></Grid>
+                  <Grid item> <h1>Results</h1></Grid>
+                </Grid>
               </Grid>
-              <Grid container spacing={8} style={{marginTop:'20px', marginBottom: '20px'}}>
-                <div style={{width: '100%'}}>
+              <Grid container spacing={8} justify='center' style={{marginTop:'20px', marginBottom: '20px'}}>
+                <div style={{width: '70%'}}>
                   {this.state.resultComponent}
                 </div>
               </Grid>
