@@ -124,7 +124,6 @@ class ManagerLocationsList extends React.Component {
       selectedLocations: [],
       deleteLocation_list: [],
 
-      resultLocations: null,
       resultComponent: null,
       bounds: null,
     }
@@ -140,65 +139,70 @@ class ManagerLocationsList extends React.Component {
     this.setState({
       bounds: new window.google.maps.LatLngBounds()
     }, () => {
-      this.loadResult()
       this.loadLocationList() 
       this.loadMap()
     })
   }
 
-  loadResult = () => {
+  loadResult = (locationResList) => {
     var results = []
 
-    fetch('/locations')
-      .then(res => res.json())
-      .then(locations => {
-        this.setState({ resultLocations: locations})
-        locations.forEach((location, idx) => {
-          var query = `/locations/search?locationId=${location.id}`;
-            
-          var qaList = [];
-          fetch(query).then(res => res.json())
-          .then(data => {
-            data.forEach(qa => {
-              qaList.push({ question: qa.question, answer: qa.answer })
-            })
-          }).catch(err => console.log(err));
-
-          setTimeout(() => {
-            var res = 
-            <ExpansionPanel key={idx}>
-
-              <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-                <div style={{flexBasis: '70.33%'}}>
-                  <Typography style={{color: '#483D8B'}}> {location.street}</Typography>
-                  <Typography style={{color: '#483D8B'}}> {location.city}, {location.state} {location.zipcode}, {location.country}</Typography>
-                </div>
-                <div style={{flexBasis: '33.33%'}}><Typography style={{color: '#A9A9A9'}}> duration: {location.duration} mins</Typography></div>
-              </ExpansionPanelSummary>
-              
-              <ExpansionPanelDetails>
-                <div style={{margin: '0 auto 0 auto'}}>
-                  <List>
-                    {qaList.map((qa,idx) => {
-                      return <PaperSheet key={idx} qa={qa} locationId={location.id} />
-                    })}
-                  </List>
-                </div>
-              </ExpansionPanelDetails>
-
-            </ExpansionPanel>
-          
-            results.push(res);
-          }, 1000);
+    locationResList.forEach((location, idx) => {
+      var query = `/locations/search?locationId=${location.id}`;
+        
+      var qaList = [];
+      fetch(query).then(res => res.json())
+      .then(data => {
+        data.forEach(qa => {
+          qaList.push({ question: qa.question, answer: qa.answer })
         })
-      })
-      .catch(err => console.log(err))
+      }).catch(err => console.log(err));
 
       setTimeout(() => {
-        this.setState({
-          resultComponent: results
-        })
-      }, 2000)
+        var res = 
+        <ExpansionPanel key={idx}>
+
+          <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+            <div style={{flexBasis: '70.33%'}}>
+              <Typography style={{color: '#483D8B'}}> {location.street}</Typography>
+              <Typography style={{color: '#483D8B'}}> {location.city}, {location.state} {location.zipcode}, {location.country}</Typography>
+            </div>
+            <div style={{flexBasis: '33.33%'}}><Typography style={{color: '#A9A9A9'}}> duration: {location.duration} mins</Typography></div>
+          </ExpansionPanelSummary>
+          
+          <ExpansionPanelDetails>
+            <div style={{margin: '0 auto 0 auto'}}>
+              <List>
+                {qaList.map((qa,idx) => {
+                  return <PaperSheet key={idx} qa={qa} locationId={location.id} />
+                })}
+              </List>
+            </div>
+          </ExpansionPanelDetails>
+
+        </ExpansionPanel>
+      
+        results.push(res);
+      }, 1000);
+    })
+
+    setTimeout(() => {
+      this.setState({
+        resultComponent: <Grid item xs={12} >
+          <Grid container spacing={8} alignItems="flex-end" style={{marginTop: '70px'}}>
+            <Grid container spacing={8} alignItems="flex-end" justify='center' >
+              <Grid item> <ListAlt/></Grid>
+              <Grid item> <h1>Results</h1></Grid>
+            </Grid>
+          </Grid>
+          <Grid container spacing={8} justify='center' style={{marginTop:'20px', marginBottom: '20px'}}>
+            <div style={{width: '70%'}}>
+              {results}
+            </div>
+          </Grid>
+        </Grid>
+      })
+    }, 2000)
   }
 
   deleteLocation = (deleteLocation_list) => {
@@ -224,7 +228,7 @@ class ManagerLocationsList extends React.Component {
         console.log('Delete location done!');
       })
       this.setState({selectedLocations : []}, () => {
-        this.loadResult();
+        this.setState({resultComponent: null})
         this.loadLocationList();
       });
     })
@@ -253,7 +257,7 @@ class ManagerLocationsList extends React.Component {
       .catch(err => console.log(err))
       console.log('Update successfully!');
 
-    this.loadResult();
+    this.setState({resultComponent: null})
     this.loadLocationList();
   }
 
@@ -267,7 +271,7 @@ class ManagerLocationsList extends React.Component {
                       display={this.displayLocations} 
                       deleteLocation={this.deleteLocation}
                       updateLocation={this.updateLocation} 
-                      />
+                      viewResults={this.loadResult} />
 
         this.setState({
           locationTable: list
@@ -348,7 +352,6 @@ class ManagerLocationsList extends React.Component {
            + `&duration=${duration}`)
     .catch(err => console.log(err))
     console.log('Add location done!');
-    this.loadResult();
     this.loadLocationList();
   }
 
@@ -462,7 +465,9 @@ class ManagerLocationsList extends React.Component {
               
             </Grid>
 
-            <Grid item xs={12} >
+            {this.state.resultComponent}
+
+            {/* <Grid item xs={12} >
               <Grid container spacing={8} alignItems="flex-end" style={{marginTop: '70px'}}>
                 <Grid container spacing={8} alignItems="flex-end" justify='center' >
                   <Grid item> <ListAlt/></Grid>
@@ -474,7 +479,7 @@ class ManagerLocationsList extends React.Component {
                   {this.state.resultComponent}
                 </div>
               </Grid>
-            </Grid>
+            </Grid> */}
           </Grid>
         </div>
       </div>

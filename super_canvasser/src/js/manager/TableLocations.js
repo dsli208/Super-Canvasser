@@ -250,6 +250,19 @@ class EnhancedTableToolbar extends React.Component {
     }
   }
 
+  handleViewResults = () => {
+    const {locations , index} = this.props;
+    var locationResList = [];
+
+    for (var i=0; i<index.length; i++) {
+      var location = locations.find(location => location.id === index[i]);
+      if (typeof location !== 'undefined') {
+        locationResList.push(location);
+      }
+    }
+    this.props.handleViewResults(locationResList);
+  }
+
   handleEdit = () => {
     console.log('edit location');
     const {locations , index} = this.props;
@@ -330,7 +343,7 @@ class EnhancedTableToolbar extends React.Component {
         <div className={classes.actions}>
           {numSelected > 0 ? (
             <Tooltip title="View results">
-              <IconButton aria-label="Result">
+              <IconButton onClick={this.handleViewResults} aria-label="Result">
                 <ListAlt/>
               </IconButton>
             </Tooltip>
@@ -653,6 +666,10 @@ class TableLocations extends React.Component {
     this.props.updateLocation(location);
   }
 
+  viewResultsHelper = (locationResList) => {
+    this.props.viewResults(locationResList);
+  }
+
   render() {
     if (!this.state.data) {
       return <div/>
@@ -669,7 +686,8 @@ class TableLocations extends React.Component {
                 listCoords={this.state.listCoordinates} 
                 display={this.displayHelper} 
                 handleDelete={this.deleteHelper}
-                handleEdit={this.editHelper} />
+                handleEdit={this.editHelper}
+                handleViewResults={this.viewResultsHelper} />
 
         <div className={classes.tableWrapper}>
           <Table className={classes.table} aria-labelledby="tableTitle">
