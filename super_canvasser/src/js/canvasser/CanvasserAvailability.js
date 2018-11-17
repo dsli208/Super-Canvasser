@@ -87,7 +87,7 @@ class CanvasserAvailability extends React.Component {
               }
               j++;
               return (
-                <ListItem key={idx} style={{width: '95%', backgroundColor: (j%2==0) ? '#ffffff' : '#DEDBFA' }}>
+                <ListItem key={idx} style={{width: '95%', backgroundColor: (j%2==0) ? '#F4F4F4' : '#DEDBFA' }}>
                   
                   <ListItemText
                     primary={displayDate}
@@ -307,7 +307,7 @@ class CanvasserAvailability extends React.Component {
                                   }
                                   j++;
                                   return (
-                                    <ListItem key={idx} style={{backgroundColor: (j%2==0) ? '#ffffff' : '#DEDBFA' }}>
+                                    <ListItem key={idx} style={{backgroundColor: (j%2==0) ? '#F4F4F4' : '#DEDBFA' }}>
                                       
                                       <ListItemText
                                         primary={displayDate}
