@@ -7,9 +7,10 @@ import ManagerCampaignsList from './manager/ManagerCampaignsList';
 import ManagerCanvassersList from './manager/ManagerCanvassersList';
 import ManagerLocationsList from './manager/ManagerLocationsList';
 import ManagerQuestions from './manager/ManagerQuestions';
-import Canvasser from './canvasser/Canvasser';
+//import Canvasser from './canvasser/Canvasser';
 import CanvasserViewMap from './canvasser/CanvasserViewMap';
-import canvasserAssignments from './canvasser/CanvasserAssignments';
+import CanvasserAvailability from './canvasser/CanvasserAvailability';
+import CanvasserAssignments from './canvasser/CanvasserAssignments';
 //import CanvasserViewUpcoming from './canvasser/CanvasserViewUpcoming';
 //import Admin from './admin/Admin';
 import AdminAddUser from './admin/AdminAddUser';
@@ -36,8 +37,9 @@ class App extends Component {
           <Route path='/users/manager/:username/questions' exact component={ManagerQuestions}/>
 
           {/* ------- Canvasser stuff -------- */}
-          <Route path='/users/canvasser/:username' exact component={Canvasser}/>
-          <Route path='/users/canvasser/:username/assignments' exact component={canvasserAssignments}/>
+          <Route path='/users/canvasser/:username' exact component={CanvasserAvailability}/>
+          <Route path='/users/canvasser/:username/availability' exact component={CanvasserAvailability}/>
+          <Route path='/users/canvasser/:username/assignments' exact component={CanvasserAssignments}/>
           <Route path='/users/canvasser/:username/map' exact component={CanvasserViewMap}/>
           {/* <Route path='/users/canvasser/:username/upcoming' exact component={CanvasserViewUpcoming}/> */}
           <Route path='/users/canvasser/:username/results' exact component={CanvasserResultsList}/>

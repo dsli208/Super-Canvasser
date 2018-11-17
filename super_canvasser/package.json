@@ -18,6 +18,7 @@
     "react-infinite-calendar": "^2.3.1",
     "react-router-dom": "^4.3.1",
     "react-scripts": "^2.1.1",
+    "react-stars": "^2.2.5",
     "react-table": "^6.8.6",
     "react-toolbox": "^2.0.0-beta.13",
     "react-web-tabs": "^1.0.1",

@@ -60,8 +60,8 @@ class Canvasser extends React.Component  {
   }
 
   /////
-  viewMap = () => {
-    window.location.href = '/users/canvasser/' + this.state.currentUserName + '/map';
+  viewAssignments = () => {
+    window.location.href = '/users/canvasser/' + this.state.currentUserName + '/assignments';
   }
 
   /////
@@ -74,8 +74,8 @@ class Canvasser extends React.Component  {
     window.location.href = '/users/canvasser/' + this.state.currentUserName + '/results';
   }
 
-  viewAssignments = () => {
-    window.location.href = '/users/canvasser/' + this.state.currentUserName + '/assignments';
+  viewAvailability = () => {
+    window.location.href = '/users/canvasser/' + this.state.currentUserName + '/availability';
   }
 
   render() {
@@ -92,7 +92,8 @@ class Canvasser extends React.Component  {
             </Typography>
             <Button onClick={this.viewResults} color="inherit">Results</Button>
             <Button onClick={this.viewUpcoming} color="inherit">Upcoming Events</Button>
-            <Button onClick={this.viewAssignments} color="inherit">Availabilities</Button>
+            <Button onClick={this.viewAssignments} color="inherit">Canvas Assignments</Button>
+            <Button onClick={this.viewAvailability} color="inherit">Schedule/Calendar</Button>
             <Button onClick={this.logout} color="inherit">Log out</Button>
           </Toolbar>
         </AppBar>

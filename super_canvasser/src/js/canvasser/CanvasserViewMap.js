@@ -1,9 +1,6 @@
 import React from 'react';
-import MapUsers from './MapUsers';
 import 'react-web-tabs/dist/react-web-tabs.css';
 import Canvasser from './Canvasser';
-
-import '../../css/manager.css';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import MyMap from '../../api/MyMapComponent';
@@ -120,7 +117,7 @@ class CanvasserViewMap extends React.Component {
         <Canvasser/>
         <br/>
 
-        <div className='locationlist'>
+        <div style={{margin: '0 3.5% 30px 3.5%'}} >
           <Tabs
             defaultTab="one"
             onChange={(tabId) => { console.log(tabId) }} >
