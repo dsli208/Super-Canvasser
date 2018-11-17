@@ -143,6 +143,12 @@ INSERT INTO `super_canvasser`.`tasks` (`id`, `locationId`)
 VALUES (1, 2);
 
 INSERT INTO `super_canvasser`.`tasks` (`id`, `locationId`)
+VALUES (1, 13);
+
+INSERT INTO `super_canvasser`.`tasks` (`id`, `locationId`)
+VALUES (1, 14);
+
+INSERT INTO `super_canvasser`.`tasks` (`id`, `locationId`)
 VALUES (2, 3);
 
 INSERT INTO `super_canvasser`.`tasks` (`id`, `locationId`)
@@ -172,11 +178,6 @@ VALUES (6, 11);
 INSERT INTO `super_canvasser`.`tasks` (`id`, `locationId`)
 VALUES (6, 12);
 
-INSERT INTO `super_canvasser`.`tasks` (`id`, `locationId`)
-VALUES (7, 13);
-
-INSERT INTO `super_canvasser`.`tasks` (`id`, `locationId`)
-VALUES (7, 14);
 
 -- -----------------------------------------------------
 -- insert into assignments table

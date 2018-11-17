@@ -35,6 +35,8 @@ CREATE  TABLE IF NOT EXISTS `super_canvasser`.`locations` (
 	`zipcode` INT NOT NULL ,
 	`country` VARCHAR(50) NOT NULL ,
 	`duration` INT ,
+	`rate` FLOAT ,
+	`note` VARCHAR(500) ,
 	PRIMARY KEY (`id`)
 ) ENGINE = InnoDB;
 
