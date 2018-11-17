@@ -466,20 +466,6 @@ class ManagerLocationsList extends React.Component {
             </Grid>
 
             {this.state.resultComponent}
-
-            {/* <Grid item xs={12} >
-              <Grid container spacing={8} alignItems="flex-end" style={{marginTop: '70px'}}>
-                <Grid container spacing={8} alignItems="flex-end" justify='center' >
-                  <Grid item> <ListAlt/></Grid>
-                  <Grid item> <h1>Results</h1></Grid>
-                </Grid>
-              </Grid>
-              <Grid container spacing={8} justify='center' style={{marginTop:'20px', marginBottom: '20px'}}>
-                <div style={{width: '70%'}}>
-                  {this.state.resultComponent}
-                </div>
-              </Grid>
-            </Grid> */}
           </Grid>
         </div>
       </div>
