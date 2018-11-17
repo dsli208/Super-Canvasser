@@ -1,7 +1,6 @@
 import React from 'react';
 import Canvasser from './Canvasser';
 import Paper from '@material-ui/core/Paper';
-import List from '@material-ui/core/List';
 import { withStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import Typography from '@material-ui/core/Typography';
@@ -9,10 +8,14 @@ import ReactStars from 'react-stars';
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
-import {LocationOn} from '@material-ui/icons';
+import {LocationOn, Done} from '@material-ui/icons';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 import { withGoogleMap, GoogleMap, Marker, InfoWindow } from 'react-google-maps';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
+import ListItemText from '@material-ui/core/ListItemText';
 
 
 const style = {
@@ -95,7 +98,201 @@ GoogleMapExample = withGoogleMap(GoogleMapExample);
 
 
 class PaperSheet extends React.Component {
-  
+  state = {
+    locationComponent: null,
+    recommendComponent: null,
+  }
+
+  componentDidMount() {
+    const { assignment} = this.props;
+    this.renderLocation([assignment.locations[0].fullAddress]);
+    this.renderRecommend(assignment.locations[0].fullAddress);
+  }
+
+  renderLocation = (locationList) => {
+    const {classes, assignment} = this.props;
+    var displayList = [];
+    
+    {assignment.locations.map((locationData, index) => {
+      var address = locationList.find(addr => addr === locationData.fullAddress);
+      
+      if (typeof address !== 'undefined') {
+        var location = 
+        <div key={index} style={{marginBottom: '20px'}}>
+          <Grid container spacing={8} alignItems="center">
+            <Grid item>
+              <Tooltip title="Display location">
+                <IconButton aria-label="Location">
+                  <LocationOn color='secondary'/>
+                </IconButton>
+              </Tooltip>
+            </Grid>
+            <Grid item>
+              <strong>
+                {locationData.fullAddress} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span style={{color: '#A9A9A9'}} > Duration: {locationData.duration} mins </span> 
+              </strong>
+            </Grid>
+          </Grid>
+          {locationData.qaList.map((qa, idx) => {
+            return (
+              <div key={idx} style={{marginBottom: '15px'}}>
+                <Typography variant='inherit'><strong>Question:</strong> {qa.question} </Typography>
+                <Typography variant='inherit'><strong>Answer:</strong> </Typography>
+                <TextField
+                    onChange={this.handleTFChange}
+                    multiline={true}
+                    fullWidth={true}
+                    defaultValue={qa.answer}
+                    />
+                <Button 
+                    style={{marginTop: '5px'}}
+                    variant='contained'
+                    color='default'
+                    className={classes.button}> Save </Button>
+              </div>
+            )
+          })}
+          
+          <Grid container >
+            <Grid item xs={6} >
+              <Grid container justify='center' style={{marginBottom: '15px'}}>
+                <TextField
+                    label='Notes'
+                    multiline={true}
+                    style={{width: '90%'}}
+                    rows={5} />
+              </Grid>
+
+              <Grid container alignItems='flex-end' justify='center' style={{marginBottom: '15px'}}>
+                <Grid item>
+                  <Typography> 
+                    <strong>Rate:</strong> &nbsp;&nbsp;&nbsp;
+                  </Typography>
+                </Grid>
+                <Grid item>
+                  <ReactStars
+                      count={5}
+                      onChange={(rate) => console.log(rate)}
+                      size={20}
+                      color2={'#ffd700'} />
+                </Grid>
+              </Grid>
+              
+              <Grid container justify='center' style={{marginBottom: '15px'}}>
+                <Button 
+                  variant='contained'
+                  color='primary'
+                  className={classes.button}> Save </Button>
+              </Grid>
+            </Grid>
+
+            <Grid item xs={6} >
+              <GoogleMapExample
+                  containerElement={ <div style={{ height: `300px`, width: '100%' }} /> }
+                  mapElement={ <div style={{ height: `100%` }} /> }
+              />
+            </Grid>
+          </Grid>
+        </div>
+        
+        displayList.push(location);
+      }
+    })}
+    setTimeout(() => {
+      this.setState({
+        locationComponent: displayList
+      })
+    }, 1000)
+  }
+
+  changeRenderLocation = (locationAddress) => {
+    this.renderLocation([locationAddress]);
+    this.renderRecommend(locationAddress);
+  }
+
+  renderRecommend = (currentLocation) => {
+    const { assignment} = this.props;
+
+    // algorithm to find next recommended location and remaining locations list
+    var remainLocations = [];
+    var recommendLocation = null;
+    var i = 0;
+
+    for (i=0; i < assignment.locations.length; i++) {
+      var locationData = assignment.locations[i];
+      if (locationData.fullAddress !== currentLocation) {
+        remainLocations.push(locationData);
+      } else {
+        if (i !== assignment.locations.length - 1) {
+          recommendLocation = assignment.locations[i+1];
+        } else {
+          recommendLocation = assignment.locations[0];
+        }
+        break;
+      }
+    }
+
+    if (recommendLocation !== assignment.locations[0]) {
+      for (var j=i+2; j < assignment.locations.length; j++) {
+        remainLocations.push(assignment.locations[j]);
+      }
+    } else {
+      remainLocations.splice(0,1);
+    }
+    
+    var j = 0;
+    // render recommendation component
+    this.setState({
+      recommendComponent: 
+      <Grid container>
+        <Grid item xs={6} >
+          <strong>Recommended next location:</strong> <br/>
+          <Typography> {recommendLocation.fullAddress} </Typography> <br/>
+          <Tooltip title="Display location">
+            <Button variant='extendedFab' color='secondary' aria-label="Location" style={{marginRight: '10px'}}>
+              <LocationOn /> Show location
+            </Button>
+          </Tooltip>
+
+          <Tooltip title="Go to next location">
+            <Button onClick={() => this.changeRenderLocation(recommendLocation.fullAddress)} variant='extendedFab' color='primary' aria-label="Go">
+              <Done /> Go
+            </Button>
+          </Tooltip>
+        </Grid>
+
+        <Grid item xs={6} >
+          <strong>Other locations:</strong>
+          <List>
+            {remainLocations.map((location, idx) => {
+              console.log(location);
+              j++;
+              return (
+                <ListItem key={idx} style={{width: '100%', backgroundColor: (j%2==0) ? '#F4F4F4' : '#F9E5F7' }}>
+                  <ListItemText 
+                      primary={<Typography>{location.fullAddress}<br/></Typography>} 
+                  />
+
+                  <Tooltip title="Display location">
+                    <IconButton color='secondary'> <LocationOn/> </IconButton>
+                  </Tooltip>
+
+                  <Tooltip title="Go to next location">
+                    <IconButton
+                        onClick={() => this.changeRenderLocation(location.fullAddress)}
+                        color='primary'> <Done/> 
+                    </IconButton>
+                  </Tooltip>
+
+                </ListItem>
+              )
+            })}
+          </List>
+        </Grid>
+      </Grid>
+    })
+  }
+
   handleTFChange = () => {
 
   }
@@ -109,89 +306,9 @@ class PaperSheet extends React.Component {
           <Typography variant='headline'>
             <strong>Task {assignment.taskName}</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {assignment.date}
           </Typography>
-          
-          {assignment.locations.map((locationData, index) => {
-            //console.log(locationData);
-            return (
-            <div key={index} style={{marginBottom: '10px'}}>
-              <Grid container spacing={8} alignItems="center">
-                <Grid item>
-                  <Tooltip title="Display location">
-                    <IconButton aria-label="Location">
-                      <LocationOn color='secondary'/>
-                    </IconButton>
-                  </Tooltip>
-                </Grid>
-                <Grid item>
-                  <strong>
-                    {locationData.fullAddress} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span style={{color: '#A9A9A9'}} > Duration: {locationData.duration} mins </span> 
-                  </strong>
-                </Grid>
-              </Grid>
-              {locationData.qaList.map((qa, idx) => {
-                return (
-                  <div key={idx} style={{marginBottom: '15px'}}>
-                    <Typography><strong>Question:</strong> {qa.question} </Typography>
-                    <Typography><strong>Answer:</strong> </Typography>
-                    <TextField
-                        onChange={this.handleTFChange}
-                        multiline={true}
-                        fullWidth={true}
-                        defaultValue={qa.answer}
-                        />
-                    <Button 
-                        style={{marginTop: '5px'}}
-                        variant='contained'
-                        color='default'
-                        className={classes.button}> Save </Button>
-                  </div>
-                )
-              })}
-              
-              <Grid container >
-                <Grid item xs={6} >
-                  <Grid container justify='center' style={{marginBottom: '15px'}}>
-                    <TextField
-                        label='Notes'
-                        multiline={true}
-                        style={{width: '90%'}}
-                        rows={5} />
-                  </Grid>
 
-                  <Grid container alignItems='flex-end' justify='center' style={{marginBottom: '15px'}}>
-                    <Grid item>
-                      <Typography> 
-                        <strong>Rate:</strong> &nbsp;&nbsp;&nbsp;
-                      </Typography>
-                    </Grid>
-                    <Grid item>
-                      <ReactStars
-                          count={5}
-                          onChange={(rate) => console.log(rate)}
-                          size={20}
-                          color2={'#ffd700'} />
-                    </Grid>
-                  </Grid>
-                  
-                  <Grid container justify='center' style={{marginBottom: '15px'}}>
-                    <Button 
-                      variant='contained'
-                      color='primary'
-                      className={classes.button}> Save </Button>
-                  </Grid>
-                </Grid>
-
-                <Grid item xs={5} >
-                  <GoogleMapExample
-                      containerElement={ <div style={{ height: `300px`, width: '100%' }} /> }
-                      mapElement={ <div style={{ height: `100%` }} /> }
-                  />
-                </Grid>
-              </Grid>
-            </div>
-            )
-          })}
-
+          {this.state.locationComponent}
+          {this.state.recommendComponent}
         </div>
       </Paper>
     )
