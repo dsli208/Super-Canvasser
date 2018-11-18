@@ -103,14 +103,12 @@ class Login extends Component {
 
   handleChangeField = (event) => {
     if (event.target.type === 'text') {
-      console.log(event.target.value);
       // email
       this.setState({
         email: event.target.value
       })
     } else {
       // password
-      console.log(event.target.value);
       this.setState({
         password: event.target.value
       })
