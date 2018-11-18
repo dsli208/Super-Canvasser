@@ -22,7 +22,7 @@ import Modal from '@material-ui/core/Modal';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
-import currentUser from '../../data/currentUser';
+
 
 function desc(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -228,7 +228,7 @@ class EnhancedTableToolbar extends React.Component {
   }
 
   handleDelete = () => {
-    const {users, selected} = this.props;
+    const { selected} = this.props;
 
     for (var i = 0; i < selected.length; i++) {
       var id = selected[i];

@@ -254,12 +254,13 @@ class EnhancedTableToolbar extends React.Component {
     const {locations , index} = this.props;
     var locationResList = [];
 
-    for (var i=0; i<index.length; i++) {
-      var location = locations.find(location => location.id === index[i]);
+    index.forEach(idx => {
+      var location = locations.find(location => location.id === idx);
       if (typeof location !== 'undefined') {
         locationResList.push(location);
       }
-    }
+    })
+
     this.props.handleViewResults(locationResList);
   }
 

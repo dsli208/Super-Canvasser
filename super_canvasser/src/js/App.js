@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 import '../css/App.css';
 import {BrowserRouter, Route } from 'react-router-dom';
 //import Manager from './manager/Manager';
-import ManagerCampaignsList from './manager/ManagerCampaignsList';
 import ManagerCanvassersList from './manager/ManagerCanvassersList';
 import ManagerLocationsList from './manager/ManagerLocationsList';
 import ManagerQuestions from './manager/ManagerQuestions';
@@ -31,7 +30,6 @@ class App extends Component {
 
           {/* ------- Manager stuff -------- */}
           <Route path='/users/manager/:username' exact component={ManagerCanvassersList}/>
-          <Route path='/users/manager/:username/campaigns' exact component={ManagerCampaignsList}/>
           <Route path='/users/manager/:username/canvasserAssignments' exact component={ManagerCanvassersList}/>
           <Route path='/users/manager/:username/locations' exact component={ManagerLocationsList}/>
           <Route path='/users/manager/:username/questions' exact component={ManagerQuestions}/>
