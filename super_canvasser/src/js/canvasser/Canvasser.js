@@ -64,16 +64,6 @@ class Canvasser extends React.Component  {
     window.location.href = '/users/canvasser/' + this.state.currentUserName + '/assignments';
   }
 
-  /////
-  viewUpcoming = () => {
-    window.location.href = '/users/canvasser/' + this.state.currentUserName + '/upcoming';
-  }
-
-  /////
-  viewResults = () => {
-    window.location.href = '/users/canvasser/' + this.state.currentUserName + '/results';
-  }
-
   viewAvailability = () => {
     window.location.href = '/users/canvasser/' + this.state.currentUserName + '/availability';
   }
@@ -90,8 +80,7 @@ class Canvasser extends React.Component  {
             <Typography variant="title" color="inherit" className={classes.grow}>
                {this.state.currentUserFullName}
             </Typography>
-            <Button onClick={this.viewResults} color="inherit">Results</Button>
-            <Button onClick={this.viewUpcoming} color="inherit">Upcoming Events</Button>
+            
             <Button onClick={this.viewAssignments} color="inherit">Canvas Assignments</Button>
             <Button onClick={this.viewAvailability} color="inherit">Schedule/Calendar</Button>
             <Button onClick={this.logout} color="inherit">Log out</Button>

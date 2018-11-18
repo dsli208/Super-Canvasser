@@ -7,7 +7,6 @@ import ManagerCanvassersList from './manager/ManagerCanvassersList';
 import ManagerLocationsList from './manager/ManagerLocationsList';
 import ManagerQuestions from './manager/ManagerQuestions';
 //import Canvasser from './canvasser/Canvasser';
-import CanvasserViewMap from './canvasser/CanvasserViewMap';
 import CanvasserAvailability from './canvasser/CanvasserAvailability';
 import CanvasserAssignments from './canvasser/CanvasserAssignments';
 //import CanvasserViewUpcoming from './canvasser/CanvasserViewUpcoming';
@@ -15,7 +14,7 @@ import CanvasserAssignments from './canvasser/CanvasserAssignments';
 import AdminAddUser from './admin/AdminAddUser';
 import AdminView from './admin/AdminViewUsers';
 import Main from './Main';
-import CanvasserResultsList from './canvasser/CanvasserResultsList';
+
 
 class App extends Component {  
   render() {    
@@ -38,9 +37,6 @@ class App extends Component {
           <Route path='/users/canvasser/:username' exact component={CanvasserAvailability}/>
           <Route path='/users/canvasser/:username/availability' exact component={CanvasserAvailability}/>
           <Route path='/users/canvasser/:username/assignments' exact component={CanvasserAssignments}/>
-          <Route path='/users/canvasser/:username/map' exact component={CanvasserViewMap}/>
-          {/* <Route path='/users/canvasser/:username/upcoming' exact component={CanvasserViewUpcoming}/> */}
-          <Route path='/users/canvasser/:username/results' exact component={CanvasserResultsList}/>
 
         </div>
       </BrowserRouter>
