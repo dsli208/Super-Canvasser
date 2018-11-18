@@ -14,7 +14,6 @@ import Tooltip from '@material-ui/core/Tooltip';
 import { withGoogleMap, GoogleMap, Marker, InfoWindow } from 'react-google-maps';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
-import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItemText from '@material-ui/core/ListItemText';
 
 
@@ -65,14 +64,16 @@ class GoogleMapExample extends React.Component {
   }
 
   render() {
+    const {listLocations} = this.props;
+
     return(
         <GoogleMap
-        defaultCenter = {{lat: 37.090240, lng: -95.712891}}
+        defaultCenter = {{lat: listLocations[0].lat, lng: listLocations[0].lng}}
         zoom = { 8 }
         //ref={(map) => map && map.fitBounds(this.props.bounds)}
         >
           
-          {/* {this.props.listLocations.map((coord,idx) => 
+          {listLocations.map((coord,idx) => 
             <Marker key={idx} position={coord} label='view'
               onClick={()=>this.handleClick(coord, idx)} >
 
@@ -85,7 +86,7 @@ class GoogleMapExample extends React.Component {
                 </InfoWindow> : null
               }
             </Marker>
-          )} */}
+          )}
           
         </GoogleMap>
       
@@ -99,21 +100,70 @@ GoogleMapExample = withGoogleMap(GoogleMapExample);
 
 class PaperSheet extends React.Component {
   state = {
+    API_KEY: 'AIzaSyC3A1scukBQw2jyAUqwHHTw4Weob5ibZiY',
     locationComponent: null,
     recommendComponent: null,
+    mapComponent: null,
+    originalLocation: null,
   }
 
   componentDidMount() {
     const { assignment} = this.props;
-    this.renderLocation([assignment.locations[0].fullAddress]);
-    this.renderRecommend(assignment.locations[0].fullAddress);
+    this.setState({
+      originalLocation: assignment.locations[0] 
+    }, () => {
+      this.load([assignment.locations[0]]) 
+    })
+  }
+
+  load = (listLocation) => {
+    var addressList = [];
+    listLocation.forEach(location => addressList.push(location.fullAddress));
+    var listCoordinates = this.getCoordList(addressList);
+
+    this.setState({
+      mapComponent: <GoogleMapExample
+                        listLocations={listCoordinates}
+                        containerElement={ <div style={{ height: `300px`, width: '100%' }} /> }
+                        mapElement={ <div style={{ height: `100%` }} /> }
+                    />
+    }, () => {
+      this.renderLocation([listLocation[0].fullAddress]);
+      this.renderRecommend(listLocation[0].fullAddress);
+    })
+  }
+
+  ///// Use Geocoding API to convert address to longitude and latitude 
+  //// to display markers of all selected locations on the map
+  getCoordList = (selected) => {
+    var listCoordinates = [];
+    var i = 0;
+    selected.forEach(fullAddr => {
+      i += 1;
+      var search_query = fullAddr.replace(/ /g, '+');
+      
+      // use API to fetch search result
+      fetch('https://maps.googleapis.com/maps/api/geocode/json?address=' + search_query + '&key=' + this.state.API_KEY)
+      .then(res => res.json())
+      .then(data => {
+        //console.log(data.results[0].geometry.location)
+        listCoordinates.push(data.results[0].geometry.location)
+      })
+      .catch(err => console.log(err))     
+    })
+    while (i < selected.length) {}
+    return listCoordinates;
+  }
+
+  displayNextLocation = (location) => {
+    this.load([this.state.originalLocation, location]);
   }
 
   renderLocation = (locationList) => {
     const {classes, assignment} = this.props;
     var displayList = [];
     
-    {assignment.locations.map((locationData, index) => {
+    assignment.locations.map((locationData, index) => {
       var address = locationList.find(addr => addr === locationData.fullAddress);
       
       if (typeof address !== 'undefined') {
@@ -121,11 +171,9 @@ class PaperSheet extends React.Component {
         <div key={index} style={{marginBottom: '20px'}}>
           <Grid container spacing={8} alignItems="center">
             <Grid item>
-              <Tooltip title="Display location">
-                <IconButton aria-label="Location">
+                <IconButton disabled={true} aria-label="Location">
                   <LocationOn color='secondary'/>
                 </IconButton>
-              </Tooltip>
             </Grid>
             <Grid item>
               <strong>
@@ -187,17 +235,14 @@ class PaperSheet extends React.Component {
             </Grid>
 
             <Grid item xs={6} >
-              <GoogleMapExample
-                  containerElement={ <div style={{ height: `300px`, width: '100%' }} /> }
-                  mapElement={ <div style={{ height: `100%` }} /> }
-              />
+              {this.state.mapComponent}
             </Grid>
           </Grid>
         </div>
         
         displayList.push(location);
       }
-    })}
+    })
     setTimeout(() => {
       this.setState({
         locationComponent: displayList
@@ -205,9 +250,10 @@ class PaperSheet extends React.Component {
     }, 1000)
   }
 
-  changeRenderLocation = (locationAddress) => {
-    this.renderLocation([locationAddress]);
-    this.renderRecommend(locationAddress);
+  changeRenderLocation = (location) => {
+    this.setState({
+      originalLocation: location,
+    }, () => this.load([location]))
   }
 
   renderRecommend = (currentLocation) => {
@@ -217,6 +263,7 @@ class PaperSheet extends React.Component {
     var remainLocations = [];
     var recommendLocation = null;
     var i = 0;
+    var j = 0;
 
     for (i=0; i < assignment.locations.length; i++) {
       var locationData = assignment.locations[i];
@@ -233,14 +280,14 @@ class PaperSheet extends React.Component {
     }
 
     if (recommendLocation !== assignment.locations[0]) {
-      for (var j=i+2; j < assignment.locations.length; j++) {
+      for (j=i+2; j < assignment.locations.length; j++) {
         remainLocations.push(assignment.locations[j]);
       }
     } else {
       remainLocations.splice(0,1);
     }
     
-    var j = 0;
+    j = 0;
     // render recommendation component
     this.setState({
       recommendComponent: 
@@ -249,13 +296,13 @@ class PaperSheet extends React.Component {
           <strong>Recommended next location:</strong> <br/>
           <Typography> {recommendLocation.fullAddress} </Typography> <br/>
           <Tooltip title="Display location">
-            <Button variant='extendedFab' color='secondary' aria-label="Location" style={{marginRight: '10px'}}>
+            <Button onClick={() => this.displayNextLocation(recommendLocation)} variant='extendedFab' color='secondary' aria-label="Location" style={{marginRight: '10px'}}>
               <LocationOn /> Show location
             </Button>
           </Tooltip>
 
           <Tooltip title="Go to next location">
-            <Button onClick={() => this.changeRenderLocation(recommendLocation.fullAddress)} variant='extendedFab' color='primary' aria-label="Go">
+            <Button onClick={() => this.changeRenderLocation(recommendLocation)} variant='extendedFab' color='primary' aria-label="Go">
               <Done /> Go
             </Button>
           </Tooltip>
@@ -265,21 +312,21 @@ class PaperSheet extends React.Component {
           <strong>Other locations:</strong>
           <List>
             {remainLocations.map((location, idx) => {
-              console.log(location);
               j++;
               return (
-                <ListItem key={idx} style={{width: '100%', backgroundColor: (j%2==0) ? '#F4F4F4' : '#F9E5F7' }}>
+                <ListItem key={idx} style={{width: '100%', backgroundColor: (j%2===0) ? '#F4F4F4' : '#F9E5F7' }}>
                   <ListItemText 
                       primary={<Typography>{location.fullAddress}<br/></Typography>} 
                   />
 
                   <Tooltip title="Display location">
-                    <IconButton color='secondary'> <LocationOn/> </IconButton>
+                    <IconButton onClick={() => this.displayNextLocation(location)} 
+                          color='secondary'> <LocationOn/> </IconButton>
                   </Tooltip>
 
                   <Tooltip title="Go to next location">
                     <IconButton
-                        onClick={() => this.changeRenderLocation(location.fullAddress)}
+                        onClick={() => this.changeRenderLocation(location)}
                         color='primary'> <Done/> 
                     </IconButton>
                   </Tooltip>
@@ -350,11 +397,14 @@ class CanvasserAssignments extends React.Component {
           {
             this.state.canvasserData === null ? null :
             <div>
-              {this.state.canvasserData.assignments.map((assignment, idx) => {
-                return (
-                  <PaperSheet key={idx} assignment={assignment} />
-                )
-              })}
+              {
+                this.state.canvasserData.assignments.length === 0 ? <div>No assignments yet!</div> :
+                this.state.canvasserData.assignments.map((assignment, idx) => {
+                  return (
+                    <PaperSheet key={idx} assignment={assignment} />
+                  )
+                })
+              }
             </div>
           }
           
