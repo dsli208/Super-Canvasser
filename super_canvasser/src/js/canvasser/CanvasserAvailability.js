@@ -78,29 +78,35 @@ class CanvasserAvailability extends React.Component {
         dateList : dateList
       }, () => {
         var j = 0;
+        var hasAvailable = false;
+
         this.setState({
           freeDatesComponent: <List >
-            {this.state.dateList.map((date, idx) => {
-              var displayDate = date.month + '/' + date.date + '/' + date.year;
-              if (date.taskId !== null) {
-                return null;
-              }
-              j++;
-              return (
-                <ListItem key={idx} style={{width: '95%', backgroundColor: (j%2==0) ? '#F4F4F4' : '#DEDBFA' }}>
-                  
-                  <ListItemText
-                    primary={displayDate}
-                  />
-                  <ListItemSecondaryAction style={{marginRight: '5%'}}>
-                    <Button onClick={() => this.deleteFreeDate(date)} aria-label="Delete" >
-                      <DeleteIcon /> Delete
-                    </Button>
-                  </ListItemSecondaryAction>
+            {
+              this.state.dateList.map((date, idx) => {
+                var displayDate = date.month + '/' + date.date + '/' + date.year;
+                if (date.taskId !== null) {
+                  return null;
+                }
+                hasAvailable = true;
+                j++;
+                return (
+                  <ListItem key={idx} style={{width: '95%', backgroundColor: (j%2===0) ? '#F4F4F4' : '#DEDBFA' }}>
+                    
+                    <ListItemText
+                      primary={displayDate}
+                    />
+                    <ListItemSecondaryAction style={{marginRight: '5%'}}>
+                      <Button onClick={() => this.deleteFreeDate(date)} aria-label="Delete" >
+                        <DeleteIcon /> Delete
+                      </Button>
+                    </ListItemSecondaryAction>
 
-                </ListItem>
-              )
-            })}
+                  </ListItem>
+                )
+              })
+            }
+            {hasAvailable ? null : <div> No available dates yet! </div>}
           </List>
         })
       })
@@ -161,7 +167,8 @@ class CanvasserAvailability extends React.Component {
     // Render the Calendar
     var today = new Date();
     var lastWeek = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 7);
-    
+    var hasAssigned = false;
+
     return (
       <div style={style}>
         <Canvasser username={this.props.match.params.username}/>
@@ -298,28 +305,32 @@ class CanvasserAvailability extends React.Component {
                           <div className={classes.root}>
                             <div className={classes.demo}>
                               <List >
+                            
+                                {
+                                  this.state.dateList.map((date, idx) => {
+                                    var displayDate = date.month + '/' + date.date + '/' + date.year;
+                                    var task = 'Task ' + date.taskId;
+                                    if (date.taskId === null) {
+                                      return null;
+                                    }
+                                    hasAssigned = true;
+                                    j++;
+                                    return (
+                                      <ListItem key={idx} style={{backgroundColor: (j%2===0) ? '#F4F4F4' : '#DEDBFA' }}>
+                                        
+                                        <ListItemText
+                                          primary={displayDate}
+                                        />
 
-                                {this.state.dateList.map((date, idx) => {
-                                  var displayDate = date.month + '/' + date.date + '/' + date.year;
-                                  var task = 'Task ' + date.taskId;
-                                  if (date.taskId === null) {
-                                    return null;
-                                  }
-                                  j++;
-                                  return (
-                                    <ListItem key={idx} style={{backgroundColor: (j%2==0) ? '#F4F4F4' : '#DEDBFA' }}>
-                                      
-                                      <ListItemText
-                                        primary={displayDate}
-                                      />
+                                        <ListItemSecondaryAction>
+                                          <strong> {task} &nbsp;&nbsp;&nbsp;&nbsp; </strong>
+                                        </ListItemSecondaryAction>
 
-                                      <ListItemSecondaryAction>
-                                        <strong> {task} &nbsp;&nbsp;&nbsp;&nbsp; </strong>
-                                      </ListItemSecondaryAction>
-
-                                    </ListItem>
-                                  )
-                                })}
+                                      </ListItem>
+                                    )
+                                  })
+                                }
+                                {hasAssigned ? null : <div>No assigned dates yet!</div>}
                               </List>
                             </div>
                           </div>
