@@ -245,6 +245,8 @@ class ManagerLocationsList extends React.Component {
     var zipcode = location.zipcode;
     var country = location.country.replace(/ /g, '+');
     var duration = location.duration;
+    var rate = location.rate;
+    var note = location.note;
 
     fetch(`/locations/edit?id=${location.id}` 
             + `&fullAddress=${fullAddress}`
@@ -253,6 +255,8 @@ class ManagerLocationsList extends React.Component {
             + `&state=${state}`
             + `&zipcode=${zipcode}`
             + `&country=${country}`
+            + `&rate=${rate}`
+            + `&note=${note}`
             + `&duration=${duration}`)
       .catch(err => console.log(err))
       console.log('Update successfully!');
