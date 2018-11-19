@@ -105,6 +105,7 @@ class PaperSheet extends React.Component {
     recommendComponent: null,
     mapComponent: null,
     originalLocation: null,
+    isSaved: false,
   }
 
   componentDidMount() {
@@ -117,6 +118,26 @@ class PaperSheet extends React.Component {
   }
 
   load = (listLocation) => {
+    var current_locationData = {};
+    current_locationData['id'] = listLocation[0].id;
+    current_locationData['fullAddress'] = listLocation[0].fullAddress;
+    current_locationData['duration'] = listLocation[0].duration;
+    current_locationData['qaList'] = [];
+
+    var query = `/locations/canvasserAssignments/${listLocation[0].id}`;
+    fetch(query).then(res => res.json())
+    .then(locationQAlist => {
+      //console.log(locationQAlist);
+      locationQAlist.forEach(locationQAdata => {
+        current_locationData['rate'] = locationQAdata.rate;
+        current_locationData['note'] = locationQAdata.note;
+        current_locationData['qaList'].push({
+          question: locationQAdata.question,
+          answer: locationQAdata.answer
+        })
+      })
+    })
+
     var addressList = [];
     listLocation.forEach(location => addressList.push(location.fullAddress));
     var listCoordinates = this.getCoordList(addressList);
@@ -128,8 +149,10 @@ class PaperSheet extends React.Component {
                         mapElement={ <div style={{ height: `100%` }} /> }
                     />
     }, () => {
-      this.renderLocation([listLocation[0].fullAddress]);
-      this.renderRecommend(listLocation[0].fullAddress);
+      setTimeout(() => {
+        this.renderLocation(current_locationData);
+      }, 700)
+      this.renderRecommend(current_locationData.fullAddress);
     })
   }
 
@@ -159,95 +182,141 @@ class PaperSheet extends React.Component {
     this.load([this.state.originalLocation, location]);
   }
 
-  renderLocation = (locationList) => {
-    const {classes, assignment} = this.props;
-    var displayList = [];
-    
-    assignment.locations.map((locationData, index) => {
-      var address = locationList.find(addr => addr === locationData.fullAddress);
-      
-      if (typeof address !== 'undefined') {
-        var location = 
-        <div key={index} style={{marginBottom: '20px'}}>
-          <Grid container spacing={8} alignItems="center">
-            <Grid item>
-                <IconButton disabled={true} aria-label="Location">
-                  <LocationOn color='secondary'/>
-                </IconButton>
-            </Grid>
-            <Grid item>
-              <strong>
-                {locationData.fullAddress} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span style={{color: '#A9A9A9'}} > Duration: {locationData.duration} mins </span> 
-              </strong>
-            </Grid>
-          </Grid>
-          {locationData.qaList.map((qa, idx) => {
-            return (
-              <div key={idx} style={{marginBottom: '15px'}}>
-                <Typography variant='inherit'><strong>Question:</strong> {qa.question} </Typography>
-                <Typography variant='inherit'><strong>Answer:</strong> </Typography>
-                <TextField
-                    onChange={this.handleTFChange}
-                    multiline={true}
-                    fullWidth={true}
-                    defaultValue={qa.answer}
-                    />
-                <Button 
-                    style={{marginTop: '5px'}}
-                    variant='contained'
-                    color='default'
-                    className={classes.button}> Save </Button>
-              </div>
-            )
-          })}
-          
-          <Grid container >
-            <Grid item xs={6} >
-              <Grid container justify='center' style={{marginBottom: '15px'}}>
-                <TextField
-                    label='Notes'
-                    multiline={true}
-                    style={{width: '90%'}}
-                    rows={5} />
-              </Grid>
+  saveInfo = (toEditLocationInfo) => {
+    console.log(toEditLocationInfo);
 
-              <Grid container alignItems='flex-end' justify='center' style={{marginBottom: '15px'}}>
-                <Grid item>
-                  <Typography> 
-                    <strong>Rate:</strong> &nbsp;&nbsp;&nbsp;
-                  </Typography>
-                </Grid>
-                <Grid item>
-                  <ReactStars
-                      count={5}
-                      onChange={(rate) => console.log(rate)}
-                      size={20}
-                      color2={'#ffd700'} />
-                </Grid>
-              </Grid>
-              
-              <Grid container justify='center' style={{marginBottom: '15px'}}>
-                <Button 
-                  variant='contained'
-                  color='primary'
-                  className={classes.button}> Save </Button>
-              </Grid>
-            </Grid>
+    // update rate and note
+    var note = toEditLocationInfo.note === null ? '': toEditLocationInfo.note;
+    note = note.replace(/ /g, '+');
+    var query = `/locations/assignments/editRateNote/${toEditLocationInfo.id}/`;
+    query += `?rate=${toEditLocationInfo.rate}&note=${note}`;
+    fetch(query).then(res=>res.json()).catch(err => console.log(err));
 
-            <Grid item xs={6} >
-              {this.state.mapComponent}
-            </Grid>
-          </Grid>
-        </div>
-        
-        displayList.push(location);
-      }
+    // update question answer
+    toEditLocationInfo.qaList.forEach(qaObj => {
+      var question = qaObj.question.replace(/ /g, '+');
+      var answer = qaObj.answer.replace(/ /g, '+');
+      query = `/locations/assignments/editQA/${toEditLocationInfo.id}/`;
+      query += `?question=${question}&answer=${answer}`;
+      fetch(query).then(res=>res.json()).catch(err => console.log(err));
     })
+
+    this.setState({ isSaved: true }, () => this.load([toEditLocationInfo]))
     setTimeout(() => {
-      this.setState({
-        locationComponent: displayList
-      })
-    }, 1000)
+      this.setState({ isSaved: false })
+    }, 1500)
+  }
+
+  handleNoteChange = (e, toEditLocationInfo) => {
+    toEditLocationInfo.note = e.target.value;
+  }
+
+  handleQAChange = (e, toEditLocationInfo, question) => {
+    var qaObj = toEditLocationInfo.qaList.find(qa => qa.question === question);
+    if (typeof qaObj !== 'undefined') {
+      qaObj.answer = e.target.value;
+    }
+  }
+
+  renderLocation = (location) => {
+      const {classes} = this.props;
+      var toEditLocationInfo = JSON.parse(JSON.stringify(location));
+
+      var displayLocation = 
+      <div style={{marginBottom: '20px'}}>
+        <Grid container spacing={8} alignItems="center">
+          <Grid item>
+              <IconButton disabled={true} aria-label="Location">
+                <LocationOn color='secondary'/>
+              </IconButton>
+          </Grid>
+          <Grid item>
+            <strong>
+              {location.fullAddress} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span style={{color: '#A9A9A9'}} > Duration: {location.duration} mins </span> 
+            </strong>
+          </Grid>
+        </Grid>
+        {location.qaList.map((qa, idx) => {
+          return (
+            <div key={idx} style={{marginBottom: '15px'}}>
+              <Typography variant='inherit'><strong>Question:</strong> {qa.question} </Typography>
+              <Typography variant='inherit'><strong>Answer:</strong> {qa.answer} </Typography>
+              <TextField 
+                    onChange={(e) => this.handleQAChange(e, toEditLocationInfo, qa.question)}
+                    defaultValue=''
+                    label='Update answer here'
+                    multiline={true}
+                    style={{width: '90%', marginBottom: '5px'}} 
+              />
+        
+            </div>
+          )
+        })}
+        
+        <Grid container >
+          <Grid item xs={6} >
+            <Grid container justify='center' >
+              <Typography variant='inherit'><strong>Notes:</strong></Typography>
+            </Grid>
+
+            <Grid container justify='center' style={{marginBottom: '15px'}}>
+              <Typography> {location.note} </Typography>
+            </Grid>
+
+            <Grid container justify='center' style={{marginBottom: '15px'}}>
+              <TextField
+                  onChange={(e) => this.handleNoteChange(e, toEditLocationInfo)}
+                  defaultValue=''
+                  label='Update notes here'
+                  multiline={true}
+                  style={{width: '90%'}}
+                  rows={5} />
+            </Grid>
+
+            <Grid container alignItems='flex-end' justify='center' style={{marginBottom: '15px'}}>
+              <Grid item>
+                <Typography variant='inherit'> 
+                  <strong>Rate:</strong> &nbsp;&nbsp;&nbsp;
+                </Typography>
+              </Grid>
+              <Grid item>
+                <ReactStars
+                    count={5}
+                    value={location.rate}
+                    onChange={(rate) => {toEditLocationInfo.rate = rate}}
+                    size={20}
+                    color2={'#ffd700'} />
+              </Grid>
+            </Grid>
+            
+            {
+              this.state.isSaved ? 
+              <Grid container justify='center' style={{marginBottom: '15px'}}>
+                <Typography style={{color: 'green'}}>Your information is saved!</Typography>
+              </Grid>
+              : null
+            }
+
+            <Grid container justify='center' style={{marginBottom: '15px'}}>
+              <Button 
+                onClick={() => this.saveInfo(toEditLocationInfo)}
+                variant='contained'
+                color='primary'
+                className={classes.button}> Save info </Button>
+            </Grid>
+          </Grid>
+
+          <Grid item xs={6} >
+            {this.state.mapComponent}
+          </Grid>
+        </Grid>
+      </div>
+      
+      setTimeout(() => {
+        this.setState({
+          locationComponent: displayLocation
+        })
+      }, 600)
   }
 
   changeRenderLocation = (location) => {
@@ -293,7 +362,7 @@ class PaperSheet extends React.Component {
       recommendComponent: 
       <Grid container>
         <Grid item xs={6} >
-          <strong>Recommended next location:</strong> <br/>
+          <strong>Recommended next location:</strong> <br/><br/>
           <Typography> {recommendLocation.fullAddress} </Typography> <br/>
           <Tooltip title="Display location">
             <Button onClick={() => this.displayNextLocation(recommendLocation)} variant='extendedFab' color='secondary' aria-label="Location" style={{marginRight: '10px'}}>
@@ -338,10 +407,6 @@ class PaperSheet extends React.Component {
         </Grid>
       </Grid>
     })
-  }
-
-  handleTFChange = () => {
-
   }
 
   render() {
@@ -442,8 +507,11 @@ class CanvasserAssignments extends React.Component {
               fetch(`/locations/searching/${locationInfo.locationId}`)
               .then(res => res.json())
               .then((location) => {
+                locationDict['id'] = location[0].id;
                 locationDict['fullAddress'] = location[0].fullAddress;
                 locationDict['duration'] = location[0].duration;
+                locationDict['note'] = location[0].note === null ? '':location[0].note;
+                locationDict['rate'] = location[0].rate === null ? 0:location[0].rate;
                 locationDict['qaList'] = [];
 
                 var sql = `/locations/search?locationId=${locationInfo.locationId}`;

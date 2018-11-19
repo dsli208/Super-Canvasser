@@ -231,7 +231,7 @@ server.get('/locations/delete', (req, res) => {
 
 // edit location
 server.get('/locations/edit', (req, res) => {
-	const {id, fullAddress, street, city, state, zipcode, country, duration} = req.query;
+	const {id, fullAddress, street, city, state, zipcode, country, duration, rate, note} = req.query;
 
 	var sql = "UPDATE locations SET ";
 	sql += "fullAddress=\"" + fullAddress + "\",";
@@ -240,6 +240,8 @@ server.get('/locations/edit', (req, res) => {
 	sql += "state=\"" + state + "\", ";
 	sql += "zipcode=" + zipcode + ", ";
 	sql += "country=\"" + country + "\", ";
+	sql += "rate=" + rate + ", ";
+	sql += "note=\"" + note + "\", ";
 	sql += "duration=" + duration ;
 	sql += " WHERE id=" + id;
 
@@ -248,6 +250,37 @@ server.get('/locations/edit', (req, res) => {
 			console.log(err);
 		}
 		console.log('Update location successfully!');
+		res.send(JSON.stringify(results));
+	})
+})
+
+// edit location assignment (rate and note)
+server.get('/locations/assignments/editRateNote/:locationId/', (req, res) => {
+	const {rate, note} = req.query;
+	var sql = "UPDATE locations SET ";
+	sql += "rate=" + rate + ", note=\"" + note + "\"";
+	sql += " WHERE id=" + req.params.locationId;
+
+	connection.query(sql, (err, results, fields) => {
+		if (err) {
+			console.log(err);
+		}
+		res.send(JSON.stringify(results));
+	})
+})
+
+// edit location assignment (QA)
+server.get('/locations/assignments/editQA/:locationId/', (req, res) => {
+	const {question, answer} = req.query;
+	var sql = "UPDATE questions SET ";
+	sql += "answer=\"" + answer + "\"";
+	sql += " WHERE locationId=" + req.params.locationId;
+	sql += " AND question=\"" + question + "\""; 
+
+	connection.query(sql, (err, results, fields) => {
+		if (err) {
+			console.log(err);
+		}
 		res.send(JSON.stringify(results));
 	})
 })
@@ -297,6 +330,16 @@ server.get('/locations/:locationId/questions/delete', (req, res) => {
 	const locationId = req.params.locationId;
 	var sql = "DELETE FROM questions WHERE locationId=";
 	sql += locationId + " AND question=\"" + question + "\"";
+
+	connection.query(sql, (err, results, fields) => {
+		if (err) console.log(err);
+		res.send(JSON.stringify(results));
+	})
+})
+
+server.get('/locations/canvasserAssignments/:locationId', (req, res) => {
+	var sql = `SELECT locations.id, locations.fullAddress, locations.duration, locations.rate, locations.note, questions.question, questions.answer FROM questions, locations WHERE questions.locationId=locations.id`;
+	sql += ` AND locations.id=${req.params.locationId}`;
 
 	connection.query(sql, (err, results, fields) => {
 		if (err) console.log(err);
