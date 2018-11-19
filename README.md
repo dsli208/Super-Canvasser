@@ -6,6 +6,17 @@ Super Canvasser helps organizations run door-to-door canvassing campaigns (sales
 2. Canvassers, who visit the locations in campaigns on assigned dates
 3. System administrators, who manage user accounts
 
+## Some screen shots of the application
+<img width="1279" alt="screen shot 2018-11-19 at 12 20 02 am" src="https://user-images.githubusercontent.com/20756728/48687857-6ad61380-eb91-11e8-85a2-8e569d50be1a.png">
+<img width="1279" alt="screen shot 2018-11-19 at 12 18 58 am" src="https://user-images.githubusercontent.com/20756728/48687887-8ccf9600-eb91-11e8-92ac-9ecc8a850e12.png">
+<img width="1279" alt="screen shot 2018-11-19 at 12 19 20 am" src="https://user-images.githubusercontent.com/20756728/48687869-77f30280-eb91-11e8-9c20-d04008973cc7.png">
+<img width="1280" alt="screen shot 2018-11-19 at 12 20 36 am" src="https://user-images.githubusercontent.com/20756728/48688013-1aab8100-eb92-11e8-8ad3-b4c177a01729.png">
+<img width="1280" alt="screen shot 2018-11-19 at 12 19 38 am" src="https://user-images.githubusercontent.com/20756728/48687934-bab4da80-eb91-11e8-873f-4d1938e11d6e.png">
+<img width="1280" alt="screen shot 2018-11-19 at 12 21 59 am" src="https://user-images.githubusercontent.com/20756728/48687881-84775b00-eb91-11e8-85b6-3ad7e4e0990d.png">
+<img width="1280" alt="screen shot 2018-11-19 at 12 22 37 am" src="https://user-images.githubusercontent.com/20756728/48687893-90631d00-eb91-11e8-9301-d2b3e6cc23c4.png">
+<img width="1280" alt="screen shot 2018-11-19 at 12 22 15 am" src="https://user-images.githubusercontent.com/20756728/48688080-7118bf80-eb92-11e8-8c35-6caba9023a3e.png">
+
+
 ## 2. Functionality for Campaign Managers
 
 ### 2.1 Create, View and Edit Campaigns
