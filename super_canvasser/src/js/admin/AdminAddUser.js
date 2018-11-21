@@ -40,6 +40,8 @@ class AdminAddUser extends React.Component {
       tmpEmail: '',
       tmpPhone: '',
 
+      params: {},
+
       firstNameValid: true,
       lastNameValid: true,
       userNameValid: true,
@@ -66,6 +68,7 @@ class AdminAddUser extends React.Component {
     } else {
       role = '3';
     }
+    
 
     if (id !== null) {
       this.setState({
@@ -78,7 +81,16 @@ class AdminAddUser extends React.Component {
         selectedValue: role
       })
     }
-    console.log(role)
+  }
+
+  componentWillMount() {
+    // fetch global parameters
+    fetch('/parameters').then(res => res.json())
+    .then(params => {
+      this.setState({
+        params: params[0]
+      })
+    }).catch(err => console.log(err))
   }
 
   handleChangeRadio = (event) => {
@@ -114,6 +126,22 @@ class AdminAddUser extends React.Component {
         // phone
         this.setState({
           phone: event.target.value
+        })
+      } else if (event.target.id === 'dayDuration') {
+        // duration
+        this.setState({
+          params: {
+            dayDuration: event.target.value,
+            avgSpeed: typeof this.state.params === 'undefined' ? 0.0 : this.state.params.avgSpeed
+          }
+        })
+      } else if (event.target.id === 'avgSpeed') {
+        // speed
+        this.setState({
+          params: {
+            dayDuration: typeof this.state.params === 'undefined' ? 0 : this.state.params.dayDuration ,
+            avgSpeed: event.target.value
+          }
         })
       }
     }
@@ -198,7 +226,11 @@ class AdminAddUser extends React.Component {
   }
 
   handleUpdateParam = () => {
-
+    const {params} = this.state;
+    console.log(params);
+    var query = `/parameters/${params.dayDuration}/${params.avgSpeed}`;
+    fetch(query).then(res => res.json())
+    .catch(err => console.log(err));
   }
 
   handleUpdateUser = () => {
@@ -293,13 +325,6 @@ class AdminAddUser extends React.Component {
       }
 
     }
-
-
-
-
-  }
-
-  handleUpdateParam = () => {
   }
 
   render() {
@@ -378,32 +403,20 @@ class AdminAddUser extends React.Component {
                 </Grid>
               </Grid>
               <br/>
-              <Grid container justify='center'>
-                <Grid item><br/>Role:</Grid>
-              </Grid>
-              <Grid container justify='center'>
-                <Grid item>
-                  <div justify='center'>
-                    <Radio checked={this.state.selectedValue === '1'} value='1' onChange={this.handleChangeRadio} />Admin
-                    <Radio checked={this.state.selectedValue === '2'} value='2' onChange={this.handleChangeRadio} />Canvasser
-                    <Radio checked={this.state.selectedValue === '3'} value='3' onChange={this.handleChangeRadio} />Manager
-                 </div>
-                </Grid>
-              </Grid>
             </div>
 
-            <div style={pad}>
-              <Grid container spacing={8} alignItems="flex-end" justify='center'>
-                <Grid item xs={3}>Work day duration:</Grid>
-                <Grid item xs={6}>
-                  <TextField
-                    className='dayDuration'
-                    label='Work day duration'
-                    fullWidth={true} />
-                </Grid>
+            <Grid container justify='center'>
+              <Grid item><br/>Role:</Grid>
+            </Grid>
+            <Grid container justify='center'>
+              <Grid item>
+                <div justify='center'>
+                  <Radio checked={this.state.selectedValue === '1'} value='1' onChange={this.handleChangeRadio} />Admin
+                  <Radio checked={this.state.selectedValue === '2'} value='2' onChange={this.handleChangeRadio} />Canvasser
+                  <Radio checked={this.state.selectedValue === '3'} value='3' onChange={this.handleChangeRadio} />Manager
+                </div>
               </Grid>
-            </div>
-            <br />
+            </Grid>
 
             <Grid container justify='center'>
               <Grid item><br />
@@ -418,21 +431,36 @@ class AdminAddUser extends React.Component {
 
             <div style={pad}>
               <Grid container spacing={8} alignItems="flex-end" justify='center'>
-                <Grid item xs={3}>Work day duration:</Grid>
+                <Grid item xs={3}>Work day duration (mins):</Grid>
                 <Grid item xs={6}>
                   <TextField
+                    id='dayDuration'
+                    onChange={this.handleChangeField}
+                    defaultValue={typeof this.state.params === 'undefined' ? '': this.state.params.dayDuration}
                     className='dayDuration'
                     label='Work day duration'
+                    fullWidth={true} />
+                </Grid>
+              </Grid>
+              <Grid container spacing={8} alignItems="flex-end" justify='center'>
+                <Grid item xs={3}>User average speed (m/s):</Grid>
+                <Grid item xs={6}>
+                  <TextField
+                    id='avgSpeed'
+                    onChange={this.handleChangeField}
+                    defaultValue={typeof this.state.params === 'undefined' ? '': this.state.params.avgSpeed}
+                    className='speed'
+                    label='Average speed'
                     fullWidth={true} />
                 </Grid>
               </Grid>
             </div>
             <br />
             <Grid container justify='center'>
-                <Grid item><br/>
-                  <Button onClick={this.handleUpdateParam} variant="contained" size='large' color="primary"> Update </Button>
-                </Grid>
+              <Grid item><br/>
+                <Button onClick={this.handleUpdateParam} variant="contained" size='large' color="primary"> Update </Button>
               </Grid>
+            </Grid>
 
           </form>
         </div>

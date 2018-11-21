@@ -43,6 +43,11 @@ INSERT INTO `super_canvasser`.`users` (`firstName`,`lastName`, `username`, `role
 VALUES ('Scott', 'Stoller', 'scott', 'admin', 'scott.stoller@stonybrook.edu', '6313277812', 'scottpass' );
 
 -- -----------------------------------------------------
+-- insert into parameters table
+-- -----------------------------------------------------
+INSERT INTO `super_canvasser`.`parameters` (`dayDuration`, `avgSpeed`) VALUES (35, 8.9);
+
+-- -----------------------------------------------------
 -- insert into locations table
 -- -----------------------------------------------------
 

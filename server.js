@@ -1,7 +1,6 @@
 const express 		= require('express');
 const server 			= express();
 const mysql     	= require('mysql');
-var fs 						= require('fs');
 
 server.set('port', process.env.PORT || 3001 );
 
@@ -18,6 +17,32 @@ connection.connect((err) => {
 	if (err) console.log(err);
 	console.log('MySQL connected...');
 });
+
+// =====================================  global parameters stuff  =======================================================
+server.get('/parameters', (req, res) => {
+	connection.query('SELECT * FROM parameters', function (error, results, fields) {
+	  if (error) console.log(error);
+	  else res.send(JSON.stringify(results));
+	});
+})
+
+// update global parameters
+server.get('/parameters/:dayDuration/:avgSpeed', (req, res) => {
+	const dayDuration = req.params.dayDuration;
+	const avgSpeed = req.params.avgSpeed;
+
+	connection.query('DELETE FROM parameters', function (error, results, fields) {
+		if (error) console.log(error);
+		else {
+			var sql = "INSERT INTO parameters (dayDuration, avgSpeed) VALUES (";
+			sql += dayDuration + "," + avgSpeed + ")";
+			connection.query(sql, function (err, result, field) {
+				if (err) console.log(err);
+				else res.send(JSON.stringify(results));
+			});
+		}
+	})
+})
 
 // =====================================  USER stuff  =======================================================
 // perform queries here

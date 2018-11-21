@@ -21,6 +21,17 @@ CREATE  TABLE IF NOT EXISTS `super_canvasser`.`users` (
 ) ENGINE = InnoDB;
 
 /*
+-------- parameters table ---------
+*/
+
+DROP TABLE IF EXISTS `super_canvasser`.`parameters` ;
+
+CREATE TABLE IF NOT EXISTS `super_canvasser`.`parameters` (
+	`dayDuration` INT UNSIGNED ,
+	`avgSpeed` FLOAT
+) ENGINE = InnoDB;
+
+/*
 ----- locations table -------
 */
 
