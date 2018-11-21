@@ -14,6 +14,8 @@ import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
 import { withStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
+import ReactStars from 'react-stars';
+
 
 window.__MUI_USE_NEXT_TYPOGRAPHY_VARIANTS__ = true;
 const style = {
@@ -174,10 +176,34 @@ class ManagerLocationsList extends React.Component {
             <div style={{margin: '0 auto 0 auto'}}>
               <List>
                 {qaList.map((qa,idx) => {
-                  return <PaperSheet key={idx} qa={qa} locationId={location.id} />
+                  return <PaperSheet key={idx} qa={qa} location={location} />
                 })}
               </List>
-            </div>
+              <Grid container justify='center'>
+                <Grid item>
+                  <Typography>
+                    <strong>Notes: </strong> {location.note}
+                  </Typography>
+                </Grid>
+              </Grid>
+
+              <Grid container justify='center' alignItems='center'>
+                <Grid item>
+                  <Typography>
+                    <strong>Rate: </strong> {location.rate} &nbsp;&nbsp;&nbsp;
+                  </Typography>
+                </Grid>
+                <Grid item>
+                  <ReactStars
+                        count={5}
+                        value={location.rate}
+                        edit={false}
+                        size={20}
+                        color2={'#ffd700'} />
+                </Grid>
+              </Grid>
+              
+              </div>
           </ExpansionPanelDetails>
 
         </ExpansionPanel>
