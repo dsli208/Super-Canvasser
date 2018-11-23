@@ -72,6 +72,10 @@ class Manager extends React.Component {
     window.location.href = '/users/manager/' + this.state.currentUserName + '/questions';
   }
 
+  viewAlgorithm = () => {
+    window.location.href = '/users/manager/' + this.state.currentUserName + '/algorithm';
+  }
+
   render() {
     const { classes } = this.props;
     return (
@@ -85,7 +89,7 @@ class Manager extends React.Component {
               {this.state.currentUserFullName}
             </Typography>
             
-            <Button color="inherit"> Assignments Algorithm </Button>
+            <Button onClick={this.viewAlgorithm} color="inherit"> Assignments Algorithm </Button>
             <Button onClick={this.viewCanvasserAssignments} color="inherit">Canvasser Assignments</Button>
             <Button onClick={this.viewLocations} color="inherit">Locations</Button>
             <Button onClick={this.viewQuestions} color="inherit">Questions</Button>

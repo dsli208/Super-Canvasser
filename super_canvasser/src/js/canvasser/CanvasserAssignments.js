@@ -363,47 +363,59 @@ class PaperSheet extends React.Component {
       <Grid container>
         <Grid item xs={6} >
           <strong>Recommended next location:</strong> <br/><br/>
-          <Typography> {recommendLocation.fullAddress} </Typography> <br/>
-          <Tooltip title="Display location">
-            <Button onClick={() => this.displayNextLocation(recommendLocation)} variant='extendedFab' color='secondary' aria-label="Location" style={{marginRight: '10px'}}>
-              <LocationOn /> Show location
-            </Button>
-          </Tooltip>
+          {
+            assignment.locations.length > 1 ?
+            <div>
+                <Typography> {recommendLocation.fullAddress} </Typography> <br/>
+                <Tooltip title="Display location">
+                  <Button onClick={() => this.displayNextLocation(recommendLocation)} variant='extendedFab' color='secondary' aria-label="Location" style={{marginRight: '10px'}}>
+                    <LocationOn /> Show location
+                  </Button>
+                </Tooltip>
 
-          <Tooltip title="Go to next location">
-            <Button onClick={() => this.changeRenderLocation(recommendLocation)} variant='extendedFab' color='primary' aria-label="Go">
-              <Done /> Go
-            </Button>
-          </Tooltip>
+                <Tooltip title="Go to next location">
+                  <Button onClick={() => this.changeRenderLocation(recommendLocation)} variant='extendedFab' color='primary' aria-label="Go">
+                    <Done /> Go
+                  </Button>
+                </Tooltip>
+            </div>
+            : <div> <Typography> Not available </Typography> </div>
+          }
+          
         </Grid>
 
         <Grid item xs={6} >
           <strong>Other locations:</strong>
-          <List>
-            {remainLocations.map((location, idx) => {
-              j++;
-              return (
-                <ListItem key={idx} style={{width: '100%', backgroundColor: (j%2===0) ? '#F4F4F4' : '#F9E5F7' }}>
-                  <ListItemText 
-                      primary={<Typography>{location.fullAddress}<br/></Typography>} 
-                  />
+          {
+            assignment.locations.length > 1 ?
+            <List>
+              {remainLocations.map((location, idx) => {
+                j++;
+                return (
+                  <ListItem key={idx} style={{width: '100%', backgroundColor: (j%2===0) ? '#F4F4F4' : '#F9E5F7' }}>
+                    <ListItemText 
+                        primary={<Typography>{location.fullAddress}<br/></Typography>} 
+                    />
 
-                  <Tooltip title="Display location">
-                    <IconButton onClick={() => this.displayNextLocation(location)} 
-                          color='secondary'> <LocationOn/> </IconButton>
-                  </Tooltip>
+                    <Tooltip title="Display location">
+                      <IconButton onClick={() => this.displayNextLocation(location)} 
+                            color='secondary'> <LocationOn/> </IconButton>
+                    </Tooltip>
 
-                  <Tooltip title="Go to next location">
-                    <IconButton
-                        onClick={() => this.changeRenderLocation(location)}
-                        color='primary'> <Done/> 
-                    </IconButton>
-                  </Tooltip>
+                    <Tooltip title="Go to next location">
+                      <IconButton
+                          onClick={() => this.changeRenderLocation(location)}
+                          color='primary'> <Done/> 
+                      </IconButton>
+                    </Tooltip>
 
-                </ListItem>
-              )
-            })}
-          </List>
+                  </ListItem>
+                )
+              })}
+            </List>
+            : <div><br/> <Typography> Not available </Typography> </div>
+          }
+          
         </Grid>
       </Grid>
     })

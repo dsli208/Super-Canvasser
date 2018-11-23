@@ -2,15 +2,12 @@
 import React, { Component } from 'react';
 import '../css/App.css';
 import {BrowserRouter, Route } from 'react-router-dom';
-//import Manager from './manager/Manager';
+import ManagerAlgorithm from './manager/ManagerAlgorithm';
 import ManagerCanvassersList from './manager/ManagerCanvassersList';
 import ManagerLocationsList from './manager/ManagerLocationsList';
 import ManagerQuestions from './manager/ManagerQuestions';
-//import Canvasser from './canvasser/Canvasser';
 import CanvasserAvailability from './canvasser/CanvasserAvailability';
 import CanvasserAssignments from './canvasser/CanvasserAssignments';
-//import CanvasserViewUpcoming from './canvasser/CanvasserViewUpcoming';
-//import Admin from './admin/Admin';
 import AdminAddUser from './admin/AdminAddUser';
 import AdminView from './admin/AdminViewUsers';
 import Main from './Main';
@@ -29,6 +26,7 @@ class App extends Component {
 
           {/* ------- Manager stuff -------- */}
           <Route path='/users/manager/:username' exact component={ManagerCanvassersList}/>
+          <Route path='/users/manager/:username/algorithm' exact component={ManagerAlgorithm}/>
           <Route path='/users/manager/:username/canvasserAssignments' exact component={ManagerCanvassersList}/>
           <Route path='/users/manager/:username/locations' exact component={ManagerLocationsList}/>
           <Route path='/users/manager/:username/questions' exact component={ManagerQuestions}/>
