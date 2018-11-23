@@ -96,6 +96,7 @@ class ManagerAlgorithm extends React.Component {
       var locationData = {};
       locationData['duration'] = location.duration;
       locationData['fullAddress'] = location.fullAddress;
+      locationData['id'] = location.id;
 
       var fullAddr = location.fullAddress;
       var search_query = fullAddr.replace(/ /g, '+');
@@ -118,25 +119,25 @@ class ManagerAlgorithm extends React.Component {
     })
   }
 
+  haversine_distance = (x1, x2) => {
+    const R = 6371e3;     // earth radius in meters
+    const Δ = (x1 - x2) * (Math.PI / 180);
+  
+    const a = (Math.sin(Δ / 2) * Math.sin(Δ / 2));
+    
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  
+    const distance = R * c;
+    return distance; // in meters
+  }
+
   getDistance = (str1, str2) => {
     var lat1 = parseFloat(str1.split(":")[0]);
     var lon1 = parseFloat(str1.split(":")[1]);
     var lat2 = parseFloat(str2.split(":")[0]);
     var lon2 = parseFloat(str2.split(":")[1]);
   
-    const R = 6371e3; // earth radius in meters
-    const φ1 = lat1 * (Math.PI / 180);
-    const φ2 = lat2 * (Math.PI / 180);
-    const Δφ = (lat2 - lat1) * (Math.PI / 180);
-    const Δλ = (lon2 - lon1) * (Math.PI / 180);
-  
-    const a = (Math.sin(Δφ / 2) * Math.sin(Δφ / 2)) +
-              ((Math.cos(φ1) * Math.cos(φ2)) * (Math.sin(Δλ / 2) * Math.sin(Δλ / 2)));
-    
-    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-  
-    const distance = R * c;
-    return distance; // in meters
+    return this.haversine_distance(lat1, lat2) + this.haversine_distance(lon1, lon2);
   }
 
   getDistanceList = (map, unvisit) => {
@@ -184,6 +185,7 @@ class ManagerAlgorithm extends React.Component {
         yes = true;
         path.push({
           'address': map[str]['fullAddress'] ,
+          'id' :  map[str]['id'] ,
           'duration': map[str]['duration']
         });
         var new_unvisit = JSON.parse(JSON.stringify(unvisit));
@@ -217,6 +219,7 @@ class ManagerAlgorithm extends React.Component {
         map[key] = {};
         map[key]['duration'] = coordinate.duration;
         map[key]['fullAddress'] = coordinate.fullAddress;
+        map[key]['id'] = coordinate.id;
       })
       
       console.log(map);
@@ -238,7 +241,10 @@ class ManagerAlgorithm extends React.Component {
       
       this.setState({
         tasks: result,
-      }, () => this.renderTasksComponent())
+      }, () => {
+        this.renderTasksComponent();
+        this.saveTasksToDB();
+      })
 
     }, 2000)
   }
@@ -258,6 +264,20 @@ class ManagerAlgorithm extends React.Component {
     })
   }
 
+  saveTasksToDB = () => {
+    const {tasks} = this.state;
+
+    fetch('/tasks/deleteAll').then(res => res.json()).then(result => {
+      tasks.forEach((task, idx) => {
+        var taskId = idx + 1;
+        task.forEach(location => {
+          var query = `/tasks/saveAssigned/${taskId}/${location.id}`;
+          fetch(query).then(res => res.json()).catch(error => console.log(error))
+        })
+      })
+    }).catch(err => console.log(err))
+  }
+
   render() {
     return (
       <div style={style}>
@@ -270,6 +290,17 @@ class ManagerAlgorithm extends React.Component {
             <Grid item >
                <h1 style={{fontSize: '40px'}}>Canvas Assignments Algorithm</h1>
             </Grid>
+        </Grid>
+
+        <Grid container style={{marginTop: '25px'}} justify='flex-end' >
+          <Grid container justify='center' >
+            <Grid item style={{marginRight: '50px'}}>
+              <Typography> <strong>Work day duration:</strong> {this.state.params.dayDuration} mins </Typography>
+            </Grid>
+            <Grid item>
+              <Typography> <strong>Average user speed:</strong> {this.state.params.avgSpeed} m/s </Typography>
+            </Grid>
+          </Grid>
         </Grid>
 
         <Grid container style={{marginTop: '25px'}} justify='center' alignItems='center'>
@@ -311,7 +342,7 @@ class PaperSheet extends React.Component {
         <div justify='center'>
           <Typography variant='subheading'> <strong> Task {task} </strong></Typography>
           {
-            taskData.map((address, idx) => {
+            taskData.map((location, idx) => {
               return (
                 <div key={idx} style={{marginBottom: '15px', marginTop: '5px'}}>
                   <Grid container spacing={8} alignItems="center" >
@@ -320,14 +351,14 @@ class PaperSheet extends React.Component {
                     </Grid>
                     <Grid item>
                       <Typography > 
-                        {address.address}
+                        {location.address}
                       </Typography>
                     </Grid>
                   </Grid>
                   
                   <div style={{marginLeft: '30px'}} >
                     <Typography> 
-                      Duration: {address.duration}
+                      Duration: {location.duration} mins
                     </Typography>
                   </div>
                 </div>

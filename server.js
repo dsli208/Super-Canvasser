@@ -406,6 +406,25 @@ server.get('/tasks/assign/:canvasserId/:taskId/day', (req, res) => {
 	})
 })
 
+// delete all tasks
+server.get('/tasks/deleteAll', (req, res) => {
+	var sql = "DELETE FROM tasks";
+	connection.query(sql, (err, results, fields) => {
+		if (err) console.log(err);
+		else res.send(JSON.stringify(results));
+	})
+})
+
+// save assigned tasks after generating algorithm into tasks table
+server.get('/tasks/saveAssigned/:taskId/:locationId', (req, res) => {
+	var sql = "INSERT INTO tasks (id, locationId) VALUES (";
+	sql += req.params.taskId + ", " + req.params.locationId + ")";
+	connection.query(sql, (err, results, fields) => {
+		if (err) console.log(err);
+		else res.send(JSON.stringify(results));
+	})
+})
+
 server.listen(server.get('port'), () => {
 	console.log('Listening on port ' + server.get('port'));
 });
