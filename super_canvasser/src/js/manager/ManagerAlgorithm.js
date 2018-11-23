@@ -74,8 +74,37 @@ class ManagerAlgorithm extends React.Component {
         locationList: locations ,
       }, () => {
         this.saveListCoord(locations);
+        this.renderExistingTasks();
       })
     }).catch(err => console.log(err))
+  }
+
+  renderExistingTasks = () => {
+    fetch('/tasks/uniqueTaskId').then(res => res.json())
+    .then(taskIdList => {
+      var taskList = [];
+      taskIdList.forEach(taskId => {
+        var task = [];
+        fetch(`/tasks/${taskId.id}`)
+        .then(res => res.json())
+        .then(taskData => {
+          taskData.forEach(location => {
+            var locationData = {};
+            locationData['address'] = location.fullAddress;
+            locationData['id'] = location.locationId;
+            locationData['duration'] = location.duration;
+            task.push(locationData);
+          })
+          taskList.push(task);
+        }).catch(err => console.log(err))
+      })
+      setTimeout(() => {
+        this.setState({
+          tasks: taskList
+        }, () => this.renderTasksComponent())  
+      }, 1500)
+    })
+    .catch(err => console.log(err))
   }
 
   async saveListCoord(locations) {

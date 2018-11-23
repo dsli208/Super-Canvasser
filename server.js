@@ -425,6 +425,26 @@ server.get('/tasks/saveAssigned/:taskId/:locationId', (req, res) => {
 	})
 })
 
+// load all distinct task id
+server.get('/tasks/uniqueTaskId', (req, res) => {
+	var sql = "SELECT DISTINCT id FROM tasks";
+	connection.query(sql, (err, results, fields) => {
+		if (err) console.log(err);
+		else res.send(JSON.stringify(results));
+	})
+})
+
+// load all info of task id
+server.get('/tasks/:taskId', (req, res) => {
+	var sql = "SELECT tasks.id AS taskId, locations.id AS locationId, locations.fullAddress, locations.duration FROM tasks, locations";
+	sql += " WHERE tasks.locationId = locations.id AND tasks.id=" + req.params.taskId;
+	connection.query(sql, (err, results, fields) => {
+		if (err) console.log(err);
+		else res.send(JSON.stringify(results));
+	})
+})
+
+
 server.listen(server.get('port'), () => {
 	console.log('Listening on port ' + server.get('port'));
 });
