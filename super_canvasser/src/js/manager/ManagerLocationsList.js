@@ -15,6 +15,7 @@ import Paper from '@material-ui/core/Paper';
 import { withStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
 import ReactStars from 'react-stars';
+import {Doughnut} from 'react-chartjs-2';
 
 
 window.__MUI_USE_NEXT_TYPOGRAPHY_VARIANTS__ = true;
@@ -148,19 +149,32 @@ class ManagerLocationsList extends React.Component {
 
   loadResult = (locationResList) => {
     var results = []
+    var qaRateList = [];
 
     locationResList.forEach((location, idx) => {
       var query = `/locations/search?locationId=${location.id}`;
-        
       var qaList = [];
+      var unanswered = 0;
+      var answered = 0;
+
       fetch(query).then(res => res.json())
       .then(data => {
         data.forEach(qa => {
           qaList.push({ question: qa.question, answer: qa.answer })
+          if (qa.answer === '') {
+            unanswered += 1;
+          } else {
+            answered += 1;
+          }
+        })
+        qaRateList.push({
+          unanswered: parseFloat((unanswered/(unanswered+answered)).toFixed(2)),
+          answered: parseFloat((answered/(unanswered+answered)).toFixed(2))
         })
       }).catch(err => console.log(err));
 
       setTimeout(() => {
+        console.log(qaRateList[idx]);
         var res = 
         <ExpansionPanel key={idx}>
 
@@ -200,6 +214,31 @@ class ManagerLocationsList extends React.Component {
                         edit={false}
                         size={20}
                         color2={'#ffd700'} />
+                </Grid>
+              </Grid>
+              <Grid container justify='center' alignItems='center'>
+                <Grid item>
+                  <Doughnut
+                    width={200}
+                    height={200}
+                    data={{
+                      labels: [
+                        `Unanswered` ,
+                        `Answered` 
+                      ],
+                      datasets: [{
+                        data: [qaRateList[idx].unanswered, qaRateList[idx].answered],
+                        backgroundColor: [
+                        '#FF6384',
+                        '#36A2EB',
+                        ],
+                        hoverBackgroundColor: [
+                        '#FF6384',
+                        '#36A2EB',
+                        ]
+                      }]
+                    }}
+                  />
                 </Grid>
               </Grid>
               
