@@ -219,7 +219,7 @@ class ManagerLocationsList extends React.Component {
               <Grid container justify='center' alignItems='center'>
                 <Grid item>
                   <Doughnut
-                    width={200}
+                    width={500}
                     height={200}
                     data={{
                       labels: [

@@ -316,11 +316,12 @@ class ManagerAlgorithm extends React.Component {
             <Grid item >
                <img src={routeImg} alt='logo' style={{width: '60%'}} />
             </Grid>
-            <Grid item >
-               <h1 style={{fontSize: '40px'}}>Canvas Assignments Algorithm</h1>
-            </Grid>
         </Grid>
-
+        <Grid container justify='center' alignItems='center'>
+          <Grid item >
+               <h1 style={{fontSize: '40px'}}>Canvas Assignments Algorithm</h1>
+          </Grid>
+        </Grid>
         <Grid container style={{marginTop: '25px'}} justify='flex-end' >
           <Grid container justify='center' >
             <Grid item style={{marginRight: '50px'}}>
