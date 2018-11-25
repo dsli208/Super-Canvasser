@@ -84,7 +84,10 @@ class ManagerAlgorithm extends React.Component {
     .then(taskIdList => {
       var taskList = [];
       taskIdList.forEach(taskId => {
-        var task = [];
+        var task = {};
+        task['id'] = taskId.id;
+        task['locationList'] = [];
+
         fetch(`/tasks/${taskId.id}`)
         .then(res => res.json())
         .then(taskData => {
@@ -93,7 +96,7 @@ class ManagerAlgorithm extends React.Component {
             locationData['address'] = location.fullAddress;
             locationData['id'] = location.locationId;
             locationData['duration'] = location.duration;
-            task.push(locationData);
+            task['locationList'].push(locationData);
           })
           taskList.push(task);
         }).catch(err => console.log(err))
@@ -271,8 +274,10 @@ class ManagerAlgorithm extends React.Component {
       this.setState({
         tasks: result,
       }, () => {
-        this.renderTasksComponent();
         this.saveTasksToDB();
+        setTimeout(() => {
+          window.location.href = `/users/manager/${this.props.match.params.username}/algorithm`;
+        }, 500)
       })
 
     }, 2000)
@@ -285,8 +290,9 @@ class ManagerAlgorithm extends React.Component {
       tasksComponent:
       <List>
         {tasks.map((task, idx) => {
+          console.log(task);
           return (
-            <PaperSheet key={idx} task={idx+1} taskData={task} />
+            <PaperSheet key={idx} task={task.id} taskData={task.locationList} />
           )
         })}
       </List>
