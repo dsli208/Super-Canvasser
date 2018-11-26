@@ -51,10 +51,10 @@ function getSorting(order, orderBy) {
 
 const rows = [
   { id: 'street', numeric: false, disablePadding: false, label: 'Street' },
+  { id: 'unit', numeric: false, disablePadding: false, label: 'Unit' },
   { id: 'city', numeric: false, disablePadding: false, label: 'City' },
   { id: 'state', numeric: false, disablePadding: false, label: 'State' },
   { id: 'zipcode', numeric: true, disablePadding: false, label: 'Zip code' },
-  { id: 'country', numeric: false, disablePadding: false, label: 'Country' },
   { id: 'duration', numeric: true, disablePadding: false, label: 'Duration (mins)' },
 ];
 
@@ -198,6 +198,7 @@ class EnhancedTableToolbar extends React.Component {
     deleteModal_open: false,
 
     edit_street: '',
+    edit_unit: '',
     edit_city: '',
     edit_state: '',
     edit_zipcode: '',
@@ -214,6 +215,7 @@ class EnhancedTableToolbar extends React.Component {
       return;
     this.setState({
       edit_street: location.street,
+      edit_unit: location.unit,
       edit_city: location.city,
       edit_state: location.state,
       edit_zipcode: location.zipcode,
@@ -237,6 +239,8 @@ class EnhancedTableToolbar extends React.Component {
   handleTFchange = (event) => {
     if (event.target.id === 'street') {
       this.setState({edit_street: event.target.value})
+    } else if (event.target.id === 'unit') {
+      this.setState({edit_unit: event.target.value})
     } else if (event.target.id === 'city') {
       this.setState({edit_city: event.target.value})
     } else if (event.target.id === 'state') {
@@ -273,12 +277,15 @@ class EnhancedTableToolbar extends React.Component {
       return;
 
     location.street = this.state.edit_street;
+    location.unit = this.state.edit_unit;
     location.city = this.state.edit_city;
     location.state = this.state.edit_state;
     location.zipcode = this.state.edit_zipcode;
     location.country = this.state.edit_country;
     location.duration = this.state.edit_duration;
-    location.fullAddress = location.street + ', ' + location.city
+    location.fullAddress = location.street;
+    location.fullAddress += location.unit.length === 0 ? '' : ', ' + location.unit;
+    location.fullAddress += ', ' + location.city
                     + ', ' + location.state + ', ' + location.zipcode
                     + ', ' + location.country;
 
@@ -402,6 +409,19 @@ class EnhancedTableToolbar extends React.Component {
                         label='Street'
                         onChange={this.handleTFchange}
                         defaultValue={location.street}
+                        fullWidth={true} />
+                  </Grid>
+                </Grid>
+
+                <Grid container spacing={8} alignItems="flex-end" justify='center'>
+                  <Grid item xs={3}>Unit:</Grid>
+                  <Grid item xs={6}>
+                      <TextField
+                        id='unit'
+                        className = 'unit'
+                        label='Unit'
+                        onChange={this.handleTFchange}
+                        defaultValue={location.unit}
                         fullWidth={true} />
                   </Grid>
                 </Grid>
@@ -720,10 +740,10 @@ class TableLocations extends React.Component {
                       </TableCell>
                                             
                       <TableCell> {n.street} </TableCell>
+                      <TableCell> {n.unit} </TableCell>
                       <TableCell> {n.city} </TableCell>
                       <TableCell> {n.state} </TableCell>
                       <TableCell numeric> {n.zipcode} </TableCell>
-                      <TableCell> {n.country} </TableCell>
                       <TableCell numeric> {n.duration} </TableCell>
                     </TableRow>
                   );

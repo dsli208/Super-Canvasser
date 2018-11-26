@@ -16,6 +16,7 @@ import Button from '@material-ui/core/Button';
 import Modal from '@material-ui/core/Modal';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import TextField from '@material-ui/core/TextField';
+import {LocationOn} from '@material-ui/icons';
 
 
 const style = {
@@ -239,11 +240,14 @@ class LocationRow extends React.Component {
     return (
       <ExpansionPanel >
         <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-          <div style={{flexBasis: '70.33%'}}>
-            <Typography variant='subheading' style={{color: '#483D8B'}}> {locationData.street}</Typography>
+          <div style={{flexBasis: '5%'}}>
+            <LocationOn color='secondary' />
+          </div>
+          <div style={{flexBasis: '70%'}}>
+            <Typography variant='subheading' style={{color: '#483D8B'}}> {locationData.street}, {locationData.unit}</Typography>
             <Typography variant='subheading' style={{color: '#483D8B'}}> {locationData.city}, {locationData.state} {locationData.zipcode}, {locationData.country}</Typography>
           </div>
-          <div style={{flexBasis: '33.33%'}}><Typography style={{color: '#A9A9A9'}}> duration: {locationData.duration} mins</Typography></div>
+          <div style={{flexBasis: '20%'}}><Typography style={{color: '#A9A9A9'}}> duration: {locationData.duration} mins</Typography></div>
         </ExpansionPanelSummary>
         
         <ExpansionPanelDetails>
@@ -358,6 +362,7 @@ class ManagerQuestions extends React.Component {
               locationId: location.id,
               fullAddress: location.fullAddress,
               street: location.street,
+              unit: location.unit,
               city: location.city,
               state: location.state,
               zipcode: location.zipcode,

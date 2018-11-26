@@ -1,0 +1,14 @@
+1147, N Country Rd, , Stony Brook, New York, 11790, USA
+318, Wynn Ln, , Port Jefferson, New York, 11777, USA
+521, Lake Ave, , St James, New York, 11780, USA
+526, Main St, , Islip, New York, 11751, USA
+75, Washington Pl, , New York, New York, 10011, USA
+313, Smith Haven Mall, , Lake Grove, New York, 11755, USA
+15, Hollow Rd, , Stony Brook, New York, 11790, USA
+100, Nicolls Rd, , Stony Brook, New York, 11790, USA
+75, Arlington St, , Boston, Massachusetts, 02116, USA
+1704, Washington St, , Boston, Massachusetts, 02118, USA
+383, Congress St, , Boston, Massachusetts, 02210, USA
+3, N Square, , Boston, Massachusetts, 02113, USA
+150, Eastbrook Rd, , Smoketown, PA, 17576, USA
+15, S Main St, , New Hope, PA, 18938, USA

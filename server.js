@@ -217,12 +217,13 @@ server.get('/locations/searching/:id', (req, res) => {
 
 // add location
 server.get('/locations/add', (req, res) => {
-	const {fullAddress, street, city, state, zipcode, country, duration} = req.query;
+	const {fullAddress, street, unit, city, state, zipcode, country, duration} = req.query;
 	
-	var sql = 'INSERT INTO locations (fullAddress, street, city, state, zipcode, country, duration) VALUES (';
+	var sql = 'INSERT INTO locations (fullAddress, street, unit, city, state, zipcode, country, duration) VALUES (';
 	
 	sql += "\"" + fullAddress + "\"";
 	sql += ",\"" + street + "\"";
+	sql += ",\"" + unit + "\"";
 	sql += ",\"" + city + "\"";
 	sql += ",\"" + state + "\"";
 	sql += "," + zipcode;
@@ -240,7 +241,7 @@ server.get('/locations/add', (req, res) => {
 
 // delete location
 server.get('/locations/delete', (req, res) => {
-	const {fullAddress, street, city, state, zipcode, country, duration} = req.query;
+	const {fullAddress, street, unit, city, state, zipcode, country, duration} = req.query;
 
 	var sql = "DELETE FROM locations WHERE street=";
 	sql += "\"" + street + "\"";
@@ -256,11 +257,12 @@ server.get('/locations/delete', (req, res) => {
 
 // edit location
 server.get('/locations/edit', (req, res) => {
-	const {id, fullAddress, street, city, state, zipcode, country, duration, rate, note} = req.query;
+	const {id, fullAddress, street, unit, city, state, zipcode, country, duration, rate, note} = req.query;
 
 	var sql = "UPDATE locations SET ";
 	sql += "fullAddress=\"" + fullAddress + "\",";
 	sql += "street=\"" + street + "\", ";
+	sql += "unit=\"" + unit + "\", ";
 	sql += "city=\"" + city + "\", ";
 	sql += "state=\"" + state + "\", ";
 	sql += "zipcode=" + zipcode + ", ";

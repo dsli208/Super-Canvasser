@@ -13,7 +13,7 @@ import Button from '@material-ui/core/Button';
 import Modal from '@material-ui/core/Modal';
 import Grid from '@material-ui/core/Grid';
 import SelectFreeDateAndTask from './SelectFreeDateAndTask';
-
+import Avatar from '@material-ui/core/Avatar';
 
 const style = {
   backgroundColor: '#ffffff',
@@ -44,6 +44,13 @@ const paper_styles = theme => ({
     padding: theme.spacing.unit * 4,
   }
 });
+
+const avatar_styles = theme => ({
+  purpleAvatar: {
+    color: '#fff',
+    padding: 5,
+  }
+})
 
 class PaperSheet extends React.Component {
   state = {
@@ -169,6 +176,7 @@ class ManagerCanvassersList extends React.Component {
   }
 
   renderMainComponent = () => {
+    const {classes} = this.props;
     const {canvassers} = this.state;
 
     this.setState({
@@ -187,7 +195,14 @@ class ManagerCanvassersList extends React.Component {
             return (
               <ExpansionPanel key={idx}>
                 <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-                  <div style={{flexBasis: '50%'}}>
+                  <div style={{flexBasis: '5%', marginRight: '20px'}}>
+                      <Avatar className={classes.purpleAvatar} >
+                        <div> 
+                          {canvasser.userInfo.firstName.substr(0,1)}{canvasser.userInfo.lastName.substr(0,1)}
+                        </div>
+                      </Avatar>
+                  </div>
+                  <div style={{flexBasis: '40%'}}>
                     <Typography variant='subheading' style={{color: '#483D8B'}}> {canvasser.userInfo.firstName} {canvasser.userInfo.lastName}</Typography>
                     <Typography variant='subheading' style={{color: '#A9A9A9'}}> @{canvasser.userInfo.username} | {canvasser.userInfo.role} </Typography>
                   </div>
@@ -318,6 +333,7 @@ class ManagerCanvassersList extends React.Component {
     
   };
 }
+ManagerCanvassersList = withStyles(avatar_styles)(ManagerCanvassersList);
 
 export default ManagerCanvassersList;
 

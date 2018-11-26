@@ -115,6 +115,7 @@ class ManagerLocationsList extends React.Component {
     super(props);
     this.state = {
       input_street: '',
+      input_unit: '',
       input_city: '',
       input_state: '',
       input_country: '',
@@ -129,6 +130,8 @@ class ManagerLocationsList extends React.Component {
 
       resultComponent: null,
       bounds: null,
+
+      multipleLocationStr: ''
     }
   }
 
@@ -180,7 +183,7 @@ class ManagerLocationsList extends React.Component {
 
           <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
             <div style={{flexBasis: '70.33%'}}>
-              <Typography style={{color: '#483D8B'}}> {location.street}</Typography>
+              <Typography style={{color: '#483D8B'}}> {location.street}, {location.unit} </Typography>
               <Typography style={{color: '#483D8B'}}> {location.city}, {location.state} {location.zipcode}, {location.country}</Typography>
             </div>
             <div style={{flexBasis: '33.33%'}}><Typography style={{color: '#A9A9A9'}}> duration: {location.duration} mins</Typography></div>
@@ -196,8 +199,19 @@ class ManagerLocationsList extends React.Component {
               <Grid container justify='center'>
                 <Grid item>
                   <Typography>
-                    <strong>Notes: </strong> {location.note}
+                    <strong>Notes: </strong>
                   </Typography>
+                  {
+                    location.note === null ? null : 
+                    location.note.split('\n').map((line, index) => {
+                      return (
+                        <Typography key={index}>
+                          {line}
+                        </Typography>
+                      )
+                    })
+                  }
+                  
                 </Grid>
               </Grid>
 
@@ -216,31 +230,35 @@ class ManagerLocationsList extends React.Component {
                         color2={'#ffd700'} />
                 </Grid>
               </Grid>
-              <Grid container justify='center' alignItems='center'>
-                <Grid item>
-                  <Doughnut
-                    width={500}
-                    height={200}
-                    data={{
-                      labels: [
-                        `Unanswered` ,
-                        `Answered` 
-                      ],
-                      datasets: [{
-                        data: [qaRateList[idx].unanswered, qaRateList[idx].answered],
-                        backgroundColor: [
-                        '#FF6384',
-                        '#36A2EB',
+
+              {
+                qaList.length === 0 ? null :
+                <Grid container justify='center' alignItems='center'>
+                  <Grid item>
+                    <Doughnut
+                      width={500}
+                      height={200}
+                      data={{
+                        labels: [
+                          `Unanswered` ,
+                          `Answered` 
                         ],
-                        hoverBackgroundColor: [
-                        '#FF6384',
-                        '#36A2EB',
-                        ]
-                      }]
-                    }}
-                  />
+                        datasets: [{
+                          data: [qaRateList[idx].unanswered, qaRateList[idx].answered],
+                          backgroundColor: [
+                          '#FF6384',
+                          '#36A2EB',
+                          ],
+                          hoverBackgroundColor: [
+                          '#FF6384',
+                          '#36A2EB',
+                          ]
+                        }]
+                      }}
+                    />
+                  </Grid>
                 </Grid>
-              </Grid>
+              }
               
               </div>
           </ExpansionPanelDetails>
@@ -279,12 +297,14 @@ class ManagerLocationsList extends React.Component {
         var fullAddress = location.fullAddress.replace(/ /g, '+');
         var street = location.street.replace(/ /g, '+');
         var city = location.city.replace(/ /g, '+');
+        var unit = location.unit.replace(/ /g, '+');
         var state = location.state.replace(/ /g, '+');
         var zipcode = location.zipcode;
         var country = location.country.replace(/ /g, '+');
 
         fetch(`/locations/delete?fullAddress=` +
            `${fullAddress}&street=${street}`
+           + `&unit=${unit}`
            + `&city=${city}`
            + `&state=${state}`
            + `&zipcode=${zipcode}`
@@ -305,6 +325,7 @@ class ManagerLocationsList extends React.Component {
 
     var fullAddress = location.fullAddress.replace(/ /g, '+');
     var street = location.street.replace(/ /g, '+');
+    var unit = location.unit.replace(/ /g, '+');
     var city = location.city.replace(/ /g, '+');
     var state = location.state.replace(/ /g, '+');
     var zipcode = location.zipcode;
@@ -316,6 +337,7 @@ class ManagerLocationsList extends React.Component {
     fetch(`/locations/edit?id=${location.id}` 
             + `&fullAddress=${fullAddress}`
             + `&street=${street}`
+            + `&unit=${unit}`
             + `&city=${city}`
             + `&state=${state}`
             + `&zipcode=${zipcode}`
@@ -383,6 +405,8 @@ class ManagerLocationsList extends React.Component {
   handleTFchange = (event) => {
     if (event.target.id === 'street') {
       this.setState({input_street: event.target.value})
+    } else if (event.target.id === 'unit') {
+      this.setState({input_unit: event.target.value})
     } else if (event.target.id === 'city') {
       this.setState({input_city: event.target.value})
     } else if (event.target.id === 'state') {
@@ -399,12 +423,14 @@ class ManagerLocationsList extends React.Component {
   handleAddLocation = () => {
     var fullAddress = this.state.input_street + ', '
                         + this.state.input_city + ', '
+                        + this.state.input_unit + ', '
                         + this.state.input_state + ', '
                         + this.state.input_zipcode + ', '
                         + this.state.input_country;
     fullAddress = fullAddress.replace(/ /g, '+');
     //console.log(fullAddress);
     var street = this.state.input_street.replace(/ /g, '+');
+    var unit = this.state.input_unit.replace(/ /g, '+');
     var city = this.state.input_city.replace(/ /g, '+');
     var state = this.state.input_state.replace(/ /g, '+');
     var zipcode = parseInt(this.state.input_zipcode, 10);
@@ -414,6 +440,7 @@ class ManagerLocationsList extends React.Component {
 
     fetch(`/locations/add?fullAddress=` +
            `${fullAddress}&street=${street}`
+           + `&unit=${unit}`
            + `&city=${city}`
            + `&state=${state}`
            + `&zipcode=${zipcode}`
@@ -421,6 +448,60 @@ class ManagerLocationsList extends React.Component {
            + `&duration=${duration}`)
     .catch(err => console.log(err))
     console.log('Add location done!');
+    this.loadLocationList();
+  }
+
+  handleMultipleLocationChange = (e) => {
+    this.setState({
+      multipleLocationStr: e.target.value
+    })
+  }
+
+  handleAddMultiple_location = () => {
+    var {multipleLocationStr} = this.state;
+    multipleLocationStr.split("\n").forEach((locationAddress) => {
+      var street = '';
+      var unit = '';
+      var city = '';
+      var state = '';
+      var zipcode = '';
+      var country = 'USA';
+
+      var location_info = locationAddress.split(", ");
+      location_info.forEach((data, idx) => {
+        if (idx === 0) {
+          street += data;
+        } else if (idx === 1) {
+          street += ' ' + data;
+        } else if (idx === 2) {
+          unit = data;
+        } else if (idx === 3) {
+          city = data;
+        } else if (idx === 4) {
+          state = data;
+        } else if (idx === 5) {
+          zipcode = data;
+        }
+      })
+      var fullAddress = locationAddress.replace(/ /g, '+');
+      street = street.replace(/ /g, '+');
+      unit = unit.replace(/ /g, '+');
+      city = city.replace(/ /g, '+');
+      state = state.replace(/ /g, '+');
+      zipcode = parseInt(zipcode, 10);
+      var duration = 0;
+      console.log(zipcode)
+      fetch(`/locations/add?fullAddress=` +
+            `${fullAddress}&street=${street}`
+            + `&unit=${unit}`
+            + `&city=${city}`
+            + `&state=${state}`
+            + `&zipcode=${zipcode}`
+            + `&country=${country}`
+            + `&duration=${duration}`)
+      .catch(err => console.log(err))
+      console.log('Add location done!');
+    })
     this.loadLocationList();
   }
 
@@ -462,6 +543,18 @@ class ManagerLocationsList extends React.Component {
                           id='street'
                           className = 'street'
                           label='Enter street'
+                          style={{minWidth: '100%'}}
+                          onChange={this.handleTFchange} />
+                  </Grid>
+                </Grid>
+
+                <Grid container spacing={8} alignItems="flex-end" justify='center' >
+                  <Grid item xs={3}>Unit:</Grid>
+                  <Grid item xs={6}>
+                    <TextField
+                          id='unit'
+                          className = 'unit'
+                          label='Enter unit info'
                           style={{minWidth: '100%'}}
                           onChange={this.handleTFchange} />
                   </Grid>
@@ -532,6 +625,31 @@ class ManagerLocationsList extends React.Component {
                 </Grid>
               </Grid>
               
+            </Grid>
+
+            <Grid container spacing={8} alignItems="flex-end" justify='center' style={{marginTop: '50px'}} >
+              <Grid item> 
+                  <h1>Add multiple locations together</h1>
+              </Grid>
+            </Grid>
+
+            <Grid container spacing={8} alignItems="flex-end" justify='center' >
+              <Grid item> 
+                <Typography variant='caption'> Each line contains a location address. </Typography>
+              </Grid>
+            </Grid>
+
+            <Grid container spacing={8} justify='center' >
+                <TextField
+                    label='Add multiple locations here'
+                    onChange={this.handleMultipleLocationChange}
+                    multiline={true}
+                    style={{width: '50%'}}
+                    rows={5} />
+            </Grid>
+
+            <Grid container spacing={8} alignItems="flex-end" justify='center' >
+              <Button onClick={this.handleAddMultiple_location} variant="contained" color="primary" style={{marginTop: '30px'}} > Add </Button>
             </Grid>
 
             {this.state.resultComponent}

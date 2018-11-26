@@ -123,6 +123,11 @@ class PaperSheet extends React.Component {
     current_locationData['fullAddress'] = listLocation[0].fullAddress;
     current_locationData['duration'] = listLocation[0].duration;
     current_locationData['qaList'] = [];
+    fetch(`/locations/searching/${listLocation[0].id}`).then(res => res.json())
+    .then(data => {
+      current_locationData['rate'] = data[0].rate === null ? 0 : data[0].rate;
+      current_locationData['note'] = data[0].note === null ? '' : data[0].note;
+    }).catch(err => console.log(err))
 
     var query = `/locations/canvasserAssignments/${listLocation[0].id}`;
     fetch(query).then(res => res.json())
@@ -188,6 +193,7 @@ class PaperSheet extends React.Component {
     // update rate and note
     var note = toEditLocationInfo.note === null ? '': toEditLocationInfo.note;
     note = note.replace(/ /g, '+');
+    note = note.replace(/\r?\n/g, '%0D%0A');
     var query = `/locations/assignments/editRateNote/${toEditLocationInfo.id}/`;
     query += `?rate=${toEditLocationInfo.rate}&note=${note}`;
     fetch(query).then(res=>res.json()).catch(err => console.log(err));
@@ -219,6 +225,7 @@ class PaperSheet extends React.Component {
   }
 
   renderLocation = (location) => {
+      console.log(location)
       const {classes} = this.props;
       var toEditLocationInfo = JSON.parse(JSON.stringify(location));
 
@@ -260,7 +267,18 @@ class PaperSheet extends React.Component {
             </Grid>
 
             <Grid container justify='center' style={{marginBottom: '15px'}}>
-              <Typography> {location.note} </Typography>
+              <Grid item>
+                {
+                  location.note === null ? null : 
+                  location.note.split('\n').map((line, index) => {
+                    return (
+                      <Typography key={index}>
+                        {line}
+                      </Typography>
+                    )
+                  })
+                }
+              </Grid>
             </Grid>
 
             <Grid container justify='center' style={{marginBottom: '15px'}}>

@@ -41,6 +41,7 @@ CREATE  TABLE IF NOT EXISTS `super_canvasser`.`locations` (
 	`id` INT UNSIGNED NOT NULL AUTO_INCREMENT ,
 	`fullAddress` VARCHAR(500) NOT NULL ,
 	`street` VARCHAR(100) NOT NULL ,
+	`unit` VARCHAR(100) ,
 	`city` VARCHAR(50) NOT NULL ,
 	`state` VARCHAR(50) NOT NULL ,
 	`zipcode` INT NOT NULL ,
