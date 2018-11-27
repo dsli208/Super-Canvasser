@@ -476,30 +476,32 @@ class ManagerLocationsList extends React.Component {
       var zipcode = '';
       var country = 'USA';
 
-      var location_info = locationAddress.split(", ");
+      var location_info = locationAddress.split(",");
       location_info.forEach((data, idx) => {
         if (idx === 0) {
-          street += data;
+          street += data.trim();
         } else if (idx === 1) {
-          street += ' ' + data;
+          street += ' ' + data.trim();
         } else if (idx === 2) {
-          unit = data;
+          unit = data.trim();
         } else if (idx === 3) {
-          city = data;
+          city = data.trim();
         } else if (idx === 4) {
-          state = data;
+          state = data.trim();
         } else if (idx === 5) {
-          zipcode = data;
+          zipcode = data.trim();
         }
       })
       var fullAddress = locationAddress.replace(/ /g, '+');
+      fullAddress = fullAddress.replace("#",'');
       street = street.replace(/ /g, '+');
       unit = unit.replace(/ /g, '+');
+      unit = unit.replace("#",'');
       city = city.replace(/ /g, '+');
       state = state.replace(/ /g, '+');
       zipcode = parseInt(zipcode, 10);
       var duration = this.state.params.visitDuration;
-      
+
       fetch(`/locations/add?fullAddress=` +
             `${fullAddress}&street=${street}`
             + `&unit=${unit}`

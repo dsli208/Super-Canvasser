@@ -219,7 +219,7 @@ server.get('/locations/searching/:id', (req, res) => {
 // add location
 server.get('/locations/add', (req, res) => {
 	const {fullAddress, street, unit, city, state, zipcode, country, duration} = req.query;
-	
+
 	var sql = 'INSERT INTO locations (fullAddress, street, unit, city, state, zipcode, country, duration) VALUES (';
 	
 	sql += "\"" + fullAddress + "\"";
@@ -230,7 +230,7 @@ server.get('/locations/add', (req, res) => {
 	sql += "," + zipcode;
 	sql += ",\"" + country + "\"" ;
 	sql += "," + duration + ")";
-
+	
 	connection.query(sql, (err, results, fields) => {
 		if (err) {
 			console.log(err);
