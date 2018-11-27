@@ -28,6 +28,7 @@ DROP TABLE IF EXISTS `super_canvasser`.`parameters` ;
 
 CREATE TABLE IF NOT EXISTS `super_canvasser`.`parameters` (
 	`dayDuration` INT UNSIGNED ,
+	`visitDuration` INT UNSIGNED ,
 	`avgSpeed` FLOAT
 ) ENGINE = InnoDB;
 

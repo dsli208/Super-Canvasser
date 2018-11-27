@@ -131,11 +131,20 @@ class ManagerLocationsList extends React.Component {
       resultComponent: null,
       bounds: null,
 
-      multipleLocationStr: ''
+      multipleLocationStr: '',
+      params: {}
     }
   }
 
   componentWillMount() {
+    // fetch global parameters
+    fetch('/parameters').then(res => res.json())
+    .then(params => {
+      this.setState({
+        params: params[0]
+      })
+    }).catch(err => console.log(err))
+
     setTimeout(() => {
       this.load()
     }, 500);
@@ -489,8 +498,8 @@ class ManagerLocationsList extends React.Component {
       city = city.replace(/ /g, '+');
       state = state.replace(/ /g, '+');
       zipcode = parseInt(zipcode, 10);
-      var duration = 0;
-      console.log(zipcode)
+      var duration = this.state.params.visitDuration;
+      
       fetch(`/locations/add?fullAddress=` +
             `${fullAddress}&street=${street}`
             + `&unit=${unit}`

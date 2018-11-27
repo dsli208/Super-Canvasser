@@ -70,67 +70,73 @@ class PaperSheet extends React.Component {
 
   render() {
     const {classes, assignment} = this.props;
-    
+
     return (
-      <Paper className={classes.root} elevation={1}>
-        <div justify='center'>
-          <Typography variant='headline'>
-            <strong>Task {assignment.taskName}</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {assignment.date}
-          </Typography>
-          
-          {assignment.locations.map((locationData, index) => {
-            //console.log(locationData);
-            return (
-            <div key={index}>
-              <Typography><strong style={{color: '#DC143C'}}>Location:</strong> {locationData.fullAddress} &nbsp;&nbsp;&nbsp; <span style={{color: '#A9A9A9'}} > Duration: {locationData.duration} mins </span> </Typography>
-              {locationData.qaList.map((qa, idx) => {
+      <div>
+        {
+          assignment.locations.length === 0 ? null :
+          <Paper className={classes.root} elevation={1}>
+
+            <div justify='center'>
+              <Typography variant='headline'>
+                <strong>Task {assignment.taskName}</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {assignment.date}
+              </Typography>
+              
+              {assignment.locations.map((locationData, index) => {
+                //console.log(locationData);
                 return (
-                  <div key={idx} style={{marginBottom: '15px'}}>
-                    <Typography><strong>Question:</strong> {qa.question} </Typography>
-                    <Typography><strong>Answer:</strong> {qa.answer} </Typography>
-                  </div>
+                <div key={index}>
+                  <Typography><strong style={{color: '#DC143C'}}>Location:</strong> {locationData.fullAddress} &nbsp;&nbsp;&nbsp; <span style={{color: '#A9A9A9'}} > Duration: {locationData.duration} mins </span> </Typography>
+                  {locationData.qaList.map((qa, idx) => {
+                    return (
+                      <div key={idx} style={{marginBottom: '15px'}}>
+                        <Typography><strong>Question:</strong> {qa.question} </Typography>
+                        <Typography><strong>Answer:</strong> {qa.answer} </Typography>
+                      </div>
+                    )
+                  })}
+                </div>
                 )
               })}
-            </div>
-            )
-          })}
-
-          <Button 
-            onClick={() => this.setState({isDelete_open : true})} 
-            color="primary" 
-            className={classes.button}> Unassign </Button>
-
-            {/* ---------------------- modal for delete question -------------------------- */}
-            <Modal
-              aria-labelledby="simple-modal-title"
-              aria-describedby="simple-modal-description"
-              open={this.state.isDelete_open}
-              onClose={() => this.setState({isDelete_open : false})}
-            >
-              <div style={getModalStyle()} className={classes.paper}>
-                <Grid container justify='center' >
-                  <Typography variant='subheading'>
-                    Are you sure you want to delete this canvas assignment?
-                  </Typography>
-                </Grid>
-                <br/>
-                <Grid container justify='center'>
-                  <div><br/><Button 
-                                onClick={this.handleDelete} 
-                                variant="contained" 
-                                color="primary" 
-                                style={{marginTop:'15px', marginRight: '8px'}}> Yes, delete </Button></div>
-                  <div><br/><Button 
-                                onClick={() => this.setState({isDelete_open: false})} 
-                                variant="contained" 
-                                color="default" 
-                                style={{marginTop:'15px'}}> No, cancel </Button>
+    
+              <Button 
+                onClick={() => this.setState({isDelete_open : true})} 
+                color="primary" 
+                className={classes.button}> Unassign </Button>
+    
+                {/* ---------------------- modal for delete assignments -------------------------- */}
+                <Modal
+                  aria-labelledby="simple-modal-title"
+                  aria-describedby="simple-modal-description"
+                  open={this.state.isDelete_open}
+                  onClose={() => this.setState({isDelete_open : false})}
+                >
+                  <div style={getModalStyle()} className={classes.paper}>
+                    <Grid container justify='center' >
+                      <Typography variant='subheading'>
+                        Are you sure you want to delete this canvas assignment?
+                      </Typography>
+                    </Grid>
+                    <br/>
+                    <Grid container justify='center'>
+                      <div><br/><Button 
+                                    onClick={this.handleDelete} 
+                                    variant="contained" 
+                                    color="primary" 
+                                    style={{marginTop:'15px', marginRight: '8px'}}> Yes, delete </Button></div>
+                      <div><br/><Button 
+                                    onClick={() => this.setState({isDelete_open: false})} 
+                                    variant="contained" 
+                                    color="default" 
+                                    style={{marginTop:'15px'}}> No, cancel </Button>
+                      </div>
+                    </Grid>
                   </div>
-                </Grid>
-              </div>
-            </Modal>
-        </div>
-      </Paper>
+                </Modal>
+            </div>
+          </Paper>
+        }
+      </div>
     )
   }
 }
@@ -216,9 +222,19 @@ class ManagerCanvassersList extends React.Component {
                   <div style={{margin: '0 auto 0 auto'}} >
                     <List>
                       {assignList.map((assignment, idx) => {
-                        return (
-                          <PaperSheet key={idx} assignment={assignment} canvasserId={canvasser.userInfo.id} reload={this.init} />
-                        )
+                        if (assignment.locations.length === 0) {
+                          //console.log(canvasser.userInfo);
+                          // remove assigned date to make it free
+                          var query = `/tasks/unassign/${canvasser.userInfo.id}/${assignment.taskName}`;
+                          fetch(query).then(res => res.json()).catch(err => console.log(err))
+                          this.componentInit();
+                          return null;
+                        
+                        } else {
+                          return (
+                            <PaperSheet key={idx} assignment={assignment} canvasserId={canvasser.userInfo.id} reload={this.init} />
+                          )
+                        }
                       })}
                     </List>
                     <SelectFreeDateAndTask 

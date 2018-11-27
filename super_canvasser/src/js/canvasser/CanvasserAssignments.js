@@ -113,7 +113,9 @@ class PaperSheet extends React.Component {
     this.setState({
       originalLocation: assignment.locations[0] 
     }, () => {
-      this.load([assignment.locations[0]]) 
+      if (typeof assignment.locations[0] !== 'undefined') {
+        this.load([assignment.locations[0]]) 
+      }
     })
   }
 
@@ -495,9 +497,18 @@ class CanvasserAssignments extends React.Component {
               {
                 this.state.canvasserData.assignments.length === 0 ? <div>No assignments yet!</div> :
                 this.state.canvasserData.assignments.map((assignment, idx) => {
-                  return (
-                    <PaperSheet key={idx} assignment={assignment} />
-                  )
+                  if (assignment.locations.length === 0 ) {
+                    //console.log(assignment)
+                    // remove assigned date to make it free
+                    var query = `/tasks/unassign/${this.state.canvasserInfo.id}/${assignment.taskName}`;
+                    fetch(query).then(res => res.json()).catch(err => console.log(err))
+
+                    return <div key={idx}> No assignments yet!</div>
+                  } else {            
+                    return (
+                      <PaperSheet key={idx} assignment={assignment} />
+                    )
+                  }
                 })
               }
             </div>

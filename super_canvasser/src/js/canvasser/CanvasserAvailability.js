@@ -313,6 +313,19 @@ class CanvasserAvailability extends React.Component {
                                     if (date.taskId === null) {
                                       return null;
                                     }
+                                    fetch(`/tasks/${date.taskId}`).then(res => res.json())
+                                    .then(taskId => {
+                                      console.log(taskId)
+                                      if (taskId.length === 0) {
+                                        //console.log(this.state.canvasserInfo);
+                                        // remove assigned date to make it free
+                                        var query = `/tasks/unassign/${this.state.canvasserInfo.id}/${date.taskId}`;
+                                        fetch(query).then(res => res.json()).catch(err => console.log(err))
+                                        return null;
+
+                                      }
+                                      
+                                    }).catch(err => console.log(err))
                                     hasAssigned = true;
                                     j++;
                                     return (
@@ -330,7 +343,9 @@ class CanvasserAvailability extends React.Component {
                                     )
                                   })
                                 }
-                                {hasAssigned ? null : <div>No assigned dates yet!</div>}
+                                {
+                                  hasAssigned ? null : <div>No assigned dates yet!</div>
+                                }
                               </List>
                             </div>
                           </div>

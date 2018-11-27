@@ -27,15 +27,16 @@ server.get('/parameters', (req, res) => {
 })
 
 // update global parameters
-server.get('/parameters/:dayDuration/:avgSpeed', (req, res) => {
+server.get('/parameters/:dayDuration/:visitDuration/:avgSpeed', (req, res) => {
 	const dayDuration = req.params.dayDuration;
 	const avgSpeed = req.params.avgSpeed;
+	const visitDuration = req.params.visitDuration;
 
 	connection.query('DELETE FROM parameters', function (error, results, fields) {
 		if (error) console.log(error);
 		else {
-			var sql = "INSERT INTO parameters (dayDuration, avgSpeed) VALUES (";
-			sql += dayDuration + "," + avgSpeed + ")";
+			var sql = "INSERT INTO parameters (dayDuration, visitDuration, avgSpeed) VALUES (";
+			sql += dayDuration + "," + visitDuration + "," + avgSpeed + ")";
 			connection.query(sql, function (err, result, field) {
 				if (err) console.log(err);
 				else res.send(JSON.stringify(results));

@@ -45,7 +45,7 @@ VALUES ('Scott', 'Stoller', 'scott', 'admin', 'scott.stoller@stonybrook.edu', '6
 -- -----------------------------------------------------
 -- insert into parameters table
 -- -----------------------------------------------------
-INSERT INTO `super_canvasser`.`parameters` (`dayDuration`, `avgSpeed`) VALUES (35, 8.9);
+INSERT INTO `super_canvasser`.`parameters` (`dayDuration`, `visitDuration`, `avgSpeed`) VALUES (65, 15, 8.9);
 
 -- -----------------------------------------------------
 -- insert into locations table
@@ -188,31 +188,31 @@ VALUES (6, 12);
 -- insert into assignments table
 -- -----------------------------------------------------
 
-DELETE FROM `super_canvasser`.`assignments`;
+-- DELETE FROM `super_canvasser`.`assignments`;
 
-INSERT INTO `super_canvasser`.`assignments` (`userId`, `date`, `month`, `year`, `taskId`)
-VALUES (3, 31, 10, 2018, 1);
+-- INSERT INTO `super_canvasser`.`assignments` (`userId`, `date`, `month`, `year`, `taskId`)
+-- VALUES (3, 31, 10, 2018, 1);
 
-INSERT INTO `super_canvasser`.`assignments` (`userId`, `date`, `month`, `year`, `taskId`)
-VALUES (3, 22, 10, 2018, 2);
+-- INSERT INTO `super_canvasser`.`assignments` (`userId`, `date`, `month`, `year`, `taskId`)
+-- VALUES (3, 22, 10, 2018, 2);
 
-INSERT INTO `super_canvasser`.`assignments` (`userId`, `date`, `month`, `year`)
-VALUES (3, 12, 05, 2018);
+-- INSERT INTO `super_canvasser`.`assignments` (`userId`, `date`, `month`, `year`)
+-- VALUES (3, 12, 05, 2018);
 
-INSERT INTO `super_canvasser`.`assignments` (`userId`, `date`, `month`, `year`)
-VALUES (3, 12, 02, 2018);
+-- INSERT INTO `super_canvasser`.`assignments` (`userId`, `date`, `month`, `year`)
+-- VALUES (3, 12, 02, 2018);
 
-INSERT INTO `super_canvasser`.`assignments` (`userId`, `date`, `month`, `year`)
-VALUES (4, 09, 10, 2018);
+-- INSERT INTO `super_canvasser`.`assignments` (`userId`, `date`, `month`, `year`)
+-- VALUES (4, 09, 10, 2018);
 
-INSERT INTO `super_canvasser`.`assignments` (`userId`, `date`, `month`, `year`)
-VALUES (4, 13, 08, 2018);
+-- INSERT INTO `super_canvasser`.`assignments` (`userId`, `date`, `month`, `year`)
+-- VALUES (4, 13, 08, 2018);
 
-INSERT INTO `super_canvasser`.`assignments` (`userId`, `date`, `month`, `year`)
-VALUES (4, 24, 08, 2018);
+-- INSERT INTO `super_canvasser`.`assignments` (`userId`, `date`, `month`, `year`)
+-- VALUES (4, 24, 08, 2018);
 
-INSERT INTO `super_canvasser`.`assignments` (`userId`, `date`, `month`, `year`, `taskId`)
-VALUES (4, 15, 07, 2018, 3);
+-- INSERT INTO `super_canvasser`.`assignments` (`userId`, `date`, `month`, `year`, `taskId`)
+-- VALUES (4, 15, 07, 2018, 3);
 
-INSERT INTO `super_canvasser`.`assignments` (`userId`, `date`, `month`, `year`, `taskId`)
-VALUES (4, 04, 08, 2018, 4);
+-- INSERT INTO `super_canvasser`.`assignments` (`userId`, `date`, `month`, `year`, `taskId`)
+-- VALUES (4, 04, 08, 2018, 4);

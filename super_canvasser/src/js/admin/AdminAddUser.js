@@ -128,10 +128,20 @@ class AdminAddUser extends React.Component {
           phone: event.target.value
         })
       } else if (event.target.id === 'dayDuration') {
-        // duration
+        // work day duration
         this.setState({
           params: {
             dayDuration: event.target.value,
+            visitDuration: typeof this.state.params === 'undefined' ? 0.0 : this.state.params.visitDuration ,
+            avgSpeed: typeof this.state.params === 'undefined' ? 0.0 : this.state.params.avgSpeed
+          }
+        })
+      } else if (event.target.id === 'visitDuration') {
+        // visit duration
+        this.setState({
+          params: {
+            dayDuration: typeof this.state.params === 'undefined' ? 0 : this.state.params.dayDuration ,
+            visitDuration: event.target.value ,
             avgSpeed: typeof this.state.params === 'undefined' ? 0.0 : this.state.params.avgSpeed
           }
         })
@@ -140,6 +150,7 @@ class AdminAddUser extends React.Component {
         this.setState({
           params: {
             dayDuration: typeof this.state.params === 'undefined' ? 0 : this.state.params.dayDuration ,
+            visitDuration: typeof this.state.params === 'undefined' ? 0.0 : this.state.params.visitDuration ,
             avgSpeed: event.target.value
           }
         })
@@ -228,7 +239,7 @@ class AdminAddUser extends React.Component {
   handleUpdateParam = () => {
     const {params} = this.state;
     console.log(params);
-    var query = `/parameters/${params.dayDuration}/${params.avgSpeed}`;
+    var query = `/parameters/${params.dayDuration}/${params.visitDuration}/${params.avgSpeed}`;
     fetch(query).then(res => res.json())
     .catch(err => console.log(err));
   }
@@ -426,7 +437,7 @@ class AdminAddUser extends React.Component {
             <br /><br />
             <Grid container spacing={8} alignItems="flex-end" justify='center'>
               <Grid item><Timelapse /></Grid>
-              <Grid item><h1> Update parameter </h1></Grid>
+              <Grid item><h1> Update parameters </h1></Grid>
             </Grid>
 
             <div style={pad}>
@@ -442,6 +453,20 @@ class AdminAddUser extends React.Component {
                     fullWidth={true} />
                 </Grid>
               </Grid>
+
+              <Grid container spacing={8} alignItems="flex-end" justify='center'>
+                <Grid item xs={3}>Default visit duration (mins) at each location:</Grid>
+                <Grid item xs={6}>
+                  <TextField
+                    id='visitDuration'
+                    onChange={this.handleChangeField}
+                    //defaultValue={typeof this.state.params === 'undefined' ? '': this.state.params.visitDuration}
+                    className='visitDuration'
+                    label='Visit duration'
+                    fullWidth={true} />
+                </Grid>
+              </Grid>
+
               <Grid container spacing={8} alignItems="flex-end" justify='center'>
                 <Grid item xs={3}>User average speed (m/s):</Grid>
                 <Grid item xs={6}>
