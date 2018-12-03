@@ -78,8 +78,12 @@ class PaperSheet extends React.Component {
     var query = `/locations/${locationId}/questions/update?oldQ=${old_question}&newQ=${new_question}`;
     // perform query update
     console.log(query);
-    fetch(query).then(res => res.json()).catch(err => console.log(err))
-    console.log('Update question successfully!');
+    fetch(query).then(res => {
+      res.json();
+      console.log('Update question successfully!');
+    })
+    .catch(err => console.log(err))
+    
     this.setState({ isUpdate_open: false })
     this.props.reload();
   }
@@ -87,8 +91,12 @@ class PaperSheet extends React.Component {
   handleDelete = () => {
     const { qa, locationId } = this.props;
     var query = `/locations/${locationId}/questions/delete?question=${qa.question}`;
-    fetch(query).then(res => res.json()).catch(err => console.log(err))
-    console.log('Delete question successfully!');
+    fetch(query).then(res => {
+      res.json();
+      console.log('Delete question successfully!');
+    })
+    .catch(err => console.log(err))
+    
     this.setState({ isDelete_open: false })
     this.props.reload();
   }
@@ -212,8 +220,11 @@ class LocationRow extends React.Component {
       var query = '/locations/' + this.state.locationId + '/questions/add';
       query += `?question=${question}&answer=`;
       // perform query add question
-      fetch(query).then(res => res.json()).catch(err => console.log(err));
-      console.log('Add question successfully');
+      fetch(query).then(res => {
+        res.json();
+        console.log('Add question successfully');
+      })
+      .catch(err => console.log(err));
       this.props.reload();
     })
     setTimeout(() => {

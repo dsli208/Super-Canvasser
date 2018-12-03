@@ -11,7 +11,6 @@ import {LocationOn} from '@material-ui/icons';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 
-
 // loading UI icon
 const styles = theme => ({
   progress: {
@@ -151,15 +150,21 @@ class ManagerAlgorithm extends React.Component {
     })
   }
 
-  haversine_distance = (x1, x2) => {
-    const R = 6371e3;     // earth radius in meters
-    const Δ = (x1 - x2) * (Math.PI / 180);
-  
-    const a = (Math.sin(Δ / 2) * Math.sin(Δ / 2));
+  haversine_distance = (lat1, lon1, lat2, lon2) => {
+    var R = 6371e3;         // earth radius in meters
+    var lat1_rad = lat1 * (Math.PI / 180);
+    var lon1_rad = lon1 * (Math.PI / 180);
+    var lat2_rad = lat2 * (Math.PI / 180);
+    var lon2_rad = lon2 * (Math.PI / 180);
     
-    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-  
-    const distance = R * c;
+    var dLat = (lat2_rad - lat1_rad);
+    var dLon = (lon2_rad - lon1_rad);
+
+    var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+            Math.cos(lat1_rad) * Math.cos(lat2_rad) *
+            Math.sin(dLon/2) * Math.sin(dLon/2);
+    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+    var distance = R * c;
     return distance; // in meters
   }
 
@@ -169,7 +174,7 @@ class ManagerAlgorithm extends React.Component {
     var lat2 = parseFloat(str2.split(":")[0]);
     var lon2 = parseFloat(str2.split(":")[1]);
   
-    return this.haversine_distance(lat1, lat2) + this.haversine_distance(lon1, lon2);
+    return this.haversine_distance(lat1, lon1, lat1, lon2) + this.haversine_distance(lat1, lon2, lat2, lon2);
   }
 
   getDistanceList = (map, unvisit) => {
@@ -244,6 +249,29 @@ class ManagerAlgorithm extends React.Component {
     })
     setTimeout(() => {
       const {coordList} = this.state;
+      console.log(coordList)
+
+      // setTimeout(() => {
+      //   fetch('/runAlgorithm', {
+      //     method: 'post',
+      //     headers: {
+      //       'Accept': 'application/json, text/plain, */*',
+      //       'Content-Type': 'application/json'
+      //     },
+      //     body: JSON.stringify({
+      //       'coordData': coordList ,
+      //       'avgSpeed': this.state.params.avgSpeed ,
+      //       'dayDuration' : this.state.params.dayDuration 
+      //     })
+      //   })
+      //   .then(res => {
+      //     console.log('done here')
+      //   })
+      //   .catch(err => console.log(err))
+      // }, 2500)
+        
+      
+
       var map = {};
 
       coordList.forEach(coordinate => {

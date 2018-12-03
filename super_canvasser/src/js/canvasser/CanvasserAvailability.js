@@ -121,7 +121,11 @@ class CanvasserAvailability extends React.Component {
     var month = selectDate.month;
     
     var query = `/users/canvasser/deleteFreeDate?userId=${canvasserInfo.id}&date=${date}&month=${month}&year=${year}`;
-    fetch(query).then(result => result.json()).catch(error => console.log(error))
+    fetch(query).then(result => {
+      result.json()
+      console.log('Delete free date done!')
+    })
+    .catch(error => console.log(error))
 
     // reload free dates component
     setTimeout(() => {
@@ -139,7 +143,11 @@ class CanvasserAvailability extends React.Component {
       var month = this.state.currentSelect.getMonth() + 1;
       
       var query = `/users/canvasser/addFreeDate?userId=${canvasserInfo.id}&date=${date}&month=${month}&year=${year}`;
-      fetch(query).then(result => result.json()).catch(error => console.log(error))
+      fetch(query).then(result => {
+        result.json()
+        console.log('Add free date done!')
+      })
+      .catch(error => console.log(error))
 
       // reload free dates component
       setTimeout(() => {

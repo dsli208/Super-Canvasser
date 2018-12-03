@@ -63,7 +63,11 @@ class PaperSheet extends React.Component {
     const taskId = assignment.taskName;
   
     var query = `/tasks/unassign/${canvasserId}/${taskId}`;
-    fetch(query).then(res => res.json()).catch(err => console.log(err))
+    fetch(query).then(res => {
+      res.json();
+      console.log('Delete assignment');
+    })
+    .catch(err => console.log(err))
     this.setState({ isDelete_open: false })
     this.props.reload();
   }
@@ -282,7 +286,7 @@ class ManagerCanvassersList extends React.Component {
               .then(taskInfo => {
                 taskInfo.forEach(locationInfo => {
                   var locationDict = {};
-                  //console.log(locationInfo)
+                  console.log(locationInfo)
                   fetch(`/locations/searching/${locationInfo.locationId}`)
                   .then(res => res.json())
                   .then((location) => {

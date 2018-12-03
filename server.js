@@ -1,9 +1,15 @@
 const express 		= require('express');
 const server 			= express();
 const mysql     	= require('mysql');
+//const spawn 			= require("child_process").spawn;
+var fs 						= require('fs');
+var bodyParser 		= require('body-parser');
+var cmd 					= require('node-cmd');
 
 server.set('port', process.env.PORT || 3001 );
 
+server.use(bodyParser.json());
+server.use(bodyParser.urlencoded({ extended: false }));
 
 var connection = mysql.createConnection({
     host: "localhost",
@@ -15,8 +21,45 @@ var connection = mysql.createConnection({
 // connect MySQL database
 connection.connect((err) => {
 	if (err) console.log(err);
-	console.log('MySQL connected...');
+	else console.log('MySQL connected...');
 });
+
+server.post('/runAlgorithm', (req, res) => {
+	console.log(req.body)
+	var dataObj = req.body;
+	// var coordList = req.body.coordData;
+	// var avgSpeed = req.body.avgSpeed;
+	// var dayDuration = req.body.dayDuration;
+
+	fs.writeFile('./super_canvasser/src/data/vrp_data.json', JSON.stringify(dataObj, null, 2), 'utf8', function(err) {
+    if (err) {
+      console.log(err);
+		} else {
+			cmd.get("python ./super_canvasser/src/api/vrp.py",
+				function(data, err, stderr) {
+					if (!err) {
+						console.log(data)
+						res.send(JSON.stringify(data))
+					} else {
+						console.log(err)
+					}
+				}
+			);
+			res.send(JSON.stringify(dataObj));
+			// var pythonProcess = spawn('python', ["./super_canvasser/src/api/vrp.py", JSON.stringify(coordList), avgSpeed, dayDuration]);
+			// // Takes stdout data from script which executed
+			// // with arguments and send this data to res object
+			// pythonProcess.stdout.on('data', function(data) {
+			// 	console.log(data.toString())	
+			// 	res.send(data.toString());
+			// })
+			// pythonProcess.stdout.on('end', function(){
+			// 	console.log('End');
+			// });
+			// pythonProcess.stdin.end();
+		}
+  });
+})
 
 // =====================================  global parameters stuff  =======================================================
 server.get('/parameters', (req, res) => {

@@ -318,8 +318,11 @@ class ManagerLocationsList extends React.Component {
            + `&state=${state}`
            + `&zipcode=${zipcode}`
            + `&country=${country}`)
+        .then(res => {
+          res.json();
+          console.log('Delete location done!');
+        })
         .catch(err => console.log(err))
-        console.log('Delete location done!');
       })
       this.setState({selectedLocations : []}, () => {
         this.setState({resultComponent: null})
@@ -354,8 +357,11 @@ class ManagerLocationsList extends React.Component {
             + `&rate=${rate}`
             + `&note=${note}`
             + `&duration=${duration}`)
+      .then(res => {
+        res.json();
+        console.log('Update successfully!');
+      })
       .catch(err => console.log(err))
-      console.log('Update successfully!');
 
     this.setState({resultComponent: null})
     this.loadLocationList();
@@ -455,8 +461,11 @@ class ManagerLocationsList extends React.Component {
            + `&zipcode=${zipcode}`
            + `&country=${country}`
            + `&duration=${duration}`)
+    .then(res => {
+      res.json();
+      console.log('Add location done!');
+    })
     .catch(err => console.log(err))
-    console.log('Add location done!');
     this.loadLocationList();
   }
 
@@ -510,8 +519,11 @@ class ManagerLocationsList extends React.Component {
             + `&zipcode=${zipcode}`
             + `&country=${country}`
             + `&duration=${duration}`)
+      .then(res => {
+        res.json();
+        console.log('Add location done!');
+      })
       .catch(err => console.log(err))
-      console.log('Add location done!');
     })
     this.loadLocationList();
   }
